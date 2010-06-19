@@ -1,16 +1,17 @@
-<?php if (isset($errors)) {?>
-	<p class="error">
-		Errors:
-	</p>
-	<ul>
-	<?php foreach($errors as $field => $error){?>
-		<li><?php echo $error ?></li>
-	<?php }?>
-	</ul>
-<?php }?>
-
-<form method="post" action="<?php echo Url::site('signup') ?>">
+<form method="post" action="<?php echo Url::site('sign-up') ?>">
 	<fieldset>
+
+		<?php if (isset($errors)) {?>
+			<p class="error">
+				Errors:
+			</p>
+			<ul>
+			<?php foreach($errors as $field => $error){?>
+				<li><?php echo $error ?></li>
+			<?php }?>
+			</ul>
+		<?php }?>
+
 		<p>
 			<label for="email">Email</label>
 			<input type="text" name="email" />

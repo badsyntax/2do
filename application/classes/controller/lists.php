@@ -13,7 +13,7 @@ class Controller_Lists extends Controller_Base {
 		$lists = View::factory('page/lists');
 		$lists->lists = ORM::factory('todo')
 			->where('user_id', '=', $this->user->id)
-			->order_by('date', 'DESC')
+			->order_by('sequence', 'ASC')
 			->find_all();
 
 		$this->template->content = $lists;

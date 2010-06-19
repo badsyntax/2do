@@ -89,22 +89,22 @@ Route::set('lists', 'lists/<username>')
 		'action' => 'index',
 	));
 
-Route::set('signin', 'signin')
+Route::set('sign-in', 'sign-in')
 	->defaults(array(
 		'controller' => 'account',
-		'action' => 'signin'
+		'action' => 'sign_in'
 	));
 
-Route::set('signup', 'signup')
+Route::set('sign-up', 'sign-up')
 	->defaults(array(
 		'controller' => 'account',
-		'action' => 'signup'
+		'action' => 'sign_up'
 	));
 
-Route::set('signout', 'signout')
+Route::set('sign-out', 'sign-out')
 	->defaults(array(
 		'controller' => 'account',
-		'action' => 'signout'
+		'action' => 'sign_out'
 	));
 
 Route::set('profile', 'profile')

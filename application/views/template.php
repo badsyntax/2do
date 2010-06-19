@@ -8,11 +8,10 @@
 	<!--[if IE]><?php echo HTML::script('media/js/html5.js')?><![endif]-->
 </head>
 <body>
-
-	<div id="wrapper">
-
-		<?php // echo View::factory('page/nav') ?>
+	<div class="wrapper">
 		
+		<?php echo View::factory('page/nav') ?>
+
 		<!--<header>
 			<h1><?php echo $title ?></h2>
 		</header>-->
@@ -21,5 +20,6 @@
 			<?php echo $content ?>
 		</section>
 	</div>
+
 </body>
 </html>

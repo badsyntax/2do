@@ -42,4 +42,20 @@ class Controller_Todo extends Controller_BaseAjax {
 		$this->request->response = json_encode($response);
 	}
 
+	public function action_reorder(){
+
+		foreach($_POST['todo'] as $i => $id){
+
+			$todo = ORM::factory('todo')->where('id', '=', $id)->find();
+			$todo->sequence = $i;
+			$todo->save();
+		}
+		
+		$response = array(
+			'outcome' => 'success'
+		);
+		
+		$this->request->response = json_encode($response);
+	}
+
 }

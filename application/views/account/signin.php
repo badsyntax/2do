@@ -1,16 +1,17 @@
-<?php if (isset($errors)) {?>
-	<p class="error">
-		Errors:
-	</p>
-	<ul>
-	<?php foreach($errors as $field => $error){?>
-		<li><?php echo $error ?></li>
-	<?php }?>
-	</ul>
-<?php }?>
-
-<form method="post" action="<?php echo Url::site('signin') ?>">
+<form method="post" action="<?php echo Url::site('sign-in') ?>">
 	<fieldset>
+
+		<?php if (isset($errors)) {?>
+			<p class="error">
+				Errors:
+			</p>
+			<ul>
+			<?php foreach($errors as $field => $error){?>
+				<li><?php echo $error ?></li>
+			<?php }?>
+			</ul>
+		<?php }?>
+
 		<p>
 			<label for="username">Username</label>
 			<?php echo form::input('username', @$_POST['username'], array('id'=>'username')) ?>
@@ -25,5 +26,10 @@
 
 <script type="text/javascript">
 
-	$('input[name=username]').focus();
+	var elem = 
+		$.trim( $( 'input[name=username]' ).val() ) ? 
+		$( 'input[name=password]' ) : 
+		$( 'input[name=username]' );
+
+	elem.focus();
 </script>

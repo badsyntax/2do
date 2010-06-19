@@ -5,7 +5,7 @@
 		New todo
 	</li>
 	<?php foreach($lists as $list){?>
-		<li todo-id="<?php echo $list->id ?>"><?php echo $list->content ?></li>
+		<li id="todo-<?php echo $list->id ?>"><?php echo $list->content ?></li>
 	<?php }?>
 </ul>
 
@@ -31,7 +31,7 @@
 
 						if ( data.outcome == 'success' ) {
 
-							var item = $( '<li></li>' ).html( textarea.value ).attr('todo-id', data.id);
+							var item = $( '<li></li>' ).html( textarea.value ).attr('id', 'todo-' + data.id);
 							
 							self.after( item );
 
@@ -42,10 +42,10 @@
 					});
 				}
 					
-				self.html( 'New todo ').addClass( 'todo-new' );
+				self.html( 'New todo ').addClass( 'todo-new' ).removeClass( 'noborder' );
 			});
 
-			self.empty().append( textarea ).addClass('border', 0);
+			self.empty().append( textarea ).addClass( 'noborder' );
 
 			textarea.focus();
 
@@ -68,7 +68,7 @@
 
 			if ( /ui-icon/.test( event.target.className ) ){
 				
-				$.post('<?php echo Url::site('todo/remove') ?>', { id: $( this ).attr('todo-id') }, function( data ){
+				$.post('<?php echo Url::site('todo/remove') ?>', { id: $( this ).attr('id').replace(/todo-/, '') }, function( data ){
 
 					self.fadeOut(function(){
 
@@ -84,4 +84,20 @@
 		itembind.call( this );
 	
 	});
+
+	$('.todo-list').sortable({
+		containment: 'parent',
+		items: 'li:not(.todo-new)',
+		stop: function(event, ui){
+
+			ui.item.removeClass('todo-hover');
+
+			var list = $('.todo-list').sortable( 'serialize' );
+
+			$.post('<?php echo Url::site('todo/reorder') ?>', list, function(data){
+
+			});
+		}
+	});
+
 </script>

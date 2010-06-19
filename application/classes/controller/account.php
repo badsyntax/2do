@@ -9,7 +9,7 @@ class Controller_Account extends Controller_Base {
 		$this->template->content = 'test';	
 	}
 
-	function action_signin(){
+	function action_sign_in(){
 
 		if(Auth::instance()->logged_in()){
 
@@ -31,7 +31,7 @@ class Controller_Account extends Controller_Base {
 		}
 	}
 
-	function action_signup(){
+	function action_sign_up(){
 
 		if(Auth::instance()->logged_in()){
 
@@ -72,7 +72,7 @@ class Controller_Account extends Controller_Base {
 		}		
 	}
 
-	public function action_signout(){
+	public function action_sign_out(){
 
 		Auth::instance()->logout();
 
@@ -83,7 +83,7 @@ class Controller_Account extends Controller_Base {
 
 		if(!Auth::instance()->logged_in()){
 
-			Request::instance()->redirect('signin');
+			Request::instance()->redirect('sign-in');
 		}
 
 		$this->template->title = 'Profile';

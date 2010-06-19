@@ -8,7 +8,7 @@ class Controller_Home extends Controller_Base {
 			Request::instance()->redirect('lists');
 		}
 
-		$this->template->title = '2DO';
+		$this->template->title = 'Todo';
 
 		$this->template->content = View::factory('page/home' );
 	}
