@@ -13,13 +13,13 @@
 	<fieldset>
 		<p>
 			<label for="username">Username</label>
-			<?php echo form::input('username', @$_POST['username']) ?>
+			<?php echo form::input('username', @$_POST['username'], array('id'=>'username')) ?>
 
 			<label for="password">Password</label>
-			<?php echo form::password('password') ?>
+			<?php echo form::password('password', '', array('id' => 'password')) ?>
 		</p>
 
-		<button type="submit">Signin</button>
+		<button type="submit">Sign in</button>
 	</fieldset>
 </form>
 

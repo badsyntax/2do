@@ -11,6 +11,8 @@ class Controller_BaseAjax extends Controller {
 		parent::before();
 
 		$this->session = Session::instance();
+		
+		$this->user = Auth::instance()->get_user();
 
 		$action_name = Request::instance()->action;
 
@@ -20,10 +22,9 @@ class Controller_BaseAjax extends Controller {
 
 			if (!Auth::instance()->logged_in()){
 
-				exit('no permission');
+				exit('no permission, you are not logged in');
 			}
 		}
-
 
                 $this->request->headers['Content-type'] = 'application/x-javascript';
 	}

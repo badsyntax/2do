@@ -14,6 +14,8 @@ class Controller_Base extends Controller_Template {
 
 		$this->session = Session::instance();
 
+		$this->user = Auth::instance()->get_user();
+
 		$action_name = Request::instance()->action;
 
 		if (($this->auth_required !== FALSE && Auth::instance()->logged_in($this->auth_required) === FALSE)
@@ -28,8 +30,7 @@ class Controller_Base extends Controller_Template {
 				Request::instance()->redirect('signin');
 			}
 		}
-	
-  
+
 		if ($this->auto_render) {
 
 			$this->template->title	 = '';
@@ -45,11 +46,13 @@ class Controller_Base extends Controller_Template {
 		if ($this->auto_render) {
 
 			$styles = array(
+				'media/css/smoothness/jquery-ui.css' => 'screen, projection',
 				'media/css/screen.css' => 'screen, projection'
 			);
   
 			$scripts = array(
 				'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js',
+				'media/js/jquery-ui.js',
 				'media/js/global.js',
 			);
 		

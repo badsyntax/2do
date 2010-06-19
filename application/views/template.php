@@ -11,11 +11,11 @@
 
 	<div id="wrapper">
 
-		<?php echo View::factory('page/nav') ?>
+		<?php // echo View::factory('page/nav') ?>
 		
-		<header>
+		<!--<header>
 			<h1><?php echo $title ?></h2>
-		</header>
+		</header>-->
 
 		<section id="content">
 			<?php echo $content ?>

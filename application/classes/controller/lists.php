@@ -6,12 +6,17 @@ class Controller_Lists extends Controller_Base {
 
 	function action_index(){
 
-		$person_username = Request::instance()->param('username');
+		//$person_username = Request::instance()->param('username');
 		
-		$this->template->user = $user = Session::instance()->get('auth_user');
-
 		$this->template->title = 'Lists';
-		$this->template->content = View::factory('page/lists');
+
+		$lists = View::factory('page/lists');
+		$lists->lists = ORM::factory('todo')
+			->where('user_id', '=', $this->user->id)
+			->order_by('date', 'DESC')
+			->find_all();
+
+		$this->template->content = $lists;
 	}
 
 }
