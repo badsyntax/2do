@@ -11,6 +11,8 @@
 
 	<div id="wrapper">
 
+		<?php echo View::factory('page/nav') ?>
+		
 		<header>
 			<h1><?php echo $title ?></h2>
 		</header>

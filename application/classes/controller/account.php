@@ -24,7 +24,7 @@ class Controller_Account extends Controller_Base {
 			$status = ORM::factory('user')->login($_POST);
  
 			if ($status) {		
-				Request::instance()->redirect('profile');
+				Request::instance()->redirect('lists');
 			} else {
 				$content->errors = $_POST->errors('signin');
 			}

@@ -12,13 +12,18 @@
 <form method="post" action="<?php echo Url::site('signin') ?>">
 	<fieldset>
 		<p>
-			<label for="email">Email</label>
-			<input type="text" name="email" />
+			<label for="username">Username</label>
+			<?php echo form::input('username', @$_POST['username']) ?>
 
 			<label for="password">Password</label>
-			<input type="password" name="password" />
+			<?php echo form::password('password') ?>
 		</p>
 
 		<button type="submit">Signin</button>
 	</fieldset>
 </form>
+
+<script type="text/javascript">
+
+	$('input[name=username]').focus();
+</script>

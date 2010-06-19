@@ -83,9 +83,9 @@ Kohana::modules(array(
  * defaults for the URI.
  */
 
-Route::set('list', 'list/<username>')
+Route::set('lists', 'lists/<username>')
 	->defaults(array(
-		'controller' => 'list',
+		'controller' => 'lists',
 		'action' => 'index',
 	));
 

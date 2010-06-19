@@ -50,6 +50,7 @@ class Controller_Base extends Controller_Template {
   
 			$scripts = array(
 				'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js',
+				'media/js/global.js',
 			);
 		
 			$this->template->styles = array_merge( $this->template->styles, $styles );
