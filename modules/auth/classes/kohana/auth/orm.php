@@ -77,6 +77,7 @@ class Kohana_Auth_ORM extends Auth {
 	 */
 	protected function _login($user, $password, $remember)
 	{
+
 		if ( ! is_object($user))
 		{
 			$username = $user;

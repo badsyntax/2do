@@ -19,21 +19,24 @@ class Controller_Base extends Controller_Template {
 		if (($this->auth_required !== FALSE && Auth::instance()->logged_in($this->auth_required) === FALSE)
 		|| (is_array($this->secure_actions) && array_key_exists($action_name, $this->secure_actions) && 
 		Auth::instance()->logged_in($this->secure_actions[$action_name]) === FALSE)) {
+
 			if (Auth::instance()->logged_in()){
-				Request::instance()->redirect('account/noaccess');
-			}else{
-				Request::instance()->redirect('account/signin');
+
+				Request::instance()->redirect('403');
+			} else {
+
+				Request::instance()->redirect('signin');
 			}
 		}
 	
   
 		if ($this->auto_render) {
+
 			$this->template->title	 = '';
 			$this->template->content = '';
 			
 			$this->template->styles = array();
 			$this->template->scripts = array();
-				
 		}
 	}
 	
@@ -42,13 +45,11 @@ class Controller_Base extends Controller_Template {
 		if ($this->auto_render) {
 
 			$styles = array(
-				'media/css/screen.css' => 'screen, projection',
-				'media/css/print.css' => 'print',
-				'media/css/style.css' => 'screen',
+				'media/css/screen.css' => 'screen, projection'
 			);
   
 			$scripts = array(
-				'http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js',
+				'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js',
 			);
 		
 			$this->template->styles = array_merge( $this->template->styles, $styles );
@@ -57,4 +58,10 @@ class Controller_Base extends Controller_Template {
 
 		parent::after();
 	}
+
+	public function action_403(){
+	      $this->template->title = '403';
+	      $this->template->content = 'You do not have permission to view this page';
+	}
+
 }

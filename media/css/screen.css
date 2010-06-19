@@ -1,0 +1,89 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin:0; padding:0; border:0; outline:0; font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit; vertical-align:baseline; }
+body {
+	background: #fff;
+	margin: 0;
+	font: normal 84%/1.1 "Lucinda Grande", "Trebuchet MS", Arial, Helvetica, sans-serif;
+	color: #444;
+}
+table {
+	border-spacing: 0;
+}
+h1, h2, h3, h4 {
+	margin: 0 0 .5em 0;
+	font-family: 'Lobster', "Lucinda Grande", "Trebuchet MS", Arial, Helvetica, sans-serif;
+	border-bottom: 1px solid #ddd;
+}
+h1 {
+	font-size: 190%;
+}
+h2 {
+	font-size: 140%;
+}
+em {
+	font-style: italic;
+}
+ul {
+	margin-left: 2em;
+	margin-bottom: 1.5em;
+}
+ul ul {
+	margin: .4em 0 .6em 2em;
+}
+li {
+	margin-bottom: .4em;
+}
+p {
+	margin-bottom: 1em;
+}
+a {
+	color: #333;
+}
+a:hover {
+	text-decoration: none;
+	color: #000;
+}
+small {
+	font-size: small;
+}
+@font-face {
+	font-family: 'Lobster';
+	font-style: normal;
+	font-weight: normal;
+	src: local('Lobster'), url('http://themes.googleusercontent.com/font?kit=X-CahsKZZcJfSyZ_tX4ptg') format('truetype');
+}
+@font-face {
+	font-family: 'Droid Sans Mono';
+	font-style: normal;
+	font-weight: normal;
+	src: local('Droid Sans Mono'), url('http://themes.googleusercontent.com/font?kit=ns-m2xQYezAtqh7ai59hJViAdY2Sz5g753dOuB6TK0I') format('truetype');
+}
+
+#wrapper {
+	width: 618px;
+	padding: 2em;
+	margin: 3.2em auto 1em auto;
+	border: 1px solid #bbb;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	-moz-box-shadow: 0 0 6px #aaa;
+	-webkit-box-shadow: 0 0 6px #aaa;
+	box-shadow: 0 0 6px #aaa;
+}
+
+header {
+	display: block;
+	margin-bottom: 2em;
+}
+
+#content {
+	
+
+}
+
+form label {
+	display: block;
+}
+form input[type=text], form input[type=password] {
+	margin-bottom: 1em;
+}

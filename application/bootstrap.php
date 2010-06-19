@@ -68,13 +68,13 @@ Kohana::$config->attach(new Kohana_Config_File);
  * Enable modules. Modules are referenced by a relative or absolute path.
  */
 Kohana::modules(array(
-	// 'auth'       => MODPATH.'auth',       // Basic authentication
-	// 'cache'      => MODPATH.'cache',      // Caching with multiple backends
-	// 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
-	// 'database'   => MODPATH.'database',   // Database access
-	// 'image'      => MODPATH.'image',      // Image manipulation
-	// 'orm'        => MODPATH.'orm',        // Object Relationship Mapping
-	// 'pagination' => MODPATH.'pagination', // Paging of results
+	 'auth'       => MODPATH.'auth',       // Basic authentication
+	 'cache'      => MODPATH.'cache',      // Caching with multiple backends
+	 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
+	 'database'   => MODPATH.'database',   // Database access
+	 'image'      => MODPATH.'image',      // Image manipulation
+	 'orm'        => MODPATH.'orm',        // Object Relationship Mapping
+	 'pagination' => MODPATH.'pagination', // Paging of results
 	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	));
 
@@ -82,9 +82,46 @@ Kohana::modules(array(
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
+
+Route::set('list', 'list/<username>')
+	->defaults(array(
+		'controller' => 'list',
+		'action' => 'index',
+	));
+
+Route::set('signin', 'signin')
+	->defaults(array(
+		'controller' => 'account',
+		'action' => 'signin'
+	));
+
+Route::set('signup', 'signup')
+	->defaults(array(
+		'controller' => 'account',
+		'action' => 'signup'
+	));
+
+Route::set('signout', 'signout')
+	->defaults(array(
+		'controller' => 'account',
+		'action' => 'signout'
+	));
+
+Route::set('profile', 'profile')
+	->defaults(array(
+		'controller' => 'account',
+		'action' => 'profile'
+	));
+
+Route::set('noaccess', '403')
+	->defaults(array(
+		'controller' => 'account',
+		'action' => '403'
+	));
+
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
-		'controller' => 'welcome',
+		'controller' => 'home',
 		'action'     => 'index',
 	));
 
