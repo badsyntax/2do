@@ -6,13 +6,18 @@ class Controller_Todo extends Controller_BaseAjax {
  
 	public function action_index(){
 
-		$this->request->response = 'todo ajax!';
+		$this->request->response = '';
 	}
 
 	public function action_save(){
+		
+		ORM::factory('todo')
+		->where('user_id', '=', $this->user->id)
+		->shift_sequences(1);
 
 		$todo = ORM::factory('todo');
 		$todo->user_id = $this->user->id;
+		$todo->sequence = 0;
 		$todo->content = trim($_POST['todo']);
 		$todo->save();
 
@@ -33,10 +38,27 @@ class Controller_Todo extends Controller_BaseAjax {
 
 			$todo->delete();
 		}
+
+		ORM::factory('todo')
+		->where('user_id', '=', $this->user->id)
+		->shift_sequences(0);
 		
 		$response = array(
 			'outcome' => 'success',
 			'message' => 'Successfully removed!'
+		);
+		
+		$this->request->response = json_encode($response);
+	}
+
+	public function action_done(){
+
+		$todo = ORM::factory('todo', (int) $_POST['id']);
+		$todo->done = TRUE;
+		$todo->save();
+		
+		$response = array(
+			'outcome' => 'success'
 		);
 		
 		$this->request->response = json_encode($response);

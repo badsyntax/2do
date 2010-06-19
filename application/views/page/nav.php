@@ -1,5 +1,5 @@
 <nav class="helper-clearfix">
-	<ul class="helper-left">
+	<ul>
 		<li><a href="<?php echo URL::site() ?>">Home</a></li>
 		<li><a href="<?php echo URL::site('profile') ?>">Profile</a></li>
 		<?php if (Auth::instance()->logged_in()) {?>

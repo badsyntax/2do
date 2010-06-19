@@ -85,9 +85,12 @@ class Controller_Account extends Controller_Base {
 
 			Request::instance()->redirect('sign-in');
 		}
+		
+		$profile = View::factory('account/profile');
+		$profile->user = $this->user;
 
 		$this->template->title = 'Profile';
-		$this->template->content = 'Profile';
+		$this->template->content = $profile;
 	}
  
 }
