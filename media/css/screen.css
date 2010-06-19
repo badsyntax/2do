@@ -24,7 +24,7 @@ h3 {
 	border-bottom: 1px solid #ddd;
 	font-weight: bold;
 }
-h2, h3, p, li {
+h2, h3, p {
 	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', Arial, Helvetica, sans-serif;
 }
 em {
@@ -172,6 +172,8 @@ textarea {
 	padding: .3em;
 	cursor: pointer;
 	list-style: none;
+	position: relative;
+	min-height: 1.4em;
 }
 .todo-list li textarea {
 	padding: 0;
@@ -181,9 +183,6 @@ textarea {
 	font-size: 98%;
 	overflow:hidden;
 	width: 100%;
-}
-.todo-list li:hover {
-	border-color: #444;
 }
 .todo-list li.todo-hover .ui-icon {
 	position: static;
@@ -229,4 +228,12 @@ textarea {
 .helper-clearfix { 
 	display: block; 
 }
+
+
+/* Checkbox
+----------------------------------*/
+.ui-checkbox { position: relative; float: left; font-size: 72%;}
+.ui-checkbox .ui-checkbox-inputwrapper { width: 0; height: 0; overflow: hidden; }
+.ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; text-indent: -9999px; padding: .5em 0 .5em 30px; margin: 0 0 .3em; cursor: pointer; z-index: 1; }
+.ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 1.5em; height: 1.6em; }
 

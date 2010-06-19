@@ -12,8 +12,11 @@
 			array_push($done, $todo);
 			continue;
 		}?>
-		<li id="todo-<?php echo $todo->id ?>"<?php if ($todo->done){?> class="todo-done"<?php }?>>
-			<?php echo $todo->content ?>
+		<li id="todo-<?php echo $todo->id ?>" class="helper-clearfix<?php if ($todo->done){?> todo-done<?php }?>">
+			<label>	<input type="checkbox" /> Check 1 </label>
+			<div style="top:.4em;margin-left:24px">
+				<?php echo $todo->content ?>
+			</div>
 		</li>
 	<?php }?>
 </ul>
@@ -41,6 +44,10 @@
 <script type="text/javascript">
 
 	(function( $, window, document, undefined ){
+
+		$(function(){
+		$(":checkbox").checkbox();
+		});
 
 		var baseurl = '<?php echo Url::site('todo') ?>';
 		
@@ -138,7 +145,7 @@
 		
 		$('.todo-list li').not('.todo-new, .todo-done').each(function(){
 
-			itembind.call( this );
+			//itembind.call( $( this ).find('div')[0] );
 		});
 
 		return;
