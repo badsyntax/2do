@@ -83,7 +83,7 @@ Kohana::modules(array(
  * defaults for the URI.
  */
 
-Route::set('lists', 'lists/<username>')
+Route::set('lists', 'lists/<date>', array('date' => '.*'))
 	->defaults(array(
 		'controller' => 'lists',
 		'action' => 'index',

@@ -98,7 +98,7 @@ header {
 
 nav {
 	display: block;
-	margin: 0 0 1em 0;
+	margin: 0 0 .4em 0;
 }
 nav ul {
 	margin: 0 auto;
@@ -124,13 +124,8 @@ nav ul li a.selected {
 	text-decoration: underline;
 }
 nav ul li a:hover {
-	text-shadow: 1px 1px 1px #ccc;
+	text-shadow: 1px 1px 2px #aaa;
 	color: #000;
-}
-nav ul li a:active {
-	-moz-box-shadow: 0 0 4px #333;
-	-webkit-box-shadow: 0 0 4px #333;
-	box-shadow: 0 0 4px #333;
 }
 
 fieldset {
@@ -170,7 +165,6 @@ textarea {
 .todo-list li {
 	border: 1px dotted #ddd;
 	padding: .3em;
-	cursor: pointer;
 	list-style: none;
 	position: relative;
 	min-height: 1.4em;
@@ -183,10 +177,13 @@ textarea {
 	font-size: 98%;
 	overflow:hidden;
 	width: 100%;
+	background: transparent;
 }
-.todo-list li.todo-hover .ui-icon {
-	position: static;
-	right: auto;
+.todo-list .todo-hover .ui-icon {
+	position: absolute;
+	left: auto;
+	right: 0;
+	top: 0;
 }
 .todo-list li.border {
 	border: 1px dotted #444;
@@ -195,11 +192,26 @@ textarea {
 	width: 96%;
 	display: block;
 }
+.todo-list .todo-new {
+	cursor: pointer;
+}
 .todo-list .todo-new .todo-add {
 	margin: -1px 2px 0 0;
 }
 .todo-done {
-	text-decoration: line-through;
+	/*text-decoration: line-through;*/
+}
+
+.todo-list .todo-content {
+	margin-top: 1px;
+	cursor: pointer;
+	background: transparent;
+	position: relative;
+}
+.todo-list .todo-content .ui-icon {
+}
+.todo-list li.active {
+	border-color: #000;
 }
 
 .helper-hidden {
@@ -232,8 +244,9 @@ textarea {
 
 /* Checkbox
 ----------------------------------*/
-.ui-checkbox { position: relative; float: left; font-size: 72%;}
+.ui-checkbox { position: relative; float: left; font-size: 64%;}
 .ui-checkbox .ui-checkbox-inputwrapper { width: 0; height: 0; overflow: hidden; }
-.ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; text-indent: -9999px; padding: .5em 0 .5em 30px; margin: 0 0 .3em; cursor: pointer; z-index: 1; }
+.ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; text-indent: -9999px; padding: .5em 0 .5em 23px; margin: 0 0 .3em; cursor: pointer; z-index: 1; }
 .ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 1.5em; height: 1.6em; }
+.ui-checkbox .ui-checkbox-icon {margin: -1px 0 0 -1px}
 

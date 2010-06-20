@@ -6,17 +6,32 @@ class Controller_Lists extends Controller_Base {
 
 	function action_index(){
 
-		//$person_username = Request::instance()->param('username');
-		
+		$today = date('d/m/Y');
+
+		$date = $this->request->param('date');
+
+		if (!$date) {
+
+			$date = $today;
+		}
+
 		$this->template->title = 'Lists';
 
-		$lists = View::factory('page/lists');
-		$lists->lists = ORM::factory('todo')
-			->where('user_id', '=', $this->user->id)
-			->order_by('sequence', 'ASC')
-			->find_all();
+		$lists_template = View::factory('page/lists');
 
-		$this->template->content = $lists;
+		$lists = array();
+		
+		foreach($l = ORM::factory('list')->find_all() as $list){
+			$data = array(
+				'list' => $list,
+				'todos' => $list->get_todos($this->user->id, $date)
+			);
+			array_push($lists, $data);
+		}
+		
+		$lists_template->lists = $lists;
+
+		$this->template->content = $lists_template;
 	}
 
 }

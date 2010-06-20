@@ -27,7 +27,7 @@ class Controller_Base extends Controller_Template {
 				Request::instance()->redirect('403');
 			} else {
 
-				Request::instance()->redirect('signin');
+				Request::instance()->redirect('sign-in');
 			}
 		}
 
@@ -53,7 +53,6 @@ class Controller_Base extends Controller_Template {
 			$scripts = array(
 				'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js',
 				'media/js/jquery-ui.js',
-				'media/js/jquery.ui.checkbox.js',
 				'media/js/global.js',
 			);
 		

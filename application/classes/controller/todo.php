@@ -10,14 +10,19 @@ class Controller_Todo extends Controller_BaseAjax {
 	}
 
 	public function action_save(){
-		
-		ORM::factory('todo')
-		->where('user_id', '=', $this->user->id)
-		->shift_sequences(1);
 
-		$todo = ORM::factory('todo');
-		$todo->user_id = $this->user->id;
-		$todo->sequence = 0;
+		if (isset($_POST['id'])) {
+
+			$todo = ORM::factory('todo', (int) $_POST['id']);
+			if (!$todo->id) exit;
+		} else {
+
+			$todo = ORM::factory('todo');
+			$todo->sequence = 0;
+			$todo->list_id = (int) $_POST['list'];
+			$todo->user_id = $this->user->id;
+		}
+
 		$todo->content = trim($_POST['todo']);
 		$todo->save();
 
@@ -31,18 +36,11 @@ class Controller_Todo extends Controller_BaseAjax {
 	}
 
 	public function action_remove(){
-
-		$todo = ORM::factory('todo', (int) $_POST['id']);
-
-		if ($todo->user_id === Auth::instance()->get_user()->id) {
-
-			$todo->delete();
-		}
-
-		ORM::factory('todo')
-		->where('user_id', '=', $this->user->id)
-		->shift_sequences(0);
 		
+		ORM::factory('todo', (int) $_POST['id'])
+			->where('user_id', '=', $this->user->id)
+			->delete();
+
 		$response = array(
 			'outcome' => 'success',
 			'message' => 'Successfully removed!'
@@ -51,16 +49,26 @@ class Controller_Todo extends Controller_BaseAjax {
 		$this->request->response = json_encode($response);
 	}
 
-	public function action_done(){
+	public function action_complete(){
 
-		$todo = ORM::factory('todo', (int) $_POST['id']);
-		$todo->done = TRUE;
-		$todo->save();
+		ORM::factory('todo', (int) $_POST['id'])->complete();
 		
 		$response = array(
 			'outcome' => 'success'
 		);
 		
+		$this->request->response = json_encode($response);
+	}
+
+	public function action_incomplete(){
+		
+		$todo = ORM::factory('todo', (int) $_POST['id'])->incomplete();
+
+		$response = array(
+			'outcome' => 'success',
+			'sequence' => $todo->sequence
+		);
+
 		$this->request->response = json_encode($response);
 	}
 
