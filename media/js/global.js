@@ -15,14 +15,14 @@
 				.addClass('ui-icon ui-icon-closethick ui-helper-hidden-accessible helper-right'),
 			listCompleted: $('#list-completed')
 		},
-
+		
 		_create : function(){
 
 			var self = this;
+		
+			this.checkboxConfig = {
 
-			$(':checkbox').checkbox({
-			
-				select: function(event){
+				select: function(widget, event){
 
 					var checkbox = $( this ), 
 						listitem = checkbox.parents('li:first'), 
@@ -31,16 +31,14 @@
 
 					self[ action ]( id, listitem, checkbox );
 				}
-			});
 
-			$('.todo-new').live('click', function(){
+			};
 
-				self._listItemClickHandler( this );
-			});
-			
-			$('.todo-list li').not('.todo-new, .todo-done').each(function(){
+			$(':checkbox').checkbox( this.checkboxConfig );
 
-				self._listItemBind( $( this ).find('.todo-content')[0] );
+			$('.todo-list li').not('.todo-done').each(function(){
+
+				self._contentBind( $( this ).find('.todo-content')[0] );
 			});
 		},
 
@@ -101,6 +99,7 @@
 						}
 
 						$( this ).fadeIn( 'fast', function(){
+
 							$( this ).effect( 'highlight', {}, 800 );
 						});
 						
@@ -116,66 +115,90 @@
 			});
 		},
 
-		_listItemClickHandler: function( item ){
+		_todoSave : function( text, item, listId ){
 
 			var self = this;
 
-			item = $( item );
+			if ( !text ) return;
 
-			if (item.attr('contentEditable') == 'true') return;
+			$.post(this.options.baseurl + '/save', { 
+				todo: text, 
+				list: listId 
+			}, function( data ){
 
-			var contents = item.html(), 
-				text = $.trim( item.text() ), 
-				todo = item.parents('li:first'),
-				list = item.parents('ul:first'),
+				if ( data.outcome == 'success' ) {
+
+					var newitem = 
+						$( '<li></li>' )
+						.html( '<label><input type="checkbox" /></label><div class="todo-content">' + text + '</div>' )
+						.attr('id', 'todo-' + data.id)
+						.find(':checkbox').checkbox( self.checkboxConfig )
+						.end();
+						
+					item.after( newitem ).find('.todo-content').html('New todo');
+						
+					newitem.effect( 'highlight', {}, 800 );
+						
+					self._contentBind( newitem.find('.todo-content') );
+				}
+			});
+		},
+
+		_todoUpdate: function( text, item, listId ){
+			
+			if ( !text ) return;
+
+			$.post(this.options.baseurl + '/save', { 
+				todo: text, 
+				list: listId, 
+				id: item[0].id.replace(/todo-/, '') 
+			}, function( data ){
+
+				item.effect( 'highlight', {}, 800 );
+			});
+		},
+
+		_listItemClickHandler: function( content ){
+
+			var self = this;
+
+			content = $( content );
+
+			if (content.attr('contentEditable') == 'true') return;
+
+			var text = $.trim( content.text() ), 
+				item = content.parents('li:first'),
+				list = content.parents('ul:first'),
 				listId = list[0].id.replace(/list-/, '');
 			
-			todo.addClass('active');
+			item.addClass('active');
 
-			item
+			content
+			.data('origval', content.text() )
 			.addClass('todo-editing')
 			.attr('contentEditable', true)
-			.html( text == 'New todo' ? '' : text )
+			.html( text == 'New todo' ? '&nbsp;' : text )
 			.focus()
 			.unbind('blur.edit keydown.edit')
 			.bind('blur.edit', function(){
 			
-				todo.removeClass('active');
+				item.removeClass('active');
 				
-				item
+				content
 				.attr('contentEditable', false)
 				.removeClass('todo-editing todo-hover');
 
-				if ( item.hasClass('todo-new') ){
-					
-					$.post(self.options.baseurl + '/save', { 
-						todo: text, 
-						list: listId 
-					}, function( data ){
 
-						if ( data.outcome == 'success' ) {
+				(function( self ){
 
-							var newitem = $( '<li></li>' ).html( text ).attr('id', 'todo-' + data.id);
-								
-							item.after( newitem );
+					var text = $.trim( content.text() );
 
-							newitem.effect( 'highlight', {}, 800 );
-								
-							self._listItemBind( item );
-						}
-					});
-				} else {
+					self[ item.hasClass('todo-new') ? '_todoSave' : '_todoUpdate' ]( text, item, listId ); 
 
-					$.post(self.options.baseurl + '/save', { 
-						todo: text, 
-						list: listId, 
-						id: todo[0].id.replace(/todo-/, '') 
-					}, function( data ){
-
-						todo.effect( 'highlight', {}, 800 );
-
-						self._listItemBind( item );
-					});
+				})( self );
+				
+				if ( !$.trim( $(this).text() ) ) {
+					$( this ).html( $(this).data('origval') );
 				}
 			})
 			.bind('keydown.edit', function(event){
@@ -188,7 +211,7 @@
 		},
 
 
-		_listItemBind : function( item ){
+		_contentBind : function( item ){
 
 			var self = this;
 

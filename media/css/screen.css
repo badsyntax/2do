@@ -215,6 +215,7 @@ textarea {
 	cursor: pointer;
 	background: transparent;
 	position: relative;
+	margin-left: 24px;
 }
 .todo-list .todo-editing {
 	cursor: auto;

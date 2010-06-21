@@ -7,7 +7,9 @@
 		<ul id="list-<?php echo $list['list']->id ?>" class="todo-list todo">
 			<li class="todo-new">
 				<span class="ui-icon ui-icon-plusthick helper-left todo-add"></span>
-				New todo
+				<div class="todo-content">
+					New todo
+				</div>
 			</li>
 			<?php 
 			foreach($list['todos'] as $todo){?>
