@@ -1,3 +1,7 @@
+<h3>Sign in</h3>
+
+<br />
+
 <form method="post" action="<?php echo Url::site('sign-in') ?>">
 	<fieldset>
 
@@ -13,8 +17,8 @@
 		<?php }?>
 
 		<p>
-			<label for="username">Username</label>
-			<?php echo form::input('username', @$_POST['username'], array('id'=>'username')) ?>
+			<label for="email">Email</label>
+			<?php echo form::input('username', @$_POST['username'], array('id'=>'email')) ?>
 
 			<label for="password">Password</label>
 			<?php echo form::password('password', '', array('id' => 'password')) ?>

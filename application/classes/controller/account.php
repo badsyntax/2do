@@ -30,6 +30,41 @@ class Controller_Account extends Controller_Base {
 			}
 		}
 	}
+	
+	public function action_profile(){
+
+		if(!Auth::instance()->logged_in()){
+
+			Request::instance()->redirect('sign-in');
+		}
+		
+		$profile = View::factory('account/profile');
+		$profile->user = $this->user;
+
+		$this->template->title = 'Profile';
+		$content = $this->template->content = $profile;
+
+		if ($_POST) {
+
+			$user = ORM::factory('user', (int) $_POST['user_id']);
+
+			$post = $user->validate_update($_POST);
+
+			if ($post->check()) {
+
+				$user->values($post);
+				$user->username = $user->email;
+
+				$user->save();
+
+			} else {
+
+				#Get errors for display in view
+				$content->errors = $post->errors('register');
+			}
+		}
+	}
+ 
 
 	function action_sign_up(){
 
@@ -79,18 +114,4 @@ class Controller_Account extends Controller_Base {
 		Request::instance()->redirect('profile');		
 	}
 
-	function action_profile(){
-
-		if(!Auth::instance()->logged_in()){
-
-			Request::instance()->redirect('sign-in');
-		}
-		
-		$profile = View::factory('account/profile');
-		$profile->user = $this->user;
-
-		$this->template->title = 'Profile';
-		$this->template->content = $profile;
-	}
- 
 }

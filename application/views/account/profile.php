@@ -16,12 +16,11 @@
 		<?php }?>
 
 		<p>
+			<input type="hidden" name="user_id" value="<?php echo $user->id ?>" />
+
 			<label for="email">Email</label>
 			<?php echo form::input('email', @$_POST['email'] ? $_POST['email'] : $user->email, array('id' => 'email')) ?>
 			
-			<label for="username">Username</label>
-			<?php echo form::input('username', @$_POST['username'] ? $_POST['username'] : $user->username, array('id' => 'username')) ?>
-
 			<label for="password">Password</label>
 			<?php echo form::password('password', '', array('id' => 'password_confirm')) ?>
 

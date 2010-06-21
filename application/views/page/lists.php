@@ -1,4 +1,3 @@
-
 <?php foreach($lists as $list){?>
 <h3><?php echo $list['list']->name ?></h3>
 
@@ -8,12 +7,7 @@
 		New todo
 	</li>
 	<?php 
-	$complete = array();
-	foreach($list['todos'] as $todo){
-		if ($todo->complete) {
-			array_push($complete, $todo);
-			continue;
-		}?>
+	foreach($list['todos'] as $todo){?>
 		<li id="todo-<?php echo $todo->id ?>" class="helper-clearfix<?php if ($todo->complete){?> todo-complete<?php }?>">
 			<label>	<input type="checkbox" /> Check 1 </label>
 			<div class="todo-content">

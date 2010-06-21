@@ -6,31 +6,30 @@ class Model_List extends ORM {
 	public function get_todos($user_id=0, $date=''){
 
 		$todos = new Model_Todo;
-		$todos
+
+		return $todos
+			->where('deleted', '=', FALSE)
+			->where('complete', '=', FALSE)
 			->where('list_id', '=', $this->id)
 			->where('user_id', '=', (int) $user_id)
-			->order_by('sequence', 'ASC');
+			->order_by('sequence', 'ASC')
+			->where_date($date)
+			->find_all();
 
-		if (preg_match('/^[0-9]{2,2}\/[0-9]{2,2}\/[0-9]{4,4}$/', $date)){
-
-			$todos->where_open();
-
-			$todos->where(DB::expr("DATE_FORMAT(date, '%d/%m/%Y')"), '=', $date);
-
-			$todos->or_where_open();
-
-			list($day, $month, $year) = explode('/', $date);
-
-			$todos->where(DB::expr('UNIX_TIMESTAMP(date)'), '<', mktime(0, 0, 0, (int) $month, (int) $day, (int) $year));
-
-			$todos->where('complete', '=', FALSE);
-
-			$todos->or_where_close();
-
-			$todos->where_close();
-		} else exit;
-
-		return $todos->find_all();
 	}
 
+	public function get_todos_completed($user_id=0, $date=''){
+
+		$todos = new Model_Todo;
+
+		$todos
+			->where('deleted', '=', FALSE)
+			->where('complete', '=', TRUE)
+			->where('list_id', '=', $this->id)
+			->where('user_id', '=', (int) $user_id)
+			->order_by('sequence', 'ASC')
+			->where_date($date)
+			->find_all();
+
+	}
 }

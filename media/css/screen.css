@@ -1,6 +1,6 @@
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin:0; padding:0; border:0; outline:0; font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit; vertical-align:baseline; }
 body {
-	background: #fff;
+	background: #232323;
 	margin: 0;
 	font: normal 84%/1.1 "Lucinda Grande", "Trebuchet MS", Arial, Helvetica, sans-serif;
 	color: #444;
@@ -67,23 +67,21 @@ small {
 }
 
 .wrapper {
+	background: #fff;
 	width: 720px;
 	margin: 3.2em auto 1em auto;
+	border: 1px solid #000;
+	-moz-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	border-radius: 12px;
 }
 .footer {
 	margin-top: 0;
 }
 
 section {
-	padding: 2em;
+	padding: 1em 2em 2em 2em;
 	display: block;
-	border: 1px solid #bbb;
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	border-radius: 6px;
-	-moz-box-shadow: 0 0 6px #aaa;
-	-webkit-box-shadow: 0 0 6px #aaa;
-	box-shadow: 0 0 6px #aaa;
 }
 
 header {
@@ -98,7 +96,7 @@ header {
 
 nav {
 	display: block;
-	margin: 0 0 .4em 0;
+	margin: .5em;
 }
 nav ul {
 	margin: 0 auto;
@@ -137,6 +135,14 @@ label {
 input[type=text], input[type=password] {
 	margin-bottom: 1em;
 	width: 18em;
+	-moz-box-shadow: inset 2px 2px 1px #ddd;
+	-webkit-box-shadow: inset 2px 2px 1px #ddd;
+	-ox-shadow: inset 2px 2px 1px #ddd;
+	border: 1px solid #aaa;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	padding: .5em .8em .4em .8em;
 }
 textarea {
 	/*
@@ -164,7 +170,7 @@ textarea {
 }
 .todo-list li {
 	border: 1px dotted #ddd;
-	padding: .3em;
+	padding: .3em .3em .1em .3em;
 	list-style: none;
 	position: relative;
 	min-height: 1.4em;
@@ -207,6 +213,9 @@ textarea {
 	cursor: pointer;
 	background: transparent;
 	position: relative;
+}
+.todo-list .todo-editing {
+	cursor: auto;
 }
 .todo-list .todo-content .ui-icon {
 }

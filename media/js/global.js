@@ -66,47 +66,54 @@
 			}
 		});
 
-		function edittodo(){
+		function edithandler(){
 
 			(function( self ){
 
-				var contents = self.html(), text = $.trim( self.text() ), todo = self.parents('li:first');
+				var contents = self.html(), 
+					text = $.trim( self.text() ), 
+					todo = self.parents('li:first'),
+					list = self.parents('ul:first'),
+					listId = list[0].id.replace(/list-/, '');
+				
+				todo.addClass('active');
 
-				var input = $( '<textarea></textarea>' ).height( self.height() ).val( $.trim( self.text() ) == 'New todo' ? '' : text )
+				self
+				.addClass('todo-editing')
+				.attr('contentEditable', true)
+				.html( text == 'New todo' ? '' : text )
+				.focus()
 				.blur(function(){
+				
+					todo.removeClass('active');
+					
+					self.removeClass('todo-hover');
 
-					if ( ( $.trim( this.value ) != text ) && this.value.replace(/^\s+|\s+$/, '').length ) {
-
-						var input = this, 
-							list = self.parents('ul:first')[0].id.replace(/list-/, '');
-
-						if ( self.hasClass('todo-new') ){
+					if ( self.hasClass('todo-new') ){
 						
-							$.post(baseurl + '/save', { todo: this.value, list: list }, function( data ){
+						$.post(baseurl + '/save', { todo: self.text(), list: listId }, function( data ){
 
-								if ( data.outcome == 'success' ) {
+							if ( data.outcome == 'success' ) {
 
-									var item = $( '<li></li>' ).html( input.value ).attr('id', 'todo-' + data.id);
+								var item = $( '<li></li>' ).html( self.text() ).attr('id', 'todo-' + data.id);
 								
-									self.after( item );
+								self.after( item );
 
-									item.effect( 'highlight', {}, 800 );
+								item.effect( 'highlight', {}, 800 );
 								
-									itembind.call( item );
-								}
-							});
-						} else {
-							$.post(baseurl + '/save', { todo: this.value, list: list, id: todo[0].id.replace(/todo-/, '') }, function( data ){
+								itembind.call( item );
+							}
+						});
+					} else {
 
-								self.html( input.value );
+						$.post(baseurl + '/save', { todo: self.text(), list: listId, id: todo[0].id.replace(/todo-/, '') }, function( data ){
 
-								itembind.call( self );
+							todo.effect( 'highlight', {}, 800 );
 
-							});
-						}
+							itembind.call( self );
+
+						});
 					}
-						
-					self.html( contents ).addClass( 'todo-new' ).removeClass( 'border' );
 				})
 				.keydown(function(event){
 
@@ -116,27 +123,25 @@
 					}
 				});
 
-				self.empty().append( input ).parents('li:first').addClass( 'active' );
-
-				input.focus();
-
 			})( $( this ) );
 		}
 
-		$('.todo-new').live('click', edittodo);
+		$('.todo-new').live('click', edithandler);
 		
 		var removeicon = $( '<span></span>' ).addClass('ui-icon ui-icon-closethick ui-helper-hidden-accessible helper-right');
 
 		function itembind(){
 
-			$( this ).prepend( removeicon.clone() )
+			$( this )
+			.prepend( removeicon.clone() )
+			.unbind('mouseenter mouseleave click')
 			.bind('mouseenter mouseleave', function(){
 
 				$( this ).toggleClass('todo-hover');
-
 			})
 			.click( itemclickhandler );
 		}
+
 
 		function itemclickhandler(event){
 
@@ -155,7 +160,7 @@
 				});
 			} else	{
 
-				edittodo.call( this );		
+				edithandler.call( this );		
 			}
 		}
 		
