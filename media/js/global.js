@@ -8,194 +8,255 @@
 			}
 	});
 
-	window.managetodos = function(baseurl){
+	$.widget('ui.listeditor', {
 
-		$(":checkbox").checkbox({
-		
-			select: function(event){
+		elements: {
+			removeicon: $( '<span></span>' )
+				.addClass('ui-icon ui-icon-closethick ui-helper-hidden-accessible helper-right'),
+			listCompleted: $('#list-completed')
+		},
 
-				var checkbox = $( this ), 
-					listparent = checkbox.parents('li:first'), 
-					id = listparent.attr('id').replace(/todo-/, '');
+		_create : function(){
 
-				if ( checkbox.is(':checked') ) {
+			var self = this;
 
-					$.post(baseurl + '/complete', { id: id }, function( data ){
+			$(':checkbox').checkbox({
+			
+				select: function(event){
 
-						setTimeout(function(){
-					
-							listparent.fadeOut('fast', function(){
+					var checkbox = $( this ), 
+						listitem = checkbox.parents('li:first'), 
+						id = listitem.attr('id').replace(/todo-/, ''),
+						action = checkbox.is(':checked') ? '_todoComplete' : '_todoIncomplete';
 
-								$( '.todo-list.completed' ).prepend( this );
+					self[ action ]( id, listitem, checkbox );
+				}
+			});
 
-								$( this ).fadeIn( 'fast' ).effect( 'highlight', {}, 800 );
+			$('.todo-new').live('click', function(){
 
-								checkbox.blur();
+				self._listItemClickHandler( this );
+			});
+			
+			$('.todo-list li').not('.todo-new, .todo-done').each(function(){
 
+				self._listItemBind( $( this ).find('.todo-content')[0] );
+			});
+		},
+
+		_todoComplete : function( id, listitem, checkbox ){
+			
+			var self = this;
+
+			$.post(self.options.baseurl + '/complete', { id: id }, function( data ){
+
+				setTimeout(function(){
+			
+					listitem.fadeOut('fast', function(){
+
+						var item = $( this );
+						
+						$( '.todo-list.completed' ).prepend( this );
+
+						function show(){
+							item.fadeIn( 'fast', function(){
+								item.effect( 'highlight', {}, 800 );
 							});
+						}
 
-						}, 140);
+						if (!self.elements.listCompleted.find('ul').children().length-1) {
+
+							self.elements.listCompleted.slideDown('slow', function(){
+								show();
+							});
+						} else show();
+
+						checkbox.blur();
+
+
+					});
+
+				}, 140);
+			});
+		},
+
+		_todoIncomplete : function( id, listitem, checkbox ){
+
+			var self = this;
+
+			$.post(self.options.baseurl + '/incomplete', { id: id }, function( data ){
+
+				setTimeout(function(){
+
+					listitem.fadeOut('fast', function(){
+
+						var index = data.sequence;
+
+						if ( index > 0 ) {
+
+							$( '.todo-list.todo:first li:eq(' + ( data.sequence - 1 )+ ')' ).after( this );
+						} else {
+						
+							$( '.todo-list.todo:first .todo-new' ).after( this );
+						}
+
+						$( this ).fadeIn( 'fast', function(){
+							$( this ).effect( 'highlight', {}, 800 );
+						});
+						
+						if (!self.elements.listCompleted.find('ul').children().length) {
+
+							self.elements.listCompleted.slideUp('slow');
+						}
+
+						checkbox.blur();
+					});
+
+				}, 140);
+			});
+		},
+
+		_listItemClickHandler: function( item ){
+
+			var self = this;
+
+			item = $( item );
+
+			if (item.attr('contentEditable') == 'true') return;
+
+			var contents = item.html(), 
+				text = $.trim( item.text() ), 
+				todo = item.parents('li:first'),
+				list = item.parents('ul:first'),
+				listId = list[0].id.replace(/list-/, '');
+			
+			todo.addClass('active');
+
+			item
+			.addClass('todo-editing')
+			.attr('contentEditable', true)
+			.html( text == 'New todo' ? '' : text )
+			.focus()
+			.unbind('blur.edit keydown.edit')
+			.bind('blur.edit', function(){
+			
+				todo.removeClass('active');
+				
+				item
+				.attr('contentEditable', false)
+				.removeClass('todo-editing todo-hover');
+
+				if ( item.hasClass('todo-new') ){
 					
+					$.post(self.options.baseurl + '/save', { 
+						todo: text, 
+						list: listId 
+					}, function( data ){
+
+						if ( data.outcome == 'success' ) {
+
+							var newitem = $( '<li></li>' ).html( text ).attr('id', 'todo-' + data.id);
+								
+							item.after( newitem );
+
+							newitem.effect( 'highlight', {}, 800 );
+								
+							self._listItemBind( item );
+						}
 					});
 				} else {
 
-					$.post(baseurl + '/incomplete', { id: id }, function( data ){
+					$.post(self.options.baseurl + '/save', { 
+						todo: text, 
+						list: listId, 
+						id: todo[0].id.replace(/todo-/, '') 
+					}, function( data ){
 
-						setTimeout(function(){
+						todo.effect( 'highlight', {}, 800 );
 
-							listparent.fadeOut('fast', function(){
-
-								var index = data.sequence;
-
-								if ( index > 0 ) {
-
-									$( '.todo-list.todo li:eq(' + ( data.sequence - 1 )+ ')' ).after( this );
-								} else {
-								
-									$( '.todo-list.todo .todo-new' ).after( this );
-								}
-
-								$( this ).fadeIn( 'fast' ).effect( 'highlight', {}, 800 );
-		
-								checkbox.blur();
-							});
-
-						}, 140);
+						self._listItemBind( item );
 					});
 				}
-			}
-		});
+			})
+			.bind('keydown.edit', function(event){
 
-		function edithandler(){
+				if ( event.keyCode == 13 ) {
 
-			(function( self ){
+					$( this ).trigger( 'blur' );
+				}
+			});
+		},
 
-				var contents = self.html(), 
-					text = $.trim( self.text() ), 
-					todo = self.parents('li:first'),
-					list = self.parents('ul:first'),
-					listId = list[0].id.replace(/list-/, '');
-				
-				todo.addClass('active');
 
-				self
-				.addClass('todo-editing')
-				.attr('contentEditable', true)
-				.html( text == 'New todo' ? '' : text )
-				.focus()
-				.blur(function(){
-				
-					todo.removeClass('active');
-					
-					self.removeClass('todo-hover');
+		_listItemBind : function( item ){
 
-					if ( self.hasClass('todo-new') ){
-						
-						$.post(baseurl + '/save', { todo: self.text(), list: listId }, function( data ){
+			var self = this;
 
-							if ( data.outcome == 'success' ) {
-
-								var item = $( '<li></li>' ).html( self.text() ).attr('id', 'todo-' + data.id);
-								
-								self.after( item );
-
-								item.effect( 'highlight', {}, 800 );
-								
-								itembind.call( item );
-							}
-						});
-					} else {
-
-						$.post(baseurl + '/save', { todo: self.text(), list: listId, id: todo[0].id.replace(/todo-/, '') }, function( data ){
-
-							todo.effect( 'highlight', {}, 800 );
-
-							itembind.call( self );
-
-						});
-					}
-				})
-				.keydown(function(event){
-
-					if ( event.keyCode == 13 ) {
-
-						$( this ).trigger( 'blur' );
-					}
-				});
-
-			})( $( this ) );
-		}
-
-		$('.todo-new').live('click', edithandler);
-		
-		var removeicon = $( '<span></span>' ).addClass('ui-icon ui-icon-closethick ui-helper-hidden-accessible helper-right');
-
-		function itembind(){
-
-			$( this )
-			.prepend( removeicon.clone() )
+			$( item )
+			.prepend( this.elements.removeicon.clone() )
 			.unbind('mouseenter mouseleave click')
 			.bind('mouseenter mouseleave', function(){
 
 				$( this ).toggleClass('todo-hover');
 			})
-			.click( itemclickhandler );
-		}
+			.click( function( event ){
 
+				var item = $( this ), 
+					listparent = item.parents('li:first'), 
+					id = listparent.attr('id').replace(/todo-/, '');
 
-		function itemclickhandler(event){
+				if ( new RegExp(self.elements.removeicon[0].className).test( event.target.className ) ){
+						
+					$.post(self.options.baseurl + '/remove', { id: id }, function( data ){
 
-			var self = $( this ), 
-				listparent = self.parents('li:first'), 
-				id = listparent.attr('id').replace(/todo-/, '');
+						listparent.fadeOut('fast', function(){
 
-			if ( new RegExp(removeicon[0].className).test( event.target.className ) ){
-					
-				$.post(baseurl + '/remove', { id: id }, function( data ){
-
-					listparent.fadeOut('fast', function(){
-
-						$( this ).remove();
+							$( this ).remove();
+						});
 					});
-				});
-			} else	{
+				} else	{
+				
+					self._listItemClickHandler( this );		
+				}
 
-				edithandler.call( this );		
-			}
+			});
+		},
+
+		_sortable : function(){
+
+			$('.todo-list').sortable({
+				containment: 'parent',
+				items: 'li:not(.todo-new)',
+				distance: 5,
+				update: function(event, ui) { 
+
+					ui.item.unbind('click');
+
+					ui.item.one('click', function (event) { 
+
+						event.stopImmediatePropagation();
+
+						$(this).click(itemclickhandler);
+					});
+				},
+				stop: function(event, ui){
+
+					ui.item.removeClass('todo-hover');
+
+					var list = $('.todo-list').sortable( 'serialize' );
+
+					$.post(self.options.baseurl + '/reorder', list);
+				}
+			}).disableSelection();
+		},
+
+		destroy : function(){
+
+			this.element.find( 'checkbox' ).checkbox( 'destroy' );
+
+			$.Widget.prototype.destroy.apply(this, arguments);
 		}
-		
-		$('.todo-list li').not('.todo-new, .todo-done').each(function(){
 
-			itembind.call( $( this ).find('.todo-content')[0] );
-		});
-
-		return;
-
-		$('.todo-list').sortable({
-			containment: 'parent',
-			items: 'li:not(.todo-new)',
-			distance: 5,
-			update: function(event, ui) { 
-
-				ui.item.unbind('click');
-
-				ui.item.one('click', function (event) { 
-
-					event.stopImmediatePropagation();
-
-					$(this).click(itemclickhandler);
-				});
-			},
-			stop: function(event, ui){
-
-				ui.item.removeClass('todo-hover');
-
-				var list = $('.todo-list').sortable( 'serialize' );
-
-				$.post(baseurl + '/reorder', list);
-			}
-		}).disableSelection();
-		
-	};
+	});
 
 })( jQuery, window, window.document );

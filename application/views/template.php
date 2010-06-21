@@ -16,9 +16,9 @@
 			<h1><?php echo $title ?></h2>
 		</header>-->
 
-		<section id="content">
+		<div id="content">
 			<?php echo $content ?>
-		</section>
+		</div>
 	</div>
 
 </body>

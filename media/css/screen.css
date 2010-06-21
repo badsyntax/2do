@@ -79,8 +79,10 @@ small {
 	margin-top: 0;
 }
 
+#content {
+	padding: .5em 2em 1em 2em;
+}
 section {
-	padding: 1em 2em 2em 2em;
 	display: block;
 }
 
@@ -96,7 +98,7 @@ header {
 
 nav {
 	display: block;
-	margin: .5em;
+	margin: .5em 1.2em;
 }
 nav ul {
 	margin: 0 auto;
