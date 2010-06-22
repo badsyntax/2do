@@ -11,13 +11,13 @@
 
 	$.widget('ui.listeditor', {
 
-		elements: {
-			removeicon: $( '<span></span>' )
-				.addClass('ui-icon ui-icon-closethick ui-helper-hidden-accessible helper-right'),
-			listCompleted: $('#list-completed')
-		},
-		
 		_create : function(){
+
+			this.elements = {
+				removeicon: $( '<span></span>' )
+					.addClass('ui-icon ui-icon-closethick ui-helper-hidden-accessible helper-right'),
+				listCompleted: $('#list-completed')
+			};
 
 			var self = this;
 		
@@ -63,11 +63,28 @@
 							});
 						}
 
-						if (!self.elements.listCompleted.find('ul').children().length-1) {
+						if ( self.elements.listCompleted.find('ul').children().length === 1 ) {
 
-							self.elements.listCompleted.slideDown('slow', function(){
-								show();
+							self.elements.listCompleted.css({height: 'auto', display: 'block'});
+
+							item.show();
+							
+							var height = self.elements.listCompleted.height();
+
+							item.hide();
+
+							self.elements.listCompleted
+							.css({height: 0, display: 'none'})
+							.animate({
+								height: height,
+								opacity: 1
+							}, function(){
+
+								$( this ).css({ height: 'auto' });
 							});
+							
+							show();
+
 						} else show();
 
 						checkbox.blur();
@@ -86,30 +103,31 @@
 			$.post(self.options.baseurl + '/incomplete', { id: id }, function( data ){
 
 				setTimeout(function(){
-
 					listitem.fadeOut('fast', function(){
 
 						var index = data.sequence;
 
 						if ( index > 0 ) {
 
-							$( '.task-list.task:first li:eq(' + ( data.sequence - 1 )+ ')' ).after( this );
+							$( '.task-list.task:first li:eq(' + ( data.sequence - 1 )+ ')' ).after( listitem );
 						} else {
 						
-							$( '.task-list.task:first .task-new' ).after( this );
+							$( '.task-list.task:first .task-new' ).after( listitem );
 						}
 
-						$( this ).fadeIn( 'fast', function(){
+						listitem.fadeIn( 'fast', function(){
 
 							$( this ).effect( 'highlight', {}, 800 );
 						});
-						
-						if (!self.elements.listCompleted.find('ul').children().length) {
 
-							self.elements.listCompleted.slideUp('slow');
-						}
+
 
 						checkbox.blur();
+
+						if ( self.elements.listCompleted.find('ul').children().length === 0 ) {
+
+							self.elements.listCompleted.slideUp('slow').fadeOut();
+						}
 					});
 
 				}, 140);
