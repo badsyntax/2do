@@ -83,9 +83,9 @@ Kohana::modules(array(
  * defaults for the URI.
  */
 
-Route::set('lists', 'lists/<date>', array('date' => '.*'))
+Route::set('list', 'list/<date>', array('date' => '.*'))
 	->defaults(array(
-		'controller' => 'lists',
+		'controller' => 'list',
 		'action' => 'index',
 	));
 

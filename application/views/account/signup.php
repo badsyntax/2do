@@ -1,3 +1,6 @@
+<h3>Sign up</h3>
+
+<br />
 <form method="post" action="<?php echo Url::site('sign-up') ?>">
 	<fieldset>
 

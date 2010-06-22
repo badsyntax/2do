@@ -5,12 +5,14 @@ class Controller_Home extends Controller_Base {
 	public function action_index(){
 
 		if (Auth::instance()->logged_in()) {
-			Request::instance()->redirect('lists');
+
+			$this->template = Request::factory('list')->execute()->response;
+		} else {
+
+			$this->template->title = 'Todo';
+
+			$this->template->content = View::factory('page/home' );
 		}
-
-		$this->template->title = 'Todo';
-
-		$this->template->content = View::factory('page/home' );
 	}
 
 }

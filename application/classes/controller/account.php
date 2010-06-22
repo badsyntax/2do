@@ -4,12 +4,7 @@ class Controller_Account extends Controller_Base {
 
 	public $auth_required = FALSE;
  
-	function action_index(){
-
-		$this->template->content = 'test';	
-	}
-
-	function action_sign_in(){
+	public function action_sign_in(){
 
 		if(Auth::instance()->logged_in()){
 
@@ -24,7 +19,7 @@ class Controller_Account extends Controller_Base {
 			$status = ORM::factory('user')->login($_POST);
  
 			if ($status) {		
-				Request::instance()->redirect('lists');
+				Request::instance()->redirect('/');
 			} else {
 				$content->errors = $_POST->errors('signin');
 			}
@@ -111,7 +106,7 @@ class Controller_Account extends Controller_Base {
 
 		Auth::instance()->logout();
 
-		Request::instance()->redirect('profile');		
+		Request::instance()->redirect('/');		
 	}
 
 }

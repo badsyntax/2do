@@ -3,7 +3,8 @@
 
 	$.ajaxSetup({
 		dataType: 'json',
-		error: function(xhr, textStatus, error, callback) {
+		error: function( xhr, textStatus ) {
+
 				alert('Something went wrong! Please try again.');
 			}
 	});
@@ -124,14 +125,14 @@
 			$.post(this.options.baseurl + '/save', { 
 				todo: text, 
 				list: listId 
-			}, function( data ){
+			}, function( resposne ){
 
-				if ( data.outcome == 'success' ) {
+				if ( response.outcome == 'success' ) {
 
 					var newitem = 
 						$( '<li></li>' )
 						.html( '<label><input type="checkbox" /></label><div class="todo-content">' + text + '</div>' )
-						.attr('id', 'todo-' + data.id)
+						.attr('id', 'todo-' + response.id)
 						.find(':checkbox').checkbox( self.checkboxConfig )
 						.end();
 						
@@ -140,6 +141,9 @@
 					newitem.effect( 'highlight', {}, 800 );
 						
 					self._contentBind( newitem.find('.todo-content') );
+				} else {
+			
+					alert( response.message );
 				}
 			});
 		},
@@ -152,9 +156,15 @@
 				todo: text, 
 				list: listId, 
 				id: item[0].id.replace(/todo-/, '') 
-			}, function( data ){
+			}, function( response ){
 
-				item.effect( 'highlight', {}, 800 );
+				if ( response.outcome == 'success' ) {
+
+					item.effect( 'highlight', {}, 800 );
+				} else {
+
+					alert( response.message );
+				}
 			});
 		},
 

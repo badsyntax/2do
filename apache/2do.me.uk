@@ -2,5 +2,6 @@
 
 	DocumentRoot	/srv/projects/2do.me.uk
 	ServerName	2do.me.uk
+	ServerAlias	2d0.me
 
 </VirtualHost>

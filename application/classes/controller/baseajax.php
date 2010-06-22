@@ -9,6 +9,8 @@ class Controller_BaseAjax extends Controller {
 	public function before() {
 
 		parent::before();
+                
+		$this->request->headers['Content-type'] = 'application/x-javascript';
 
 		$this->session = Session::instance();
 		
@@ -22,10 +24,14 @@ class Controller_BaseAjax extends Controller {
 
 			if (!Auth::instance()->logged_in()){
 
-				exit('no permission, you are not logged in');
+				$response = array(
+					'outcome' => false,
+					'message' => 'Error: You have been logged out!'
+				);
+
+				exit(json_encode($response));
 			}
 		}
 
-                $this->request->headers['Content-type'] = 'application/x-javascript';
 	}
 }
