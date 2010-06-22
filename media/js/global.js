@@ -41,6 +41,8 @@
 
 				self._contentBind( $( this ).find('.task-content')[0] );
 			});
+
+			this._sortable();
 		},
 
 		_taskComplete : function( id, listitem, checkbox ){
@@ -58,6 +60,7 @@
 						$( '.task-list.completed' ).prepend( this );
 
 						function show(){
+
 							item.fadeIn( 'fast', function(){
 								item.effect( 'highlight', {}, 800 );
 							});
@@ -88,8 +91,6 @@
 						} else show();
 
 						checkbox.blur();
-
-
 					});
 
 				}, 140);
@@ -119,8 +120,6 @@
 
 							$( this ).effect( 'highlight', {}, 800 );
 						});
-
-
 
 						checkbox.blur();
 
@@ -186,7 +185,7 @@
 			});
 		},
 
-		_listItemClickHandler: function( content ){
+		_contentClickHandler: function( content ){
 
 			var self = this;
 
@@ -205,7 +204,7 @@
 			.data('origval', content.text() )
 			.addClass('task-editing')
 			.attr('contentEditable', true)
-			.html( text == 'New task' ? '&nbsp;' : text )
+			.html( text == 'New todo' ? '&nbsp;' : text )
 			.focus()
 			.unbind('blur.edit keydown.edit')
 			.bind('blur.edit', function(){
@@ -267,13 +266,14 @@
 					});
 				} else	{
 				
-					self._listItemClickHandler( this );		
+					self._contentClickHandler( this );		
 				}
-
 			});
 		},
 
 		_sortable : function(){
+
+			var self = this;
 
 			$('.task-list').sortable({
 				containment: 'parent',
@@ -281,22 +281,23 @@
 				distance: 5,
 				update: function(event, ui) { 
 
-					ui.item.unbind('click');
-
-					ui.item.one('click', function (event) { 
-
-						event.stopImmediatePropagation();
-
-						$(this).click(itemclickhandler);
-					});
+					ui.item.find('.task-content').unbind('click');
 				},
 				stop: function(event, ui){
 
-					ui.item.removeClass('task-hover');
+					ui.item.removeClass('active')
+						.find('.task-content').removeClass('task-hover');
 
-					var list = $('.task-list').sortable( 'serialize' );
+					var listSerialized = $('.task-list').sortable( 'serialize' );
 
-					$.post(self.options.baseurl + '/reorder', list);
+					$.post(self.options.baseurl + '/reorder', listSerialized, function(){
+
+						ui.item.effect( 'highlight', {}, 800 ).find('.task-content').click(function(){
+
+							self._contentClickHandler( this );
+						});
+					});
+					
 				}
 			}).disableSelection();
 		},
