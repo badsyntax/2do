@@ -1,7 +1,7 @@
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin:0; padding:0; border:0; outline:0; font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit; vertical-align:baseline; }
 body {
 	background: #232323;
-	margin: 0;
+	margin: 3.2em 0 1em;
 	font: normal 84%/1.1 "Lucinda Grande", "Trebuchet MS", Arial, Helvetica, sans-serif;
 	color: #444;
 }
@@ -24,7 +24,7 @@ h3 {
 	border-bottom: 1px solid #ddd;
 	font-weight: bold;
 }
-h2, h3, p {
+h2, h3, p, button {
 	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', Arial, Helvetica, sans-serif;
 }
 em {
@@ -40,7 +40,7 @@ ul ul {
 li {
 	margin-bottom: .4em;
 }
-p {
+p, form {
 	margin-bottom: 1em;
 }
 a {
@@ -66,10 +66,25 @@ small {
 	src: local('Droid Sans Mono'), url('http://themes.googleusercontent.com/font?kit=ns-m2xQYezAtqh7ai59hJViAdY2Sz5g753dOuB6TK0I') format('truetype');
 }
 
+header {
+	display: block;
+	margin: 0 auto;
+	width: 668px;
+}
+
+#logo a {
+	color: #fff;
+	color: #fff;
+	font-size: 240%;
+}
+#logo a:hover {
+	color: #fff;
+}
+
 .wrapper {
 	background: #fff;
 	width: 720px;
-	margin: 3.2em auto 1em auto;
+	margin: -8px auto 0 auto;
 	border: 1px solid #000;
 	-moz-border-radius: 12px;
 	-webkit-border-radius: 12px;
@@ -80,16 +95,12 @@ small {
 }
 
 #content {
-	padding: .5em 2em 1em 2em;
+	padding: 2em 2em 1em 2em;
 }
 section {
 	display: block;
 }
 
-header {
-	display: block;
-	margin-bottom: 2em;
-}
 
 #content {
 	
@@ -98,34 +109,25 @@ header {
 
 nav {
 	display: block;
-	margin: .5em 1.2em;
-}
-nav ul {
-	margin: 0 auto;
+	margin: .5em -10px 0 0;
 	padding: 0;
-	margin-left: 26px;
 	float: right;
 }
-nav ul li {
-	list-style: none;
-	margin: 0;
-	padding: 0;
+nav a {
 	float: left;
 	font-family: 'Lucinda Grande', 'Trebuchet MS', Arial, Helvetica, sans-serif;
-}
-nav ul li a {
-	display: block;
-	padding: .2em .8em;
+	padding: 0 .8em;
 	text-decoration: none;
 	text-align: center;
 	outline: none;
+	color: #ccc;
 }
-nav ul li a.selected {
+nav a.selected {
 	text-decoration: underline;
 }
-nav ul li a:hover {
-	text-shadow: 1px 1px 2px #aaa;
-	color: #000;
+nav a:hover {
+	text-shadow: 1px 1px 2px #000;
+	color: #fff;
 }
 
 fieldset {
@@ -167,17 +169,17 @@ textarea {
 	padding: .6em;
 }
 
-.todo-list {
+.task-list {
 	margin-left: 0;
 }
-.todo-list li {
+.task-list li {
 	border: 1px dotted #ddd;
 	padding: .3em .3em .1em .3em;
 	list-style: none;
 	position: relative;
 	min-height: 1.4em;
 }
-.todo-list li textarea {
+.task-list li textarea {
 	padding: 0;
 	margin: 0;
 	border: 0;
@@ -187,42 +189,42 @@ textarea {
 	width: 100%;
 	background: transparent;
 }
-.todo-list .todo-hover .ui-icon {
+.task-list .task-hover .ui-icon {
 	position: absolute;
 	left: auto;
 	right: 0;
 	top: 0;
 }
-.todo-list li.border {
+.task-list li.border {
 	border: 1px dotted #444;
 }
-.todo-list textarea {
+.task-list textarea {
 	width: 96%;
 	display: block;
 }
-.todo-list .todo-new {
+.task-list .task-new {
 	cursor: pointer;
 }
-.todo-list .todo-new .todo-add {
+.task-list .task-new .task-add {
 	margin: -1px 2px 0 0;
 }
-.todo-done {
+.task-done {
 	/*text-decoration: line-through;*/
 }
 
-.todo-list .todo-content {
+.task-list .task-content {
 	margin-top: 1px;
 	cursor: pointer;
 	background: transparent;
 	position: relative;
 	margin-left: 24px;
 }
-.todo-list .todo-editing {
+.task-list .task-editing {
 	cursor: auto;
 }
-.todo-list .todo-content .ui-icon {
+.task-list .task-content .ui-icon {
 }
-.todo-list li.active {
+.task-list li.active {
 	border-color: #000;
 }
 

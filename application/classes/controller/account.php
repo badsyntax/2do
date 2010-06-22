@@ -11,7 +11,7 @@ class Controller_Account extends Controller_Base {
 			Request::instance()->redirect('profile');		
 		}
 
-		$this->template->title = 'Sign in';
+		$this->template->title = '2do : sign in';
 		$content = $this->template->content = View::factory('account/signin');
 
 		if ($_POST) {
@@ -36,7 +36,7 @@ class Controller_Account extends Controller_Base {
 		$profile = View::factory('account/profile');
 		$profile->user = $this->user;
 
-		$this->template->title = 'Profile';
+		$this->template->title = '2do : profile';
 		$content = $this->template->content = $profile;
 
 		if ($_POST) {
@@ -54,21 +54,20 @@ class Controller_Account extends Controller_Base {
 
 			} else {
 
-				#Get errors for display in view
 				$content->errors = $post->errors('register');
 			}
 		}
 	}
  
-
-	function action_sign_up(){
+	public function action_sign_up(){
 
 		if(Auth::instance()->logged_in()){
 
 			Request::instance()->redirect('profile');		
 		}
 
-		$this->template->title = 'Sign up'; 
+		$this->template->title = '2do : sign up'; 
+
 		$content = $this->template->content = View::factory('account/signup');		
  
 		if ($_POST) {
@@ -79,24 +78,18 @@ class Controller_Account extends Controller_Base {
  
 			if ($post->check()) {
 
-				#Affects the sanitized vars to the user object
 				$user->values($post);
  
-				#create the account
 				$user->save();
  
-				#Add the login role to the user
-				$login_role = new Model_Role(array('name' =>'login'));
-				$user->add('roles',$login_role);
+				$user->add('roles', new Model_Role(array('name' =>'login')));
  
-				#sign the user in
 				Auth::instance()->login($post['username'], $post['password']);
  
-				#redirect to the user account
 				Request::instance()->redirect('profile');
 			}
 			else {
-				#Get errors for display in view
+
 				$content->errors = $post->errors('register');
 			}			
 		}		

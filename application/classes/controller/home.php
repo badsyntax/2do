@@ -9,7 +9,7 @@ class Controller_Home extends Controller_Base {
 			$this->template = Request::factory('list')->execute()->response;
 		} else {
 
-			$this->template->title = 'Todo';
+			$this->template->title = '2do';
 
 			$this->template->content = View::factory('page/home' );
 		}

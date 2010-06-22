@@ -1,5 +1,5 @@
 <?php
-class Model_Todo extends ORM {
+class Model_Task extends ORM {
 
 	protected $_belongs_to = array('list' => array());
 

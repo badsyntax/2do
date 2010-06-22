@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
-class Controller_Todo extends Controller_BaseAjax {
+class Controller_Task extends Controller_BaseAjax {
 
 	public $auth_required = array('login');
  
@@ -13,23 +13,23 @@ class Controller_Todo extends Controller_BaseAjax {
 
 		if (isset($_POST['id'])) {
 
-			$todo = ORM::factory('todo', (int) $_POST['id']);
-			if (!$todo->id) exit;
+			$task = ORM::factory('task', (int) $_POST['id']);
+			if (!$task->id) exit;
 		} else {
 
-			$todo = ORM::factory('todo');
-			$todo->sequence = 0;
-			$todo->list_id = (int) $_POST['list'];
-			$todo->user_id = $this->user->id;
+			$task = ORM::factory('task');
+			$task->sequence = 0;
+			$task->list_id = (int) $_POST['list'];
+			$task->user_id = $this->user->id;
 		}
 
-		$todo->content = trim($_POST['todo']);
-		$todo->save();
+		$task->content = trim($_POST['task']);
+		$task->save();
 
 		$response = array(
 			'outcome' => 'success',
 			'message' => 'Successfully saved!',
-			'id' => $todo->id
+			'id' => $task->id
 		);
 
 		$this->request->response = json_encode($response);
@@ -37,7 +37,7 @@ class Controller_Todo extends Controller_BaseAjax {
 
 	public function action_remove(){
 		
-		ORM::factory('todo', (int) $_POST['id'])
+		ORM::factory('task', (int) $_POST['id'])
 			->where('user_id', '=', $this->user->id)
 			->delete();
 
@@ -51,7 +51,7 @@ class Controller_Todo extends Controller_BaseAjax {
 
 	public function action_complete(){
 
-		ORM::factory('todo', (int) $_POST['id'])->complete();
+		ORM::factory('task', (int) $_POST['id'])->complete();
 		
 		$response = array(
 			'outcome' => 'success'
@@ -62,11 +62,11 @@ class Controller_Todo extends Controller_BaseAjax {
 
 	public function action_incomplete(){
 		
-		$todo = ORM::factory('todo', (int) $_POST['id'])->incomplete();
+		$task = ORM::factory('task', (int) $_POST['id'])->incomplete();
 
 		$response = array(
 			'outcome' => 'success',
-			'sequence' => $todo->sequence
+			'sequence' => $task->sequence
 		);
 
 		$this->request->response = json_encode($response);
@@ -74,11 +74,11 @@ class Controller_Todo extends Controller_BaseAjax {
 
 	public function action_reorder(){
 
-		foreach($_POST['todo'] as $i => $id){
+		foreach($_POST['task'] as $i => $id){
 
-			$todo = ORM::factory('todo')->where('id', '=', $id)->find();
-			$todo->sequence = $i;
-			$todo->save();
+			$task = ORM::factory('task')->where('id', '=', $id)->find();
+			$task->sequence = $i;
+			$task->save();
 		}
 		
 		$response = array(

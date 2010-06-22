@@ -1,8 +1,12 @@
-<p>
-	Todo: organize your life
-</p>
+<button id="go" style="background:transparent;border:0;font-size:120%;margin: 0 0 1em 0;cursor:pointer;padding:0;">
+	organize your life
+</button>
 
-<ul style="margin-bottom:0">
-	<li><a href="<?php echo Url::site('sign-in') ?>">Sign in</a></li>
-	<li><a href="<?php echo Url::site('sign-up') ?>">Sign up?</a></li>
-</ul>
+
+<script type="text/javascript">
+
+$('button#go').click(function(){
+
+	window.location = '<?php echo Url::site('list') ?>';
+});
+</script>

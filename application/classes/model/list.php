@@ -1,13 +1,13 @@
 <?php
 class Model_List extends ORM {
 
-	protected $_has_many = array('todos' => array());
+	protected $_has_many = array('tasks' => array());
 
-	public function get_todos($user_id=0, $date=''){
+	public function get_tasks($user_id=0, $date=''){
 
-		$todos = new Model_Todo;
+		$tasks = new Model_Task;
 
-		return $todos
+		return $tasks
 			->where('deleted', '=', FALSE)
 			->where('complete', '=', FALSE)
 			->where('list_id', '=', $this->id)
@@ -18,11 +18,11 @@ class Model_List extends ORM {
 
 	}
 
-	public function get_todos_completed($user_id=0, $date=''){
+	public function get_tasks_completed($user_id=0, $date=''){
 
-		$todos = new Model_Todo;
+		$tasks = new Model_Task;
 
-		$todos
+		return $tasks
 			->where('deleted', '=', FALSE)
 			->where('complete', '=', TRUE)
 			->where('list_id', '=', $this->id)

@@ -27,8 +27,8 @@
 
 					var checkbox = $( this ), 
 						listitem = checkbox.parents('li:first'), 
-						id = listitem.attr('id').replace(/todo-/, ''),
-						action = checkbox.is(':checked') ? '_todoComplete' : '_todoIncomplete';
+						id = listitem.attr('id').replace(/task-/, ''),
+						action = checkbox.is(':checked') ? '_taskComplete' : '_taskIncomplete';
 
 					self[ action ]( id, listitem, checkbox );
 				}
@@ -37,13 +37,13 @@
 
 			$(':checkbox').checkbox( this.checkboxConfig );
 
-			$('.todo-list li').not('.todo-done').each(function(){
+			$('.task-list li').not('.task-done').each(function(){
 
-				self._contentBind( $( this ).find('.todo-content')[0] );
+				self._contentBind( $( this ).find('.task-content')[0] );
 			});
 		},
 
-		_todoComplete : function( id, listitem, checkbox ){
+		_taskComplete : function( id, listitem, checkbox ){
 			
 			var self = this;
 
@@ -55,7 +55,7 @@
 
 						var item = $( this );
 						
-						$( '.todo-list.completed' ).prepend( this );
+						$( '.task-list.completed' ).prepend( this );
 
 						function show(){
 							item.fadeIn( 'fast', function(){
@@ -79,7 +79,7 @@
 			});
 		},
 
-		_todoIncomplete : function( id, listitem, checkbox ){
+		_taskIncomplete : function( id, listitem, checkbox ){
 
 			var self = this;
 
@@ -93,10 +93,10 @@
 
 						if ( index > 0 ) {
 
-							$( '.todo-list.todo:first li:eq(' + ( data.sequence - 1 )+ ')' ).after( this );
+							$( '.task-list.task:first li:eq(' + ( data.sequence - 1 )+ ')' ).after( this );
 						} else {
 						
-							$( '.todo-list.todo:first .todo-new' ).after( this );
+							$( '.task-list.task:first .task-new' ).after( this );
 						}
 
 						$( this ).fadeIn( 'fast', function(){
@@ -116,31 +116,31 @@
 			});
 		},
 
-		_todoSave : function( text, item, listId ){
+		_taskSave : function( text, item, listId ){
 
 			var self = this;
 
 			if ( !text ) return;
 
 			$.post(this.options.baseurl + '/save', { 
-				todo: text, 
+				task: text, 
 				list: listId 
-			}, function( resposne ){
+			}, function( response ){
 
 				if ( response.outcome == 'success' ) {
 
 					var newitem = 
 						$( '<li></li>' )
-						.html( '<label><input type="checkbox" /></label><div class="todo-content">' + text + '</div>' )
-						.attr('id', 'todo-' + response.id)
+						.html( '<label><input type="checkbox" /></label><div class="task-content">' + text + '</div>' )
+						.attr('id', 'task-' + response.id)
 						.find(':checkbox').checkbox( self.checkboxConfig )
 						.end();
 						
-					item.after( newitem ).find('.todo-content').html('New todo');
+					item.after( newitem ).find('.task-content').html('New task');
 						
 					newitem.effect( 'highlight', {}, 800 );
 						
-					self._contentBind( newitem.find('.todo-content') );
+					self._contentBind( newitem.find('.task-content') );
 				} else {
 			
 					alert( response.message );
@@ -148,14 +148,14 @@
 			});
 		},
 
-		_todoUpdate: function( text, item, listId ){
+		_taskUpdate: function( text, item, listId ){
 			
 			if ( !text ) return;
 
 			$.post(this.options.baseurl + '/save', { 
-				todo: text, 
+				task: text, 
 				list: listId, 
-				id: item[0].id.replace(/todo-/, '') 
+				id: item[0].id.replace(/task-/, '') 
 			}, function( response ){
 
 				if ( response.outcome == 'success' ) {
@@ -185,9 +185,9 @@
 
 			content
 			.data('origval', content.text() )
-			.addClass('todo-editing')
+			.addClass('task-editing')
 			.attr('contentEditable', true)
-			.html( text == 'New todo' ? '&nbsp;' : text )
+			.html( text == 'New task' ? '&nbsp;' : text )
 			.focus()
 			.unbind('blur.edit keydown.edit')
 			.bind('blur.edit', function(){
@@ -196,14 +196,14 @@
 				
 				content
 				.attr('contentEditable', false)
-				.removeClass('todo-editing todo-hover');
+				.removeClass('task-editing task-hover');
 
 
 				(function( self ){
 
 					var text = $.trim( content.text() );
 
-					self[ item.hasClass('todo-new') ? '_todoSave' : '_todoUpdate' ]( text, item, listId ); 
+					self[ item.hasClass('task-new') ? '_taskSave' : '_taskUpdate' ]( text, item, listId ); 
 
 				})( self );
 				
@@ -230,13 +230,13 @@
 			.unbind('mouseenter mouseleave click')
 			.bind('mouseenter mouseleave', function(){
 
-				$( this ).toggleClass('todo-hover');
+				$( this ).toggleClass('task-hover');
 			})
 			.click( function( event ){
 
 				var item = $( this ), 
 					listparent = item.parents('li:first'), 
-					id = listparent.attr('id').replace(/todo-/, '');
+					id = listparent.attr('id').replace(/task-/, '');
 
 				if ( new RegExp(self.elements.removeicon[0].className).test( event.target.className ) ){
 						
@@ -257,9 +257,9 @@
 
 		_sortable : function(){
 
-			$('.todo-list').sortable({
+			$('.task-list').sortable({
 				containment: 'parent',
-				items: 'li:not(.todo-new)',
+				items: 'li:not(.task-new)',
 				distance: 5,
 				update: function(event, ui) { 
 
@@ -274,9 +274,9 @@
 				},
 				stop: function(event, ui){
 
-					ui.item.removeClass('todo-hover');
+					ui.item.removeClass('task-hover');
 
-					var list = $('.todo-list').sortable( 'serialize' );
+					var list = $('.task-list').sortable( 'serialize' );
 
 					$.post(self.options.baseurl + '/reorder', list);
 				}

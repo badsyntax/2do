@@ -8,13 +8,14 @@
 	<!--[if IE]><?php echo HTML::script('media/js/html5.js')?><![endif]-->
 </head>
 <body>
+	<header>
+		<?php echo View::factory('page/nav') ?>
+		<div id="logo">
+			<a href="/">2do</a>
+		</div>
+	</header>
 	<div class="wrapper">
 		
-		<?php echo View::factory('page/nav') ?>
-
-		<!--<header>
-			<h1><?php echo $title ?></h2>
-		</header>-->
 
 		<div id="content">
 			<?php echo $content ?>

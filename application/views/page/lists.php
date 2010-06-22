@@ -4,19 +4,19 @@
 	<section id="<?php echo strtolower($list['list']->name) ?>" class="list">
 		<h3><?php echo $list['list']->name ?></h3>
 
-		<ul id="list-<?php echo $list['list']->id ?>" class="todo-list todo">
-			<li class="todo-new">
-				<span class="ui-icon ui-icon-plusthick helper-left todo-add"></span>
-				<div class="todo-content">
+		<ul id="list-<?php echo $list['list']->id ?>" class="task-list task">
+			<li class="task-new">
+				<span class="ui-icon ui-icon-plusthick helper-left task-add"></span>
+				<div class="task-content">
 					New todo
 				</div>
 			</li>
 			<?php 
-			foreach($list['todos'] as $todo){?>
-				<li id="todo-<?php echo $todo->id ?>" class="helper-clearfix<?php if ($todo->complete){?> todo-complete<?php }?>">
+			foreach($list['tasks'] as $task){?>
+				<li id="task-<?php echo $task->id ?>" class="helper-clearfix<?php if ($task->complete){?> task-complete<?php }?>">
 					<label>	<input type="checkbox" /> Check 1 </label>
-					<div class="todo-content">
-						<?php echo $todo->content ?>
+					<div class="task-content">
+						<?php echo $task->content ?>
 					</div>
 					</li>
 			<?php }?>
@@ -33,12 +33,12 @@
 
 <h3>Completed</h3>
 
-<ul class="todo-list completed">
-	<?php foreach($complete as $todo){?>
-	<li class="todo-complete" id="todo-<?php echo $todo->id ?>">
+<ul class="task-list completed">
+	<?php foreach($complete as $task){?>
+	<li class="task-complete" id="task-<?php echo $task->id ?>">
 		<label>	<input type="checkbox" checked="checked" /> Check 1 </label>
-		<div class="todo-content">
-			<?php echo $todo->content ?>
+		<div class="task-content">
+			<?php echo $task->content ?>
 		</div>
 	</li>
 	<?php }?>
@@ -47,7 +47,7 @@
 <script type="text/javascript">
 
 	$('#content').listeditor({
-		baseurl: '<?php echo Url::site('todo') ?>'
+		baseurl: '<?php echo Url::site('task') ?>'
 	});
 </script>
 
