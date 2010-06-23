@@ -18,8 +18,10 @@
 			this.elements = {
 				completedList: $('#list-completed'),
 				sortableLists: $('.task-list.sortable'),
-				removeicon: $( '<span></span>' )
-					.addClass('ui-icon ui-icon-closethick ui-helper-hidden-accessible helper-right')
+				removeIcon: $( '<span></span>' )
+					.addClass( 'ui-icon ui-icon-closethick task-remove' ),
+				timeIcon: $( '<span></span>' )
+					.addClass( 'ui-icon ui-icon-time task-time' )
 			};
 
 			this.checkboxConfig = {
@@ -69,28 +71,35 @@
 			})
 			.disableSelection();
 			
-			$( '.task-list').bind( 'click.edit', function( event ){
-
-				if ( !event.target ) return;
-
-				if ( event.target.nodeName === 'LI' ){
+			$( '.task-list' )
+			.delegate( '.task-remove', 'click', function(){
 					
-					var content = $( event.target ).find( '.task-content' );
+				var item = $( this ).parents( 'li:first' );
 
-					self._contentClickHandler( content );
-
-				} else if ( /task-content/.test( event.target.className ) ) {
-
-					self._contentClickHandler( event.target );		
-
-				} else if ( new RegExp( self.elements.removeicon[0].className ).test( event.target.className ) ){
-
-					var item = $( event.target ).parents( 'li:first' );
+				self._taskRemove( item );
+			})
+			.delegate( '.task-time', 'click', function(){
+					
+				var item = $( this ).parents( 'li:first' );
 				
-					self._taskRemove( item );
-				}
-			});
+				self._taskTime( item );
+			})
+			.delegate( '.task-content', 'click', function(){
+					
+				self._contentClickHandler( this );		
+			})
+			.delegate( 'li:not(.task-new)', 'mouseenter', function(){
 
+				$( this )
+					.prepend( self.elements.timeIcon.show() )
+					.prepend( self.elements.removeIcon.show() );
+			})
+			.delegate( 'li', 'mouseleave', function(){
+
+				self.elements.removeIcon.hide();
+
+				self.elements.timeIcon.hide();
+			});
 		},
 
 		_saveSequences : function( list, item, callback ){
@@ -246,7 +255,7 @@
 
 			var id = listitem.attr('id').replace(/task-/, '');
 
-			$.post( self.options.baseurl + '/remove', { id: id }, function( data ){
+			$.post( this.options.baseurl + '/remove', { id: id }, function( data ){
 
 				listitem.fadeOut('fast', function(){
 
@@ -313,6 +322,10 @@
 				.checkbox( 'destroy' );
 		}
 
+	});
+
+	$('#content').listeditor({
+		baseurl: '/task'
 	});
 
 })( jQuery, window, window.document );

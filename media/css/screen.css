@@ -194,7 +194,7 @@ textarea {
 }
 .task-list li {
 	border: 1px dotted #ddd;
-	padding: .3em .3em .1em .3em;
+	padding: .0 .3em 0 .3em;
 	list-style: none;
 	position: relative;
 	min-height: 1.4em;
@@ -236,10 +236,11 @@ textarea {
 
 .task-list .task-content {
 	margin-top: 1px;
+	margin-left: 24px;
+	padding: .3em 0 .4em 0;
 	cursor: pointer;
 	background: transparent;
 	position: relative;
-	margin-left: 24px;
 }
 .task-list .task-editing {
 	cursor: auto;
@@ -252,6 +253,21 @@ textarea {
 .task-list.sortable .ui-state-highlight {
 	background: #ffffdd;
 	border-color: #aaa;
+}
+
+.task-remove, .task-time {
+	position: absolute;
+	right: 2px;
+	top: .4em;
+	width: 16px;
+	height: 16px;
+	z-index: 999;
+}
+.task-time {
+	right: 16px;
+}
+.ui-icon-time {
+	background: url(/img/clock.gif) no-repeat center center;
 }
 
 
@@ -285,7 +301,7 @@ textarea {
 
 /* Checkbox
 ----------------------------------*/
-.ui-checkbox { position: relative; float: left; font-size: 64%;}
+.ui-checkbox { position: relative; float: left; font-size: 64%; margin-top: .5em;}
 .ui-checkbox .ui-checkbox-inputwrapper { width: 0; height: 0; overflow: hidden; }
 .ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; text-indent: -9999px; padding: .5em 0 .5em 23px; margin: 0 0 .3em; cursor: pointer; z-index: 1; }
 .ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 1.5em; height: 1.6em; }

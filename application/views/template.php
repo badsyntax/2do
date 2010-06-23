@@ -3,9 +3,9 @@
 <head>
 	<title><?php echo $title ?></title>
 	<meta charset="utf-8" />
-	<?php foreach ($styles as $file => $type) echo HTML::style($file, array('media' => $type)), "\n" ?>
-	<?php foreach ($scripts as $file) echo HTML::script($file), "\n" ?>
-	<!--[if IE]><?php echo HTML::script('/js/html5.js')?><![endif]-->
+	<?php foreach ($styles as $file => $type) echo HTML::style($file, array('media' => $type)), "\n\t" ?>
+<!--[if IE]><?php echo HTML::script('/js/html5.js')?><![endif]-->
+	<script type="text/javascript" src="/js/jquery.js"></script>
 </head>
 <body>
 	<header>
@@ -25,6 +25,7 @@
 			<a href="<?php echo URL::site('info') ?>">what?</a>
 		</footer>
 	<?php }?>
-
+	
+	<?php foreach ($scripts as $file) echo HTML::script($file), "\n" ?>
 </body>
 </html>

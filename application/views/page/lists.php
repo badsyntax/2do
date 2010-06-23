@@ -46,10 +46,3 @@
 	</ul>
 
 </div>
-
-<script type="text/javascript">
-
-	$('#content').listeditor({
-		baseurl: '<?php echo Url::site('task') ?>'
-	});
-</script>
