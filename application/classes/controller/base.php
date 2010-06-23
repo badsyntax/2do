@@ -46,14 +46,14 @@ class Controller_Base extends Controller_Template {
 		if ($this->auto_render) {
 
 			$styles = array(
-				'media/css/smoothness/jquery-ui.css' => 'screen, projection',
-				'media/css/screen.css' => 'screen, projection'
+				'css/smoothness/jquery-ui.css' => 'screen, projection',
+				'css/screen.css' => 'screen, projection'
 			);
   
 			$scripts = array(
 				'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js',
-				'media/js/jquery-ui.js',
-				'media/js/global.js',
+				'js/jquery-ui.js',
+				'js/global.js',
 			);
 		
 			$this->template->styles = $styles;

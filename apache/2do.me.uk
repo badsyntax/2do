@@ -4,4 +4,29 @@
 	ServerName	2do.me.uk
 	ServerAlias	2d0.me
 
+	CustomLog	/var/log/apache2/2do.me.uk-alogs combined
+	ErrorLog	/var/log/apache2/2do.me.uk-elogs
+
+	DirectoryIndex index.php
+
+	RewriteEngine On
+
+	# Protect hidden files from being viewed
+	<Files .*>
+		Order Deny,Allow
+		Deny From All
+	</Files>
+
+	# Protect application and system files from being viewed
+	RewriteRule ^(?:application|modules|system)\b.* /index.php/$0 [L]
+
+	RewriteCond %{REQUEST_URI} !(^/js|^/css|^/img)
+	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+	
+	AliasMatch ^/(js|img|css)/(.*) /srv/projects/2do.me.uk/media/$1/$2
+
+	# Rewrite all other URLs to index.php/URL
+	RewriteRule .* /index.php/$0 [PT]
+
 </VirtualHost>

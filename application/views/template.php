@@ -5,7 +5,7 @@
 	<meta charset="utf-8" />
 	<?php foreach ($styles as $file => $type) echo HTML::style($file, array('media' => $type)), "\n" ?>
 	<?php foreach ($scripts as $file) echo HTML::script($file), "\n" ?>
-	<!--[if IE]><?php echo HTML::script('media/js/html5.js')?><![endif]-->
+	<!--[if IE]><?php echo HTML::script('/js/html5.js')?><![endif]-->
 </head>
 <body>
 	<header>
@@ -16,10 +16,7 @@
 	</header>
 	<div class="wrapper">
 		
-
-		<div id="content">
-			<?php echo $content ?>
-		</div>
+		<?php echo $content ?>
 	</div>
 
 	<?php if (Request::instance()->uri() == 'home/index' and !Auth::instance()->logged_in()){?>

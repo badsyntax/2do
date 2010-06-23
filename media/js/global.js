@@ -51,17 +51,14 @@
 				},
 				stop: function(event, ui){
 
-					var serialized = ui.item.parents('ul:first').sortable( 'serialize' )
-						+ '&taskid=' + ui.item[0].id.replace(/task-/, '')
-						+ '&listid=' + ui.item.parents('ul:first')[0].id.replace(/list-/, ''),
-						active = /active/.test( ui.item[0].className );
-
+					var list = ui.item.parents( 'ul:first' ), active = /active/.test( ui.item[0].className );
+			
 					ui.item.removeClass('active')
 						.find('.task-content')
 							.removeClass('task-hover')
 							.trigger('blur.edit');
 
-					$.post( self.options.baseurl + '/reorder', serialized , function(){
+					self._saveSequences( list, ui.item, function(){
 
 						if ( !active ) {
 
@@ -94,6 +91,19 @@
 				}
 			});
 
+		},
+
+		_saveSequences : function( list, item, callback ){
+
+			var param = [
+				list.sortable( 'serialize' ),
+				$.param({
+					taskid: item[0].id.replace(/task-/, ''),
+					listid: list[0].id.replace(/list-/, '')
+				}) ].join( '&' );
+
+
+			$.post( this.options.baseurl + '/reorder', param , callback );
 		},
 
 		_taskComplete : function( id, listitem, checkbox ){
@@ -190,16 +200,21 @@
 
 				if ( response.outcome == 'success' ) {
 
-					var newitem = 
+					var list = item.parents('ul:first'),
+						newitem = 
 						$( '<li></li>' )
 						.html( '<label><input type="checkbox" /></label><div class="task-content">' + text + '</div>' )
 						.attr('id', 'task-' + response.id)
 						.find(':checkbox').checkbox( self.checkboxConfig )
 						.end();
 						
-					item.after( newitem ).find( '.task-content' ).html( 'New todo' );
+					item.after( newitem )
+						.find( '.task-content' ).html( 'New todo' );
 						
-					newitem.effect( 'highlight', {}, 800 );
+					newitem.effect( 'highlight', {}, 800, function(){
+	
+						self._saveSequences( list, newitem );
+					});
 				} else {
 			
 					alert( response.message );

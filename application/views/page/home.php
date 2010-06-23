@@ -1,6 +1,10 @@
-<button id="go" style="background:transparent;border:0;font-size:120%;margin: 0 0 1em 0;cursor:pointer;padding:0;">
-	organize your life
-</button>
+<div id="content">
+
+	<button id="go" style="background:transparent;border:0;font-size:120%;margin: 0 0 1em 0;cursor:pointer;padding:0;">
+		organize your life
+	</button>
+
+</div>
 
 
 <script type="text/javascript">
