@@ -12,15 +12,16 @@
 	$.widget('ui.listeditor', {
 
 		_create : function(){
+			
+			var self = this;
 
 			this.elements = {
+				completedList: $('#list-completed'),
+				sortableLists: $('.task-list.sortable'),
 				removeicon: $( '<span></span>' )
-					.addClass('ui-icon ui-icon-closethick ui-helper-hidden-accessible helper-right'),
-				listCompleted: $('#list-completed')
+					.addClass('ui-icon ui-icon-closethick ui-helper-hidden-accessible helper-right')
 			};
 
-			var self = this;
-		
 			this.checkboxConfig = {
 
 				select: function(widget, event){
@@ -32,17 +33,67 @@
 
 					self[ action ]( id, listitem, checkbox );
 				}
-
 			};
 
 			$(':checkbox').checkbox( this.checkboxConfig );
 
-			$('.task-list li').not('.task-done').each(function(){
+			this.elements.sortableLists
+			.sortable({
+				containment: $('#content'),
+				items: 'li:not(.task-new)',
+				connectWith: '.task-list.sortable',
+				distance: 5,
+				opacity: .6,
+				placeholder: 'ui-state-highlight',
+				update: function(event, ui) { 
 
-				self._contentBind( $( this ).find('.task-content')[0] );
+					ui.item.find('.task-content').unbind('click');
+				},
+				stop: function(event, ui){
+
+					var serialized = ui.item.parents('ul:first').sortable( 'serialize' )
+						+ '&taskid=' + ui.item[0].id.replace(/task-/, '')
+						+ '&listid=' + ui.item.parents('ul:first')[0].id.replace(/list-/, ''),
+						active = /active/.test( ui.item[0].className );
+
+					ui.item.removeClass('active')
+						.find('.task-content')
+							.removeClass('task-hover')
+							.trigger('blur.edit');
+
+					$.post( self.options.baseurl + '/reorder', serialized , function(){
+
+						if ( !active ) {
+
+							ui.item.effect( 'highlight', {}, 800 )
+						}
+					});
+				}
+			})
+			.disableSelection();
+			
+			$( '.task-list').bind( 'click.edit', function( event ){
+
+				if ( !event.target ) return;
+
+				if ( event.target.nodeName === 'LI' ){
+					
+					var content = $( event.target ).find( '.task-content' );
+
+					self._contentClickHandler( content );
+
+				} else if ( /task-content/.test( event.target.className ) ) {
+
+					self._contentClickHandler( event.target );		
+
+				} else if ( new RegExp( self.elements.removeicon[0].className ).test( event.target.className ) ){
+
+					var item = $( event.target ).parents( 'li:first' );
+				
+					self._taskRemove( item );
+				}
 			});
 
-			this._sortable();
 		},
 
 		_taskComplete : function( id, listitem, checkbox ){
@@ -51,49 +102,45 @@
 
 			$.post(self.options.baseurl + '/complete', { id: id }, function( data ){
 
-				setTimeout(function(){
-			
-					listitem.fadeOut('fast', function(){
+				listitem.fadeOut('fast', function(){
 
-						var item = $( this );
+					var item = $( this );
 						
-						$( '.task-list.completed' ).prepend( this );
+					$( '.task-list.completed' ).prepend( this );
 
-						function show(){
+					function show(){
 
-							item.fadeIn( 'fast', function(){
-								item.effect( 'highlight', {}, 800 );
-							});
-						}
+						item.fadeIn( 'fast', function(){
+							item.effect( 'highlight', {}, 800 );
+						});
+					}
 
-						if ( self.elements.listCompleted.find('ul').children().length === 1 ) {
+					if ( self.elements.completedList.find('ul').children().length === 1 ) {
 
-							self.elements.listCompleted.css({height: 'auto', display: 'block'});
+						self.elements.completedList.css({height: 'auto', display: 'block'});
 
-							item.show();
+						item.show();
 							
-							var height = self.elements.listCompleted.height();
+						var height = self.elements.completedList.height();
 
-							item.hide();
+						item.hide();
 
-							self.elements.listCompleted
-							.css({height: 0, display: 'none'})
-							.animate({
-								height: height,
-								opacity: 1
-							}, function(){
+						self.elements.completedList
+						.css({height: 0, display: 'none'})
+						.animate({
+							height: height,
+							opacity: 1
+						}, function(){
 
-								$( this ).css({ height: 'auto' });
-							});
+							$( this ).css({ height: 'auto' });
+						});
 							
-							show();
+						show();
 
-						} else show();
+					} else show();
 
-						checkbox.blur();
-					});
-
-				}, 140);
+					checkbox.blur();
+				});
 			});
 		},
 
@@ -103,33 +150,30 @@
 
 			$.post(self.options.baseurl + '/incomplete', { id: id }, function( data ){
 
-				setTimeout(function(){
-					listitem.fadeOut('fast', function(){
+				listitem.fadeOut('fast', function(){
 
-						var index = data.sequence;
+					var index = data.sequence;
 
-						if ( index > 0 ) {
+					if ( index > 0 ) {
 
-							$( '.task-list.task:first li:eq(' + ( data.sequence - 1 )+ ')' ).after( listitem );
-						} else {
+						$( '.task-list.task:first li:eq(' + ( data.sequence - 1 )+ ')' ).after( listitem );
+					} else {
 						
-							$( '.task-list.task:first .task-new' ).after( listitem );
-						}
+						$( '.task-list.task:first .task-new' ).after( listitem );
+					}
+	
+					listitem.fadeIn( 'fast', function(){
 
-						listitem.fadeIn( 'fast', function(){
-
-							$( this ).effect( 'highlight', {}, 800 );
-						});
-
-						checkbox.blur();
-
-						if ( self.elements.listCompleted.find('ul').children().length === 0 ) {
-
-							self.elements.listCompleted.slideUp('slow').fadeOut();
-						}
+						$( this ).effect( 'highlight', {}, 800 );
 					});
 
-				}, 140);
+					checkbox.blur();
+
+					if ( self.elements.completedList.find('ul').children().length === 0 ) {
+
+						self.elements.completedList.slideUp('slow').fadeOut();
+					}
+				});
 			});
 		},
 
@@ -153,11 +197,9 @@
 						.find(':checkbox').checkbox( self.checkboxConfig )
 						.end();
 						
-					item.after( newitem ).find('.task-content').html('New task');
+					item.after( newitem ).find( '.task-content' ).html( 'New todo' );
 						
 					newitem.effect( 'highlight', {}, 800 );
-						
-					self._contentBind( newitem.find('.task-content') );
 				} else {
 			
 					alert( response.message );
@@ -184,41 +226,52 @@
 				}
 			});
 		},
+		
+		_taskRemove : function( listitem ){
+
+			var id = listitem.attr('id').replace(/task-/, '');
+
+			$.post( self.options.baseurl + '/remove', { id: id }, function( data ){
+
+				listitem.fadeOut('fast', function(){
+
+					$( this ).remove();
+				});
+			});
+		},
 
 		_contentClickHandler: function( content ){
-
-			var self = this;
-
+			
 			content = $( content );
 
-			if (content.attr('contentEditable') == 'true') return;
+			var self = this,
+				text = $.trim( content.text() ), 
+				item = content.parents('li:first').addClass( 'active' ),
+				list = content.parents('ul:first');
 
-			var text = $.trim( content.text() ), 
-				item = content.parents('li:first'),
-				list = content.parents('ul:first'),
-				listId = list[0].id.replace(/list-/, '');
+			if ( content.attr('contentEditable') == 'true' ) return;
+
+			$( '.task-content' ).not( content )
+				.trigger( 'blur.edit' );
 			
-			item.addClass('active');
+			$.data( content[0], 'origval', content.text() );
 
 			content
-			.data('origval', content.text() )
-			.addClass('task-editing')
+			.addClass( 'task-editing' )
 			.attr('contentEditable', true)
 			.html( text == 'New todo' ? '&nbsp;' : text )
 			.focus()
-			.unbind('blur.edit keydown.edit')
 			.bind('blur.edit', function(){
 			
 				item.removeClass('active');
 				
 				content
-				.attr('contentEditable', false)
-				.removeClass('task-editing task-hover');
-
+				.attr( 'contentEditable', false )
+				.removeClass( 'task-editing task-hover' );
 
 				(function( self ){
 
-					var text = $.trim( content.text() );
+					var text = $.trim( content.text() ), listId = list[0].id.replace(/list-/, '');
 
 					self[ item.hasClass('task-new') ? '_taskSave' : '_taskUpdate' ]( text, item, listId ); 
 
@@ -227,86 +280,22 @@
 				if ( !$.trim( $(this).text() ) ) {
 					$( this ).html( $(this).data('origval') );
 				}
+
+				$( this ).unbind( 'blur.edit keydown.edit' );
 			})
 			.bind('keydown.edit', function(event){
 
-				if ( event.keyCode == 13 ) {
-
-					$( this ).trigger( 'blur' );
-				}
+				// return key
+				( event.keyCode == 13 ) && $( this ).trigger( 'blur' );
 			});
-		},
-
-
-		_contentBind : function( item ){
-
-			var self = this;
-
-			$( item )
-			.prepend( this.elements.removeicon.clone() )
-			.unbind('mouseenter mouseleave click')
-			.bind('mouseenter mouseleave', function(){
-
-				$( this ).toggleClass('task-hover');
-			})
-			.click( function( event ){
-
-				var item = $( this ), 
-					listparent = item.parents('li:first'), 
-					id = listparent.attr('id').replace(/task-/, '');
-
-				if ( new RegExp(self.elements.removeicon[0].className).test( event.target.className ) ){
-						
-					$.post(self.options.baseurl + '/remove', { id: id }, function( data ){
-
-						listparent.fadeOut('fast', function(){
-
-							$( this ).remove();
-						});
-					});
-				} else	{
-				
-					self._contentClickHandler( this );		
-				}
-			});
-		},
-
-		_sortable : function(){
-
-			var self = this;
-
-			$('.task-list').sortable({
-				containment: 'parent',
-				items: 'li:not(.task-new)',
-				distance: 5,
-				update: function(event, ui) { 
-
-					ui.item.find('.task-content').unbind('click');
-				},
-				stop: function(event, ui){
-
-					ui.item.removeClass('active')
-						.find('.task-content').removeClass('task-hover');
-
-					var listSerialized = $('.task-list').sortable( 'serialize' );
-
-					$.post(self.options.baseurl + '/reorder', listSerialized, function(){
-
-						ui.item.effect( 'highlight', {}, 800 ).find('.task-content').click(function(){
-
-							self._contentClickHandler( this );
-						});
-					});
-					
-				}
-			}).disableSelection();
 		},
 
 		destroy : function(){
-
-			this.element.find( 'checkbox' ).checkbox( 'destroy' );
-
+				
 			$.Widget.prototype.destroy.apply(this, arguments);
+
+			this.element.find( 'checkbox' )
+				.checkbox( 'destroy' );
 		}
 
 	});

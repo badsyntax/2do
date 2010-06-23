@@ -80,6 +80,10 @@ class Controller_Task extends Controller_BaseAjax {
 			$task->sequence = $i;
 			$task->save();
 		}
+
+		$task = ORM::factory('task', (int) $_POST['taskid']);
+		$task->list_id = (int) $_POST['listid'];
+		$task->save();
 		
 		$response = array(
 			'outcome' => 'success'

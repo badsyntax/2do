@@ -4,7 +4,7 @@
 	<section id="<?php echo strtolower($list['list']->name) ?>" class="list">
 		<h3><?php echo $list['list']->name ?></h3>
 
-		<ul id="list-<?php echo $list['list']->id ?>" class="task-list task">
+		<ul id="list-<?php echo $list['list']->id ?>" class="task-list task sortable">
 			<li class="task-new">
 				<span class="ui-icon ui-icon-plusthick helper-left task-add"></span>
 				<div class="task-content">
@@ -26,9 +26,9 @@
 <?php } ?>
 
 <?php if (count($complete)){?>
-<section id="list-completed" class="list">
+<section id="list-completed" class="list last">
 <?php } else {?>
-<section id="list-completed" class="list helper-hidden">
+<section id="list-completed" class="list last helper-hidden">
 <?php }?>
 
 <h3>Completed</h3>

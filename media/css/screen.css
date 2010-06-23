@@ -1,19 +1,23 @@
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin:0; padding:0; border:0; outline:0; font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit; vertical-align:baseline; }
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video { margin:0; padding:0; border:0; outline:0; font-size:100%; vertical-align:baseline; background:transparent; }
+article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary { 
+	display: block;
+}
 body {
 	background: #232323;
 	margin: 3.2em 0 1em;
-	font: normal 84%/1.1 "Lucinda Grande", "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font: normal 84%/1.1 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	color: #444;
 }
 table {
+	border-collapse: collapse;
 	border-spacing: 0;
 }
 h1, h2, h3, h4 {
-	margin: 0 0 .5em 0;
+	margin: 0 0 10px 0;
 }
 h1 {
 	font-size: 190%;
-	font-family: 'Lobster', "Lucinda Grande", "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-family: 'Lobster', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	border-bottom: 1px solid #ddd;
 }
 h2 {
@@ -25,7 +29,7 @@ h3 {
 	font-weight: bold;
 }
 h2, h3, p, button {
-	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 }
 em {
 	font-style: italic;
@@ -42,6 +46,9 @@ li {
 }
 p, form {
 	margin-bottom: 1em;
+}
+input, select {
+    vertical-align: middle;
 }
 a {
 	color: #333;
@@ -69,7 +76,8 @@ small {
 header {
 	display: block;
 	margin: 0 auto;
-	width: 668px;
+	width: 680px;
+	padding: 0 20px;
 }
 
 #logo a {
@@ -95,16 +103,28 @@ header {
 }
 
 #content {
-	padding: 2em 2em 1em 2em;
+	padding: 20px;
 }
-section {
-	display: block;
+section.list {
+	margin-bottom: 20px;
+}
+section.list.last {
+	margin-bottom: 0;
 }
 
-
-#content {
-	
-
+footer {
+	width: 720px;
+	margin: .3em auto;
+	text-align: right;
+	padding-right: 20px;
+}
+footer a, footer a:visited {
+	color: #ccc;
+	text-decoration: none;
+}
+footer a:hover {
+	text-shadow: 1px 1px 2px #000;
+	color: #fff;
 }
 
 nav {
@@ -115,7 +135,7 @@ nav {
 }
 nav a {
 	float: left;
-	font-family: 'Lucinda Grande', 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-family: 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	padding: 0 .8em;
 	text-decoration: none;
 	text-align: center;
@@ -157,7 +177,7 @@ textarea {
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;*/
-	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', Arial, Helvetica, sans-serif;
+	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	padding: 0;
 	margin: 0;
 }
@@ -170,7 +190,7 @@ textarea {
 }
 
 .task-list {
-	margin-left: 0;
+	margin: 0;
 }
 .task-list li {
 	border: 1px dotted #ddd;
@@ -178,6 +198,8 @@ textarea {
 	list-style: none;
 	position: relative;
 	min-height: 1.4em;
+	margin-bottom: 4px;
+	cursor: pointer;
 }
 .task-list li textarea {
 	padding: 0;
@@ -227,6 +249,11 @@ textarea {
 .task-list li.active {
 	border-color: #000;
 }
+.task-list.sortable .ui-state-highlight {
+	background: #ffffdd;
+	border-color: #aaa;
+}
+
 
 .helper-hidden {
 	display: none;
@@ -263,4 +290,3 @@ textarea {
 .ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; text-indent: -9999px; padding: .5em 0 .5em 23px; margin: 0 0 .3em; cursor: pointer; z-index: 1; }
 .ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 1.5em; height: 1.6em; }
 .ui-checkbox .ui-checkbox-icon {margin: -1px 0 0 -1px}
-

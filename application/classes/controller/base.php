@@ -56,8 +56,8 @@ class Controller_Base extends Controller_Template {
 				'media/js/global.js',
 			);
 		
-			$this->template->styles = array_merge( $this->template->styles, $styles );
-			$this->template->scripts = array_merge( $this->template->scripts, $scripts );
+			$this->template->styles = $styles;
+			$this->template->scripts = $scripts;
 		}
 
 		parent::after();
