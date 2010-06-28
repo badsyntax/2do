@@ -28,7 +28,7 @@ h3 {
 	border-bottom: 1px solid #ddd;
 	font-weight: bold;
 }
-h2, h3, p, button {
+h2, h3, button {
 	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 }
 em {
@@ -230,6 +230,9 @@ textarea {
 .task-list .task-new .task-add {
 	margin: .3em 2px 0 0;
 }
+.task-list label {
+	float: left;
+}
 .task-done {
 	/*text-decoration: line-through;*/
 }
@@ -306,8 +309,8 @@ textarea {
 
 /* Checkbox
 ----------------------------------*/
-.ui-checkbox { position: relative; float: left; font-size: 64%; margin-top: .5em; width: 18px; height: 18px;}
+.ui-checkbox { position: relative; float: left; font-size: 64%; margin-top: .5em; width: 17px; height: 18px;}
 .ui-checkbox .ui-checkbox-inputwrapper { width: 0; height: 0; overflow: hidden; }
 .ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; text-indent: -9999px; padding: .5em 0 .5em 23px; margin: 0 0 .3em; cursor: pointer; z-index: 1; }
-.ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 16px; height: 16px; }
+.ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 15px; height: 16px; }
 .ui-checkbox .ui-checkbox-icon {margin: -1px 0 0 -1px}

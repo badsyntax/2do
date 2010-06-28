@@ -32,15 +32,16 @@ class Model_Task extends ORM {
 			list($day, $month, $year) = explode('/', $date);
 
 			$timestamp = mktime(23, 59, 59, (int) $month, (int) $day, (int) $year);
-
-			return $this
-			->where('deleted', '=', FALSE)
-			->where('user_id', '=', (int) $user_id)
-			->where('complete', '=', TRUE)
-			->where(DB::expr('DATE_FORMAT(completed_date, \'%d/%m/%Y\')'), '=', $date)
-			->order_by('sequence', 'ASC')
-			->find_all();
+			
+			$this->where(DB::expr('DATE_FORMAT(completed_date, \'%d/%m/%Y\')'), '=', $date);
 		}
+
+		return $this
+		->where('deleted', '=', FALSE)
+		->where('user_id', '=', (int) $user_id)
+		->where('complete', '=', TRUE)
+		->order_by('sequence', 'ASC')
+		->find_all();
 
 		return $this;
 	}

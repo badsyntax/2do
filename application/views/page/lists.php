@@ -16,7 +16,7 @@
 				<?php 
 				foreach($list['tasks'] as $task){?>
 					<li id="task-<?php echo $task->id ?>" class="helper-clearfix<?php if ($task->complete){?> task-complete<?php }?>">
-						<label>	<input type="checkbox" /> Check 1 </label>
+						<label>	<input type="checkbox" /> </label>
 						<div class="task-content">
 							<?php echo $task->content ?>
 						</div>
@@ -39,7 +39,7 @@
 	<ul class="task-list completed">
 		<?php foreach($complete as $task){?>
 		<li class="task-complete" id="task-<?php echo $task->id ?>">
-			<label>	<input type="checkbox" checked="checked" /> Check 1 </label>
+			<label>	<input type="checkbox" checked="checked" /> </label>
 			<div class="task-content">
 				<?php echo $task->content ?>
 			</div>
