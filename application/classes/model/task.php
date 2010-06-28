@@ -15,18 +15,11 @@ class Model_Task extends ORM {
 
 		if (preg_match('/^[0-9]{2,2}\/[0-9]{2,2}\/[0-9]{4,4}$/', $date)){
 
-			$this
-				->where_open()
-				->where(DB::expr("DATE_FORMAT({$date_field}, '%d/%m/%Y')"), '=', $date)
-				->or_where_open();
-
 			list($day, $month, $year) = explode('/', $date);
 
-			$this
-				->where(DB::expr("UNIX_TIMESTAMP({$date_field})"), '<', mktime(0, 0, 0, (int) $month, (int) $day, (int) $year))
-				->where('complete', '=', FALSE)
-				->or_where_close()
-				->where_close();
+			$timestamp = mktime(23, 59, 59, (int) $month, (int) $day, (int) $year);
+
+			$this->where(DB::expr("UNIX_TIMESTAMP({$date_field})"), '<=', $timestamp);
 		}
 
 		return $this;
@@ -36,8 +29,8 @@ class Model_Task extends ORM {
 
 		return $this
 			->where('deleted', '=', FALSE)
-			->where('complete', '=', TRUE)
 			->where('user_id', '=', (int) $user_id)
+			->where('complete', '=', TRUE)
 			->order_by('sequence', 'ASC')
 			->where_date($date, 'completed_date')
 			->find_all();
@@ -49,10 +42,11 @@ class Model_Task extends ORM {
 		return parent::save();
 	}
 
-	public function __delete(){
+	public function delete($id = NULL){
 
 		$this->deleted = TRUE;
-		$this->save();
+
+		return $this->save();
 	}
 
 	public function complete(){

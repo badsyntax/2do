@@ -3,6 +3,7 @@
 	<?php foreach($lists as $list){?>
 
 		<section id="<?php echo strtolower($list['list']->name) ?>" class="list">
+			<span class="ui-icon ui-icon-circlesmall-minus helper-right list-toggle"></span>
 			<h3><?php echo $list['list']->name ?></h3>
 
 			<ul id="list-<?php echo $list['list']->id ?>" class="task-list task sortable">
@@ -31,6 +32,7 @@
 	<?php } else {?>
 	<section id="list-completed" class="list helper-hidden">
 	<?php }?>
+	<span class="ui-icon ui-icon-circlesmall-minus helper-right list-toggle"></span>
 
 	<h3>Completed</h3>
 

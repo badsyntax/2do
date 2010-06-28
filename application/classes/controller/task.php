@@ -26,13 +26,12 @@ class Controller_Task extends Controller_BaseAjax {
 		$task->content = trim($_POST['task']);
 		$task->save();
 
-		$response = array(
+		$this->request->response = json_encode(
+		array(
 			'outcome' => 'success',
 			'message' => 'Successfully saved!',
 			'id' => $task->id
-		);
-
-		$this->request->response = json_encode($response);
+		));
 	}
 
 	public function action_remove(){
@@ -41,35 +40,32 @@ class Controller_Task extends Controller_BaseAjax {
 			->where('user_id', '=', $this->user->id)
 			->delete();
 
-		$response = array(
+		$this->request->response = json_encode(
+		array(
 			'outcome' => 'success',
 			'message' => 'Successfully removed!'
-		);
-		
-		$this->request->response = json_encode($response);
+		));
 	}
 
 	public function action_complete(){
 
 		ORM::factory('task', (int) $_POST['id'])->complete();
 		
-		$response = array(
+		$this->request->response = json_encode(
+		array(
 			'outcome' => 'success'
-		);
-		
-		$this->request->response = json_encode($response);
+		));
 	}
 
 	public function action_incomplete(){
 		
 		$task = ORM::factory('task', (int) $_POST['id'])->incomplete();
 
-		$response = array(
+		$this->request->response = json_encode(
+		array(
 			'outcome' => 'success',
 			'sequence' => $task->sequence
-		);
-
-		$this->request->response = json_encode($response);
+		));
 	}
 
 	public function action_reorder(){
@@ -85,11 +81,10 @@ class Controller_Task extends Controller_BaseAjax {
 		$task->list_id = (int) $_POST['listid'];
 		$task->save();
 		
-		$response = array(
+		$this->request->response = json_encode(
+		array(
 			'outcome' => 'success'
-		);
-		
-		$this->request->response = json_encode($response);
+		));
 	}
 
 }

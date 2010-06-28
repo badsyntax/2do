@@ -6,14 +6,7 @@ class Controller_List extends Controller_Base {
 
 	function action_index(){
 
-		$today = date('d/m/Y');
-
-		$date = $this->request->param('date');
-
-		if (!$date) {
-
-			$date = $today;
-		}
+		$date = $this->request->param('date') or date('d/m/Y');
 
 		$this->template->title ='2do';
 

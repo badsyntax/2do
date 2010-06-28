@@ -1,6 +1,57 @@
 
 (function( $, window, document, undefined ){
 
+	// TODO incorporate html5 local storage
+	function cookie(opt){
+
+		this.config = $.extend({
+			name: 'cookie',
+			path: '/',
+			expiredays: 1
+		}, opt);
+	}
+
+	cookie.prototype = {
+		set : function(name, val, expiredays){
+
+			expiredays = expiredays || this.config.expiredays;
+
+			var exdate = new Date();
+
+			exdate.setDate( exdate.getDate() + expiredays );
+
+			document.cookie = 
+				name 
+				+ '=' + escape(val) 
+				+ ( ( expiredays == null ) ? '' : ';expires=' + exdate.toGMTString() ) 
+				+ ';path=' + this.config.path;
+		},
+		get : function(name){
+
+			if ( document.cookie.length ){
+				return '';
+			}
+
+			var start = document.cookie.indexOf( name + '=' );
+
+			if (start === -1) {
+				return '';
+			}
+
+			start = start + name.length + 1;
+
+			var end = document.cookie.indexOf( ';', start );
+
+			if (end === -1) { 
+				end = document.cookie.length;
+			}
+
+			return unescape( document.cookie.substring(start, end) );
+		}
+	}
+
+	$.cookie = new cookie();
+
 	$.ajaxSetup({
 		dataType: 'json',
 		error: function( xhr, textStatus ) {
@@ -42,7 +93,7 @@
 			this.elements.sortableLists
 			.sortable({
 				containment: $('#content'),
-				items: 'li:not(.task-new)',
+				items: 'li:not(.active)',
 				connectWith: '.task-list.sortable',
 				distance: 5,
 				opacity: .6,
@@ -100,6 +151,15 @@
 
 				self.elements.timeIcon.hide();
 			});
+
+			$('.list-toggle').click(function(){
+
+				$( this ).siblings( 'ul' )
+				.animate({
+					height: ['toggle', 'swing'],
+					opacity: 'toggle'
+				}, 400, 'linear');
+			});
 		},
 
 		_saveSequences : function( list, item, callback ){
@@ -111,89 +171,80 @@
 					listid: list[0].id.replace(/list-/, '')
 				}) ].join( '&' );
 
-
 			$.post( this.options.baseurl + '/reorder', param , callback );
 		},
 
-		_taskComplete : function( id, listitem, checkbox ){
+		_taskComplete : function( id, item, checkbox ){
 			
 			var self = this;
 
-			$.post(self.options.baseurl + '/complete', { id: id }, function( data ){
+			item.fadeOut('fast', function(){
+					
+				$( '.task-list.completed' ).prepend( item );
 
-				listitem.fadeOut('fast', function(){
+				function show(){
 
-					var item = $( this );
-						
-					$( '.task-list.completed' ).prepend( this );
+					item.fadeIn( 'fast', function(){
+						item.effect( 'highlight', {}, 800 );
+					});
+				}
 
-					function show(){
+				if ( self.elements.completedList.find('ul').children().length === 1 ) {
 
-						item.fadeIn( 'fast', function(){
-							item.effect( 'highlight', {}, 800 );
+					self.elements.completedListi
+						.css({
+							height: 'auto', 
+							display: 'block'
 						});
-					}
 
-					if ( self.elements.completedList.find('ul').children().length === 1 ) {
-
-						self.elements.completedList.css({height: 'auto', display: 'block'});
-
-						item.show();
+					item.show();
 							
-						var height = self.elements.completedList.height();
+					var height = self.elements.completedList.height();
 
-						item.hide();
+					item.hide();
 
-						self.elements.completedList
-						.css({height: 0, display: 'none'})
+					self.elements.completedList
+						.hide().css( { height: 0 } )
 						.animate({
 							height: height,
 							opacity: 1
 						}, function(){
-
+	
 							$( this ).css({ height: 'auto' });
 						});
-							
-						show();
+						
+					show();
 
-					} else show();
+				} else show();
 
-					checkbox.blur();
-				});
+				checkbox.blur();
 			});
+
+			$.post( self.options.baseurl + '/complete', { id: id } );
 		},
 
 		_taskIncomplete : function( id, listitem, checkbox ){
 
 			var self = this;
 
-			$.post(self.options.baseurl + '/incomplete', { id: id }, function( data ){
+			listitem.fadeOut('fast', function(){
 
-				listitem.fadeOut('fast', function(){
-
-					var index = data.sequence;
-
-					if ( index > 0 ) {
-
-						$( '.task-list.task:first li:eq(' + ( data.sequence - 1 )+ ')' ).after( listitem );
-					} else {
-						
-						$( '.task-list.task:first .task-new' ).after( listitem );
-					}
+				$( '.task-list.task:first .task-new' ).after( listitem );
 	
-					listitem.fadeIn( 'fast', function(){
+				listitem.fadeIn( 'fast', function(){
 
-						$( this ).effect( 'highlight', {}, 800 );
-					});
-
-					checkbox.blur();
-
-					if ( self.elements.completedList.find('ul').children().length === 0 ) {
-
-						self.elements.completedList.slideUp('slow').fadeOut();
-					}
+					$( this ).effect( 'highlight', {}, 800 );
 				});
+
+				checkbox.blur();
+
+				if ( self.elements.completedList.find('ul').children().length === 0 ) {
+
+					self.elements.completedList.slideUp('slow').fadeOut();
+				}
 			});
+
+			$.post( self.options.baseurl + '/incomplete', { id: id } );
 		},
 
 		_taskSave : function( text, item, listId ){
@@ -277,8 +328,11 @@
 
 			$( '.task-content' ).not( content )
 				.trigger( 'blur.edit' );
+
+			this.elements.sortableLists
+                        .sortable('refresh');
 			
-			$.data( content[0], 'origval', content.text() );
+			$.data( content[0], 'value', $.trim( content.text() ) );
 
 			content
 			.addClass( 'task-editing' )
@@ -286,26 +340,26 @@
 			.html( text == 'New todo' ? '&nbsp;' : text )
 			.focus()
 			.bind('blur.edit', function(){
-			
+
 				item.removeClass('active');
 				
 				content
 				.attr( 'contentEditable', false )
+				.unbind( 'blur.edit keydown.edit' )
 				.removeClass( 'task-editing task-hover' );
 
 				(function( self ){
 
 					var text = $.trim( content.text() ), listId = list[0].id.replace(/list-/, '');
 
-					self[ item.hasClass('task-new') ? '_taskSave' : '_taskUpdate' ]( text, item, listId ); 
+					( text != content.data( 'value' ) ) && 
+						self[ item.hasClass('task-new') ? '_taskSave' : '_taskUpdate' ]( text, item, listId ); 
 
 				})( self );
-				
-				if ( !$.trim( $(this).text() ) ) {
-					$( this ).html( $(this).data('origval') );
-				}
 
-				$( this ).unbind( 'blur.edit keydown.edit' );
+				if ( !$.trim( $(this).text() ) ) {
+					$( this ).html( $(this).data('value') );
+				}
 			})
 			.bind('keydown.edit', function(event){
 
@@ -329,3 +383,4 @@
 	});
 
 })( jQuery, window, window.document );
+

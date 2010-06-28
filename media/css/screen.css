@@ -193,7 +193,10 @@ textarea {
 	margin: 0;
 }
 .task-list li {
-	border: 1px dotted #ddd;
+	border: 1px solid #eee;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
 	padding: .0 .3em 0 .3em;
 	list-style: none;
 	position: relative;
@@ -217,9 +220,6 @@ textarea {
 	right: 0;
 	top: 0;
 }
-.task-list li.border {
-	border: 1px dotted #444;
-}
 .task-list textarea {
 	width: 96%;
 	display: block;
@@ -228,7 +228,7 @@ textarea {
 	cursor: pointer;
 }
 .task-list .task-new .task-add {
-	margin: -1px 2px 0 0;
+	margin: .3em 2px 0 0;
 }
 .task-done {
 	/*text-decoration: line-through;*/
@@ -248,11 +248,15 @@ textarea {
 .task-list .task-content .ui-icon {
 }
 .task-list li.active {
-	border-color: #000;
+	border-color: #aaa;
 }
 .task-list.sortable .ui-state-highlight {
 	background: #ffffdd;
 	border-color: #aaa;
+	padding: .3em 0;
+}
+.list-toggle {
+	cursor: pointer;
 }
 
 .task-remove, .task-time {
