@@ -16,11 +16,15 @@ class Controller_Account extends Controller_Base {
 
 		if ($_POST) {
 
+			$_POST['remember'] = TRUE;
+
 			$status = ORM::factory('user')->login($_POST);
  
-			if ($status) {		
+			if ($status) {
+
 				Request::instance()->redirect('/');
 			} else {
+
 				$content->errors = $_POST->errors('signin');
 			}
 		}

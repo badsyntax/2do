@@ -111,7 +111,9 @@
 							.removeClass('task-hover')
 							.trigger('blur.edit');
 
-					self._saveSequences( list, ui.item, function(){
+					self._taskUpdate( '', ui.item, list[0].id.replace(/list-/, '') );
+
+					self._saveSequences( list, function(){
 
 						if ( !active ) {
 
@@ -119,8 +121,7 @@
 						}
 					});
 				}
-			})
-			.disableSelection();
+			}); //.disableSelection();
 			
 			$( '.task-list' )
 			.delegate( '.task-remove', 'click', function(){
@@ -162,12 +163,11 @@
 			});
 		},
 
-		_saveSequences : function( list, item, callback ){
+		_saveSequences : function( list, callback ){
 
 			var param = [
 				list.sortable( 'serialize' ),
 				$.param({
-					taskid: item[0].id.replace(/task-/, ''),
 					listid: list[0].id.replace(/list-/, '')
 				}) ].join( '&' );
 
@@ -180,8 +180,6 @@
 
 			item.fadeOut('fast', function(){
 					
-				$( '.task-list.completed' ).prepend( item );
-
 				function show(){
 
 					item.fadeIn( 'fast', function(){
@@ -273,7 +271,7 @@
 						
 					newitem.effect( 'highlight', {}, 800, function(){
 	
-						self._saveSequences( list, newitem );
+						self._saveSequences( list );
 					});
 				} else {
 			
@@ -284,8 +282,6 @@
 
 		_taskUpdate: function( text, item, listId ){
 			
-			if ( !text ) return;
-
 			$.post(this.options.baseurl + '/save', { 
 				task: text, 
 				list: listId, 

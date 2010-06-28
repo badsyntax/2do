@@ -14,16 +14,22 @@ class Controller_Task extends Controller_BaseAjax {
 		if (isset($_POST['id'])) {
 
 			$task = ORM::factory('task', (int) $_POST['id']);
+
 			if (!$task->id) exit;
 		} else {
 
 			$task = ORM::factory('task');
 			$task->sequence = 0;
-			$task->list_id = (int) $_POST['list'];
 			$task->user_id = $this->user->id;
 		}
+		
+		$content = trim($_POST['task']);
 
-		$task->content = trim($_POST['task']);
+		if ($content) {
+			$task->content = $content;
+		}
+
+		$task->list_id = (int) $_POST['list'];
 		$task->save();
 
 		$this->request->response = json_encode(
@@ -77,10 +83,6 @@ class Controller_Task extends Controller_BaseAjax {
 			$task->save();
 		}
 
-		$task = ORM::factory('task', (int) $_POST['taskid']);
-		$task->list_id = (int) $_POST['listid'];
-		$task->save();
-		
 		$this->request->response = json_encode(
 		array(
 			'outcome' => 'success'
