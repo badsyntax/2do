@@ -535,20 +535,13 @@ class Auth_OpenID {
 
     static function autoSubmitHTML($form, $title="OpenId transaction in progress")
     {
-        return("<html>".
-               "<head><title>".
-               $title .
-               "</title></head>".
-               "<body onload='document.forms[0].submit();'>".
-               $form .
+        return($form .
                "<script>".
                "var elements = document.forms[0].elements;".
                "for (var i = 0; i < elements.length; i++) {".
                "  elements[i].style.display = \"none\";".
                "}".
-               "</script>".
-               "</body>".
-               "</html>");
+               "</script>");
     }
 }
 

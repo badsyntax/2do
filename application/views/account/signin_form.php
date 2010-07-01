@@ -4,11 +4,7 @@
 
 	<br />
 
-	<p>
-		Choose a service you'd like to sign in with:
-	</p>
-
-	<form method="get" action="<?php echo Url::site('auth/try') ?>">
+	<form method="post" action="<?php echo Url::site('sign-in') ?>">
 		<fieldset>
 
 			<?php if (isset($errors)) {?>
@@ -21,16 +17,16 @@
 				<?php }?>
 				</ul>
 			<?php }?>
-			 <input type="hidden" name="action" value="verify" />
 
-			<button type="submit" name="openid_identity" value="https://www.google.com/accounts/o8/id">
-				Google
-			</button>
+			<p>
+				<label for="email">Email</label>
+				<?php echo form::input('username', @$_POST['username'], array('id'=>'email')) ?>
 
-			<button type="submit" name="openid_identity" value="https://me.yahoo.com">Yahoo</button>
+				<label for="password">Password</label>
+				<?php echo form::password('password', '', array('id' => 'password')) ?>
+			</p>
 
-			<button type="submit" name="openid_identity" value="openid">OpenID</button>
-
+			<button type="submit">Sign in</button>
 		</fieldset>
 	</form>
 </div>

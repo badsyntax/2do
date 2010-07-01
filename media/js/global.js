@@ -380,5 +380,7 @@
 		baseurl: '/task'
 	});
 
+	$('button').button();
+
 })( jQuery, window, window.document );
 

@@ -14,29 +14,16 @@ class Controller_Auth extends Controller_Base {
 
 	public function action_index(){
 
-		Request::instance()->redirect('/auth/consumer');
+		Request::instance()->redirect('/');
 	}
 
-	public function action_consumer(){
-		
-		$this->template->title = '2do : openid login';
-
-		$template_consumer = View::factory('openid/consumer');
-
-		$template_consumer->pape_policy_uris = array(
-			PAPE_AUTH_MULTI_FACTOR_PHYSICAL,
-			PAPE_AUTH_MULTI_FACTOR,
-			PAPE_AUTH_PHISHING_RESISTANT
-		);
-
-		$this->template->content = $template_consumer;
-	}
-
-	public function action_finish_auth(){
+	public function action_finish(){
 		
 		$template_auth = View::factory('openid/auth');
 
-		$openid = $_GET['openid_identity'];
+		$openid = @$_GET['openid_identity'];
+
+		if (!$openid) Request::instance()->redirect('/');
 
 		$store_path = "/tmp/_php_consumer_test";
 
@@ -52,7 +39,7 @@ class Controller_Auth extends Controller_Base {
 
 		// Complete the authentication process using the server's
 		// response.
-		$response = $consumer->complete(URL::site('auth/finish_auth', TRUE));
+		$response = $consumer->complete(URL::site('auth/finish', TRUE));
 
 		// Check the response status.
 		if ($response->status == Auth_OpenID_CANCEL) {
@@ -67,71 +54,24 @@ class Controller_Auth extends Controller_Base {
 
 		} else if ($response->status == Auth_OpenID_SUCCESS) {
 
-			// This means the authentication succeeded; extract the
-			// identity URL and Simple Registration data (if it was
-			// returned).
+			// authentication succeeded
 			$openid = $response->getDisplayIdentifier();
 			$esc_identity = htmlentities($openid);
 
-			$success = sprintf('<p>You have successfully verified ' .
-					   '<a href="%s">%s</a> as your identity.</p>',
-					   $esc_identity, $esc_identity);
+			$user = ORM::factory('user')->get_by_openid($esc_identity);
 
-			if ($response->endpoint->canonicalID) {
-			    $escaped_canonicalID = escape($response->endpoint->canonicalID);
-			    $success .= '  (XRI CanonicalID: '.$escaped_canonicalID.') ';
+			if (!$user->id) {
+				$user->username = $esc_identity;
+				$user->email = $esc_identity;
+				$user->password = $esc_identity;
+				$user->openid = $esc_identity;
+				$user->save();
+				$user->add('roles', new Model_Role(array('name' =>'login')));
 			}
 
-			$sreg_resp = Auth_OpenID_SRegResponse::fromSuccessResponse($response);
+			Auth::instance()->force_login($user);
 
-			$sreg = $sreg_resp->contents();
-
-			if (@$sreg['email']) {
-			    $success .= "  You also returned '".escape($sreg['email']).
-				"' as your email.";
-			}
-
-			if (@$sreg['nickname']) {
-			    $success .= "  Your nickname is '".escape($sreg['nickname']).
-				"'.";
-			}
-
-			if (@$sreg['fullname']) {
-			    $success .= "  Your fullname is '".escape($sreg['fullname']).
-				"'.";
-			}
-
-			$pape_resp = Auth_OpenID_PAPE_Response::fromSuccessResponse($response);
-
-			if ($pape_resp) {
-				if ($pape_resp->auth_policies) {
-					$success .= "<p>The following PAPE policies affected the authentication:</p><ul>";
-
-					foreach ($pape_resp->auth_policies as $uri) {
-						$escaped_uri = escape($uri);
-						$success .= "<li><tt>$escaped_uri</tt></li>";
-					}
-
-					$success .= "</ul>";
-				} else {
-					$success .= "<p>No PAPE policies affected the authentication.</p>";
-				}
-
-				if ($pape_resp->auth_age) {
-					$age = escape($pape_resp->auth_age);
-					$success .= "<p>The authentication age returned by the " .
-					    "server is: <tt>".$age."</tt></p>";
-				}
-
-				if ($pape_resp->nist_auth_level) {
-					$auth_level = escape($pape_resp->nist_auth_level);
-					$success .= "<p>The NIST auth level returned by the " .
-					    "server is: <tt>".$auth_level."</tt></p>";
-				}
-
-			} else {
-				$success .= "<p>No PAPE response was sent by the provider.</p>";
-			}
+			Request::instance()->redirect('/');
 		}
 
 		$template_auth->msg = @$msg;
@@ -139,9 +79,13 @@ class Controller_Auth extends Controller_Base {
 
 		$this->template->content = $template_auth;
 	}
-	public function action_try_auth(){
+	public function action_try(){
+
+		$template_auth = new View('openid/auth_login');
 		
-		$openid = $_GET['openid_identity'];
+		$openid = @$_GET['openid_identity'];
+		
+		if (!$openid) Request::instance()->redirect('/');
 
 		$store_path = "/tmp/_php_consumer_test";
 
@@ -181,7 +125,7 @@ class Controller_Auth extends Controller_Base {
 		// form to send a POST request to the server.
 		if ($auth_request->shouldSendRedirect()) {
 
-			$redirect_url = $auth_request->redirectURL(URL::site(NULL, TRUE), URL::site('auth/finish_auth', TRUE));
+			$redirect_url = $auth_request->redirectURL(URL::site(NULL, TRUE), URL::site('auth/finish', TRUE));
 
 			// If the redirect URL can't be built, display an error
 			// message.
@@ -197,7 +141,7 @@ class Controller_Auth extends Controller_Base {
 
 			$form_html = $auth_request->htmlMarkup(
 				URL::site(NULL, TRUE), 
-				URL::site('auth/finish_auth', TRUE), 
+				URL::site('auth/finish', TRUE), 
 				false, 
 				array('id' => 'openid_message')
 			);
@@ -210,10 +154,10 @@ class Controller_Auth extends Controller_Base {
 
 			} else {
 
-				exit($form_html.'<h2>Please wait</h2>');
+				$template_auth->form = $form_html;
 			}
-
-			exit($form_html);
 		}
+				
+		$this->template->content = $template_auth;
 	}
 }
