@@ -3,7 +3,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 	display: block;
 }
 body {
-	background: #232323;
+	background: url(/img/bg.gif);
 	margin: 3.2em 0 1em;
 	font: normal 84%/1.1 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	color: #444;
@@ -90,7 +90,7 @@ header {
 }
 
 .wrapper {
-	background: #fff;
+	background: #fefefe;
 	width: 720px;
 	margin: -8px auto 0 auto;
 	border: 1px solid #000;
@@ -311,6 +311,6 @@ textarea {
 ----------------------------------*/
 .ui-checkbox { position: relative; float: left; font-size: 64%; margin-top: .5em; width: 17px; height: 18px;}
 .ui-checkbox .ui-checkbox-inputwrapper { width: 0; height: 0; overflow: hidden; }
-.ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; text-indent: -9999px; padding: .5em 0 .5em 23px; margin: 0 0 .3em; cursor: pointer; z-index: 1; }
+.ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; text-indent: -9999px; height: 18px; width:16px; margin: 0; cursor: pointer; z-index: 1; }
 .ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 15px; height: 16px; }
 .ui-checkbox .ui-checkbox-icon {margin: -1px 0 0 -1px}

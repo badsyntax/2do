@@ -22,7 +22,9 @@
 	<?php if (Request::instance()->uri() == 'home/index' and !Auth::instance()->logged_in()){?>
 
 		<footer>
-			<a href="<?php echo URL::site('info') ?>">what?</a>
+			<a href="<?php echo URL::site('info') ?>">info</a>
+			-
+			<a href="<?php echo URL::site('sign-up') ?>">sign up</a>
 		</footer>
 	<?php }?>
 	

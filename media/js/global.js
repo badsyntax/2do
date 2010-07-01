@@ -88,7 +88,7 @@
 				}
 			};
 
-			$(':checkbox').checkbox( this.checkboxConfig );
+			$(':checkbox:not(.plain)').checkbox( this.checkboxConfig );
 
 			this.elements.sortableLists
 			.sortable({
@@ -187,13 +187,15 @@
 					});
 				}
 
-				if ( self.elements.completedList.find('ul').children().length === 1 ) {
+				if ( self.elements.completedList.find('ul').children().length === 0 ) {
 
-					self.elements.completedListi
+					self.elements.completedList
 						.css({
 							height: 'auto', 
 							display: 'block'
 						});
+					
+					self.elements.completedList.find( 'ul' ).append( item );
 
 					item.show();
 							
@@ -210,7 +212,7 @@
 	
 							$( this ).css({ height: 'auto' });
 						});
-						
+
 					show();
 
 				} else show();
