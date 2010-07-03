@@ -1,57 +1,6 @@
 
 (function( $, window, document, undefined ){
 
-	// TODO incorporate html5 local storage
-	function cookie(opt){
-
-		this.config = $.extend({
-			name: 'cookie',
-			path: '/',
-			expiredays: 1
-		}, opt);
-	}
-
-	cookie.prototype = {
-		set : function(name, val, expiredays){
-
-			expiredays = expiredays || this.config.expiredays;
-
-			var exdate = new Date();
-
-			exdate.setDate( exdate.getDate() + expiredays );
-
-			document.cookie = 
-				name 
-				+ '=' + escape(val) 
-				+ ( ( expiredays == null ) ? '' : ';expires=' + exdate.toGMTString() ) 
-				+ ';path=' + this.config.path;
-		},
-		get : function(name){
-
-			if ( document.cookie.length ){
-				return '';
-			}
-
-			var start = document.cookie.indexOf( name + '=' );
-
-			if (start === -1) {
-				return '';
-			}
-
-			start = start + name.length + 1;
-
-			var end = document.cookie.indexOf( ';', start );
-
-			if (end === -1) { 
-				end = document.cookie.length;
-			}
-
-			return unescape( document.cookie.substring(start, end) );
-		}
-	}
-
-	$.cookie = new cookie();
-
 	$.ajaxSetup({
 		dataType: 'json',
 		error: function( xhr, textStatus ) {
@@ -79,16 +28,20 @@
 
 				select: function(widget, event){
 
-					var checkbox = $( this ), 
-						listitem = checkbox.parents('li:first'), 
-						id = listitem.attr('id').replace(/task-/, ''),
-						action = checkbox.is(':checked') ? '_taskComplete' : '_taskIncomplete';
+					try {
 
-					self[ action ]( id, listitem, checkbox );
+						var checkbox = $( this ), 
+							listitem = checkbox.parents('li:first'), 
+							id = listitem.attr('id').replace(/task-/, ''),
+							action = checkbox.is(':checked') ? '_taskComplete' : '_taskIncomplete';
+
+						self[ action ]( id, listitem, checkbox );
+
+					} catch(error) { }
 				}
 			};
 
-			$(':checkbox:not(.plain)').checkbox( this.checkboxConfig );
+			$(':checkbox:not(.system)').checkbox( this.checkboxConfig );
 
 			this.elements.sortableLists
 			.sortable({
@@ -111,7 +64,7 @@
 							.removeClass('task-hover')
 							.trigger('blur.edit');
 
-					self._taskUpdate( '', ui.item, list[0].id.replace(/list-/, '') );
+					self._taskUpdate( '', ui.item, list[0].id.replace(/list-/, ''), false );
 
 					self._saveSequences( list, function(){
 
@@ -136,6 +89,11 @@
 				
 				self._taskTime( item );
 			})
+			.delegate( 'li.task-new', 'click', function( event ){
+
+				!/task-content/.test( event.target.className ) && 
+					self._contentClickHandler( $( this ).find('.task-content')[0] );
+			})
 			.delegate( '.task-content', 'click', function(){
 					
 				self._contentClickHandler( this );		
@@ -157,8 +115,7 @@
 
 				$( this ).siblings( 'ul' )
 				.animate({
-					height: ['toggle', 'swing'],
-					opacity: 'toggle'
+					height: ['toggle', 'swing']
 				}, 400, 'linear');
 			});
 		},
@@ -215,7 +172,12 @@
 
 					show();
 
-				} else show();
+				} else {
+
+					self.elements.completedList.find( 'ul' ).append( item );
+
+					show();
+				}
 
 				checkbox.blur();
 			});
@@ -260,8 +222,9 @@
 
 				if ( response.outcome == 'success' ) {
 
-					var list = item.parents('ul:first'),
-						newitem = 
+					var 
+					list = item.parents('ul:first'),
+					newitem = 
 						$( '<li></li>' )
 						.html( '<label><input type="checkbox" /></label><div class="task-content">' + text + '</div>' )
 						.attr('id', 'task-' + response.id)
@@ -282,7 +245,7 @@
 			});
 		},
 
-		_taskUpdate: function( text, item, listId ){
+		_taskUpdate: function( text, item, listId, animate ){
 			
 			$.post(this.options.baseurl + '/save', { 
 				task: text, 
@@ -292,7 +255,7 @@
 
 				if ( response.outcome == 'success' ) {
 
-					item.effect( 'highlight', {}, 800 );
+					animate && item.effect( 'highlight', {}, 800 );
 				} else {
 
 					alert( response.message );
@@ -314,7 +277,7 @@
 		},
 
 		_contentClickHandler: function( content ){
-			
+
 			content = $( content );
 
 			var self = this,
@@ -376,7 +339,58 @@
 
 	});
 
-	$('#content').listeditor({
+	// TODO incorporate html5 local storage
+	function cookie(opt){
+
+		this.config = $.extend({
+			name: 'cookie',
+			path: '/',
+			expiredays: 1
+		}, opt);
+	}
+
+	cookie.prototype = {
+		set : function(name, val, expiredays){
+
+			expiredays = expiredays || this.config.expiredays;
+
+			var exdate = new Date();
+
+			exdate.setDate( exdate.getDate() + expiredays );
+
+			document.cookie = 
+				name 
+				+ '=' + escape(val) 
+				+ ( ( expiredays == null ) ? '' : ';expires=' + exdate.toGMTString() ) 
+				+ ';path=' + this.config.path;
+		},
+		get : function(name){
+
+			if ( document.cookie.length ){
+				return '';
+			}
+
+			var start = document.cookie.indexOf( name + '=' );
+
+			if (start === -1) {
+				return '';
+			}
+
+			start = start + name.length + 1;
+
+			var end = document.cookie.indexOf( ';', start );
+
+			if (end === -1) { 
+				end = document.cookie.length;
+			}
+
+			return unescape( document.cookie.substring(start, end) );
+		}
+	}
+
+	$.cookie = new cookie();
+
+	$('#content.lists').listeditor({
 		baseurl: '/task'
 	});
 

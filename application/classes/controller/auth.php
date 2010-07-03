@@ -1,6 +1,8 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 class Controller_Auth extends Controller_Base {
+	
+	private $store_path = '/tmp/_php_consumer_test';
 
 	public function before(){
 
@@ -10,6 +12,11 @@ class Controller_Auth extends Controller_Base {
 		require Kohana::find_file('vendor', 'Auth/OpenID/FileStore');
 		require Kohana::find_file('vendor', 'Auth/OpenID/SReg');
 		require Kohana::find_file('vendor', 'Auth/OpenID/PAPE');
+
+		if (!file_exists($this->store_path) && !@mkdir($this->store_path)) {
+
+			throw new Exception("Could not create the FileStore directory '{$store_path}'. Please check the effective permissions.");
+		}
 	}
 
 	public function action_index(){
@@ -19,95 +26,94 @@ class Controller_Auth extends Controller_Base {
 
 	public function action_finish(){
 		
-		$template_auth = View::factory('openid/auth');
-
 		$openid = @$_GET['openid_identity'];
 
 		if (!$openid) Request::instance()->redirect('/');
 
-		$store_path = "/tmp/_php_consumer_test";
-
-		if (!file_exists($store_path) && !mkdir($store_path)) {
-			print "Could not create the FileStore directory '$store_path'. ".
-			" Please check the effective permissions.";
-			exit(0);
-		}
-
-		$store = new Auth_OpenID_FileStore($store_path);
+		$store = new Auth_OpenID_FileStore($this->store_path);
 
 		$consumer = new Auth_OpenID_Consumer($store);
 
-		// Complete the authentication process using the server's
-		// response.
 		$response = $consumer->complete(URL::site('auth/finish', TRUE));
 
-		// Check the response status.
 		if ($response->status == Auth_OpenID_CANCEL) {
 
-			// This means the authentication was cancelled.
-			$msg = 'Verification cancelled.';
+			throw new Exception("OpenID authentication cancelled.");
 
 		} else if ($response->status == Auth_OpenID_FAILURE) {
 
-			// Authentication failed; display the error message.
-			$msg = "OpenID authentication failed: " . $response->message;
+			throw new Exception("OpenID authentication failed: {$response->message}");
 
 		} else if ($response->status == Auth_OpenID_SUCCESS) {
 
-			// authentication succeeded
 			$openid = $response->getDisplayIdentifier();
-			$esc_identity = htmlentities($openid);
 
-			$user = ORM::factory('user')->get_by_openid($esc_identity);
+			$user = ORM::factory('user')
+				->where('username', '=', htmlentities($openid))
+				->find();
 
 			if (!$user->id) {
-				$user->username = $esc_identity;
-				$user->email = $esc_identity;
-				$user->password = $esc_identity;
-				$user->openid = $esc_identity;
-				$user->save();
-				$user->add('roles', new Model_Role(array('name' =>'login')));
+
+				Request::instance()->redirect('/auth/confirm?openid='.urlencode($openid));
 			}
 
 			Auth::instance()->force_login($user);
 
 			Request::instance()->redirect('/');
 		}
-
-		$template_auth->msg = @$msg;
-		$template_auth->success = @$success;
-
-		$this->template->content = $template_auth;
 	}
+
+	public function action_confirm(){
+
+		if (!$_POST) {
+			$template_auth = new View('openid/auth_confirm');
+			$template_auth->openid = @$_GET['openid'];
+			$this->template->content = $template_auth;
+		} 
+		else if (isset($_POST['agree'])) {
+
+			$openid = @$_POST['openid'];
+
+			$user = ORM::factory('user');
+			$user->username = $openid;
+			$user->email = $openid;
+			$user->password = $openid;
+			$user->save();
+			$user->add('roles', new Model_Role(array('name' =>'login')));
+
+			Auth::instance()->force_login($user);
+
+			Request::instance()->redirect('/');
+		}
+	}
+
 	public function action_try(){
 
 		$template_auth = new View('openid/auth_login');
-		
+
 		$openid = @$_GET['openid_identity'];
 		
-		if (!$openid) Request::instance()->redirect('/');
+		if (!$openid) {
 
-		$store_path = "/tmp/_php_consumer_test";
+			Request::instance()->redirect('/');
+		}
 
-		(!file_exists($store_path) && !mkdir($store_path)) and
-			exit("Could not create the FileStore directory '$store_path'. Please check the effective permissions.");
-
-		$store = new Auth_OpenID_FileStore($store_path);
+		$store = new Auth_OpenID_FileStore($this->store_path);
 
 		$consumer = new Auth_OpenID_Consumer($store);
 
 		// Begin the OpenID authentication process.
 		$auth_request = $consumer->begin($openid);
 
-		// No auth request means we can't begin OpenID.
-		!$auth_request and die("Authentication error; not a valid OpenID.");
+		if (!$auth_request) {
 
-		$sreg_request = Auth_OpenID_SRegRequest::build( // Required
-				     array('nickname'),
-				     // Optional
-				     array('fullname', 'email'));
+			throw new Exception('Authentication error; not a valid OpenID.');
+		}
+
+		$sreg_request = Auth_OpenID_SRegRequest::build( array('nickname'), array('fullname', 'email') );
 
 		if ($sreg_request) {
+
 			$auth_request->addExtension($sreg_request);
 		}
 
@@ -115,7 +121,10 @@ class Controller_Auth extends Controller_Base {
 
 		$pape_request = new Auth_OpenID_PAPE_Request($policy_uris);
 
-		$pape_request and $auth_request->addExtension($pape_request);
+		if ($pape_request) {
+
+			$auth_request->addExtension($pape_request);
+		}
 
 		// Redirect the user to the OpenID server for authentication.
 		// Store the token for this authentication so we can verify the
@@ -130,13 +139,12 @@ class Controller_Auth extends Controller_Base {
 			// If the redirect URL can't be built, display an error
 			// message.
 			if (Auth_OpenID::isFailure($redirect_url)) {
-
-				exit("Could not redirect to server: " . $redirect_url->message);
-			} else {
-
-				// Send redirect.
-				Request::instance()->redirect($redirect_url);
+			
+				throw new Exception('Could not redirect to server: '.$redirect_url->message);
 			}
+
+			// Send redirect.
+			Request::instance()->redirect($redirect_url);
 		} else {
 
 			$form_html = $auth_request->htmlMarkup(
@@ -150,12 +158,11 @@ class Controller_Auth extends Controller_Base {
 			// otherwise, render the HTML.
 			if (Auth_OpenID::isFailure($form_html)) {
 
-				exit("Could not redirect to server: " . $form_html->message);
 
-			} else {
-
-				$template_auth->form = $form_html;
+				throw new Exception('Could not redirect to server: ' . $form_html->message);
 			}
+				
+			$template_auth->form = $form_html;
 		}
 				
 		$this->template->content = $template_auth;

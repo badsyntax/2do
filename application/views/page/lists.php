@@ -1,10 +1,9 @@
-<div id="content" style="padding-bottom:0">
+<div id="content" class="lists" style="padding-bottom:0">
 
 	<?php foreach($lists as $list){?>
 
 		<section id="<?php echo strtolower($list['list']->name) ?>" class="list">
-			<span class="ui-icon ui-icon-circlesmall-minus helper-right list-toggle"></span>
-			<h3><?php echo $list['list']->name ?></h3>
+			<h3 class="list-toggle"><?php echo $list['list']->name ?></h3>
 
 			<ul id="list-<?php echo $list['list']->id ?>" class="task-list task sortable">
 				<li class="task-new">
@@ -32,9 +31,8 @@
 	<?php } else {?>
 	<section id="list-completed" class="list helper-hidden">
 	<?php }?>
-	<span class="ui-icon ui-icon-circlesmall-minus helper-right list-toggle"></span>
 
-	<h3>Completed</h3>
+	<h3 class="list-toggle">Completed</h3>
 
 	<ul class="task-list completed">
 		<?php foreach($complete as $task){?>

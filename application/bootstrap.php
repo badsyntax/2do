@@ -89,6 +89,12 @@ Route::set('list', 'list/<date>', array('date' => '.*'))
 		'action' => 'index',
 	));
 
+Route::set('auth', 'auth/confirm/<openid>', array('openid' => '.*'))
+	->defaults(array(
+		'controller' => 'auth',
+		'action' => 'confirm',
+	));
+
 Route::set('sign-in', 'sign-in')
 	->defaults(array(
 		'controller' => 'account',
