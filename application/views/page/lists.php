@@ -1,3 +1,22 @@
+
+<div id="task-time-container" class="ui-state-default ui-corner-all ui-helper-hidden-accessible">
+	<span class="ui-icon ui-icon-help helper-right"></span>
+	<label for="task-time">
+		Time:
+	</label>
+	<input type="text" name="task-time" id="task-time" />
+
+	<div id="task-time-help">
+		<h4>Time info:</h4>
+		<p>You can enter the time in many different formats. Here are some examples:</p>
+		<ul>
+			<li>3.5 hrs</li>
+			<li>34 min</li>
+			<li>1 hr 45 min</li>
+		</ul>
+	</div>
+</div>
+
 <div id="content" class="lists" style="padding-bottom:0">
 
 	<?php foreach($lists as $list){?>

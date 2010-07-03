@@ -15,13 +15,16 @@
 			
 			var self = this;
 
+			$( 'body' ).attr( 'role', 'application' );
+
 			this.elements = {
 				completedList: $('#list-completed'),
 				sortableLists: $('.task-list.sortable'),
 				removeIcon: $( '<span></span>' )
 					.addClass( 'ui-icon ui-icon-closethick task-remove' ),
 				timeIcon: $( '<span></span>' )
-					.addClass( 'ui-icon ui-icon-time task-time' )
+					.addClass( 'ui-icon ui-icon-time task-time' ),
+				taskTime: $( '#task-time-container' )
 			};
 
 			this.checkboxConfig = {
@@ -77,26 +80,26 @@
 			}); //.disableSelection();
 			
 			$( '.task-list' )
-			.delegate( '.task-remove', 'click', function(){
+			.delegate( '.task-remove', 'click', function( event ){
 					
 				var item = $( this ).parents( 'li:first' );
 
-				self._taskRemove( item );
+				self._taskRemove( event, item );
 			})
-			.delegate( '.task-time', 'click', function(){
+			.delegate( '.task-time', 'click', function( event ){
 					
 				var item = $( this ).parents( 'li:first' );
 				
-				self._taskTime( item );
+				self._taskTime( event, item );
 			})
 			.delegate( 'li.task-new', 'click', function( event ){
 
 				!/task-content/.test( event.target.className ) && 
-					self._contentClickHandler( $( this ).find('.task-content')[0] );
+					self._contentClickHandler( event, $( this ).find('.task-content')[0] );
 			})
-			.delegate( '.task-content', 'click', function(){
+			.delegate( '.task-content', 'click', function( event ){
 					
-				self._contentClickHandler( this );		
+				self._contentClickHandler( event, this );		
 			})
 			.delegate( 'li:not(.task-new)', 'mouseenter', function(){
 
@@ -263,20 +266,65 @@
 			});
 		},
 		
-		_taskRemove : function( listitem ){
+		_taskRemove : function( event, item ){
 
-			var id = listitem.attr('id').replace(/task-/, '');
+			var id = item.attr('id').replace(/task-/, '');
 
 			$.post( this.options.baseurl + '/remove', { id: id }, function( data ){
 
-				listitem.fadeOut('fast', function(){
+				item.fadeOut('fast', function(){
 
 					$( this ).remove();
 				});
 			});
 		},
 
-		_contentClickHandler: function( content ){
+		_taskTime : function( event, item, animate ){
+
+			animate = animate === undefined ? true : animate;
+
+			var self = this, offset = $( event.target ).offset();
+
+			this.elements.taskTime
+			.css({
+				left: offset.left - this.elements.taskTime.innerWidth() - 10,
+				top: offset.top - ( this.elements.taskTime.height() / 2 )
+			})
+			.find( 'input' )
+				.focus()
+				.unbind( 'blur.time' )
+				.bind( 'blur.time', function( event ){
+
+					var input = this;
+					
+					self.elements.taskTime.css({ left: -9999 });
+
+					if ( !input.value ) return;
+
+					$.post( self.options.baseurl + '/savetime', { 
+						time: $.trim( input.value ),
+						id: item[0].id.replace(/task-/, '') 
+					}, function( response ){
+
+						if ( response.outcome == 'success' ) {
+
+							animate && item.effect( 'highlight', {}, 800 );
+						} else {
+
+							alert( response.message );
+						}
+					});
+
+					input.value = '';
+				})
+				.bind('keydown.time', function(event){
+
+					// return key
+					( event.keyCode == 13 ) && $( this ).trigger( 'blur' );
+				});
+		},
+
+		_contentClickHandler: function( event, content ){
 
 			content = $( content );
 

@@ -40,6 +40,18 @@ class Controller_Task extends Controller_BaseAjax {
 		));
 	}
 
+	public function action_savetime(){
+
+		$task = ORM::factory('task', (int) $_POST['id']);
+		$task->time = $_POST['time'];
+		$task->save();
+
+		$this->request->response = json_encode(
+		array(
+			'outcome' => 'success'
+		));
+	}
+
 	public function action_remove(){
 		
 		ORM::factory('task', (int) $_POST['id'])

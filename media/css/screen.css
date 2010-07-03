@@ -104,6 +104,7 @@ header {
 
 #content {
 	padding: 20px;
+	position: relative;
 }
 section.list {
 	margin-bottom: 20px;
@@ -183,7 +184,7 @@ textarea {
 }
 textarea:focus, input:focus {
 	outline: none;
-	border-color: #444;
+	border-color: #999;
 }
 textarea {
 	padding: .6em;
@@ -299,6 +300,38 @@ textarea {
 	margin-bottom: 1em;
 }
 
+#task-time-container {
+	width: 120px;
+	background: #efefef;
+	position: absolute;
+	z-index: 999;
+	padding: 6px;
+	-moz-box-shadow: 2px 2px 4px #888;
+	-webkit-box-shadow: 2px 2px 1px #888;
+}
+#task-time-container .ui-icon-help {
+	cursor: pointer;
+}
+#task-time-help {
+	width: 180px;
+	margin-top: 8px;
+	font-size: 90%;
+	display: none;
+}
+#task-time-help h4 {
+	margin-bottom: 4px;
+	font-weight: normal;
+}
+#task-time-help ul {
+	margin-bottom: 0;
+}
+#task-time {
+	width: 100px;
+	margin: 0;
+}
+
+/* layout helpers 
+---------------------*/
 
 .helper-hidden {
 	display: none;
