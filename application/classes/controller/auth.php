@@ -49,10 +49,8 @@ class Controller_Auth extends Controller_Base {
 
 		if ($_POST) {
 
-			$_POST['remember'] = TRUE;
-
 			$status = ORM::factory('user')->login($_POST);
- 
+
 			if ($status) {
 
 				Request::instance()->redirect('/');
@@ -61,6 +59,7 @@ class Controller_Auth extends Controller_Base {
 				$content->errors = $_POST->errors('signin');
 			}
 		}
+
 	}
 	
 	public function action_profile(){
@@ -123,7 +122,7 @@ class Controller_Auth extends Controller_Base {
  
 				Auth::instance()->login($post['username'], $post['password']);
  
-				Request::instance()->redirect('profile');
+				Request::instance()->redirect('/');
 			}
 			else {
 
@@ -209,8 +208,6 @@ class Controller_Auth extends Controller_Base {
 				$user->add('roles', new Model_Role(array('name' =>'login')));
 
 				Auth::instance()->force_login($user);
-			} else {
-				die(print_r($post->errors('register')));
 			}
 
 			Request::instance()->redirect('/');

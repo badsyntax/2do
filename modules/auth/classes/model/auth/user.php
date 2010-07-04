@@ -50,6 +50,7 @@ class Model_Auth_User extends ORM {
 	 */
 	public function login(array & $array, $redirect = FALSE)
 	{
+
 		$array = Validate::factory($array)
 			->filter(TRUE, 'trim')
 			->rules('username', $this->_rules['username'])
@@ -61,7 +62,7 @@ class Model_Auth_User extends ORM {
 		// Login starts out invalid
 		$status = FALSE;
 
-		if ($array->check())
+		if ( $array->check())
 		{
 			// Attempt to load the user
 			$this->where('username', '=', $array['username'])->find();

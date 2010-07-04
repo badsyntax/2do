@@ -116,10 +116,32 @@
 
 			$('.list-toggle').click(function(){
 
-				$( this ).parent().siblings( 'ul' )
-				.animate({
+				var list = $( this ).parent().siblings( 'ul' ), 
+					listid = list[0].id.replace(/list-/, ''), 
+					hiddenlists = $.cookie.get('hiddenlists').split( ',' );
+
+
+				if ( list.is(':hidden') ) {
+
+					$.map(hiddenlists, function(n, i){
+
+						if ( n == listid ) {
+							delete hiddenlists[ i ];
+						}
+					});
+				} else {
+
+					if ( $.inArray( listid, hiddenlists ) === -1 ) {
+
+						hiddenlists.push( listid );
+					}
+				}
+
+				$.cookie.set('hiddenlists', $.unique( hiddenlists ).join(',') );
+
+				list.animate({
 					height: ['toggle', 'swing']
-				}, 400, 'linear');
+				}, 200, 'linear');
 			});
 		},
 
@@ -387,7 +409,6 @@
 
 	});
 
-	// TODO incorporate html5 local storage
 	function cookie(opt){
 
 		this.config = $.extend({
@@ -411,10 +432,12 @@
 				+ '=' + escape(val) 
 				+ ( ( expiredays == null ) ? '' : ';expires=' + exdate.toGMTString() ) 
 				+ ';path=' + this.config.path;
+
 		},
 		get : function(name){
 
-			if ( document.cookie.length ){
+
+			if ( !document.cookie.length ){
 				return '';
 			}
 
@@ -425,6 +448,7 @@
 			}
 
 			start = start + name.length + 1;
+
 
 			var end = document.cookie.indexOf( ';', start );
 
@@ -438,7 +462,7 @@
 
 	$.cookie = new cookie();
 
-	$('#content.lists').listeditor({
+	$('#lists').listeditor({
 		baseurl: '/task'
 	});
 

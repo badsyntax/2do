@@ -19,7 +19,7 @@ class Controller_List extends Controller_Base {
 
 		$lists = array();
 		
-		foreach($l = ORM::factory('list')->find_all() as $list){
+		foreach($l = ORM::factory('list')->find_all() as $i => $list){
 
 			$data = array(
 				'list' => $list,
@@ -30,6 +30,7 @@ class Controller_List extends Controller_Base {
 		}
 		
 		$lists_template->lists = $lists;
+		$lists_template->hidden_lists = explode(',', @$_COOKIE['hiddenlists']);
 		$lists_template->complete = ORM::factory('task')->get_completed($this->user->id, $date);
 
 		$this->template->content = $lists_template;

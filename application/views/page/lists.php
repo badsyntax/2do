@@ -16,6 +16,7 @@
 	</div>
 </div>
 
+<div id="lists">
 <?php foreach($lists as $list){?>
 
 	<section id="<?php echo strtolower($list['list']->name) ?>" class="list">
@@ -23,7 +24,7 @@
 			<span class="list-toggle"><?php echo $list['list']->name ?></span>
 		</h3>
 
-		<ul id="list-<?php echo $list['list']->id ?>" class="task-list task sortable">
+		<ul id="list-<?php echo $list['list']->id ?>" class="task-list task sortable<?php echo in_array($list['list']->id, $hidden_lists) ? ' ui-helper-hidden' : '';?>">
 			<li class="task-new">
 				<span class="ui-icon ui-icon-plusthick helper-left task-add"></span>
 				<div class="task-content">
@@ -62,3 +63,4 @@
 	</li>
 	<?php }?>
 </ul>
+</div>

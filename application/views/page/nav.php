@@ -6,6 +6,8 @@
 
 		<a href="<?php echo URL::site('sign-out') ?>">Sign out</a>
 	<?php } else {?>
-		<a href="<?php echo URL::site('info') ?>">help/info</a>
+		<a href="<?php echo URL::site('help') ?>">help</a>
+
+		<a href="<?php echo URL::site('info') ?>">info</a>
 	<?php } ?>
 </nav>
