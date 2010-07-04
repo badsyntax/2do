@@ -4,7 +4,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 }
 body {
 	background: url(/img/bg.gif);
-	margin: 3.2em 0 1em;
+	margin: 3.2em 0 3em;
 	font: normal 84%/1.1 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	color: #444;
 }
@@ -78,6 +78,23 @@ header {
 	margin: 0 auto;
 	width: 680px;
 	padding: 0 20px;
+}
+
+#notification {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	background: #fff;
+	padding: .4em 1em;
+	border: 1px solid #000;
+	border-width: 0 1px 1px 1px;
+	-moz-border-radius: 0 0 12px 12px;
+	display: none;
+	z-index: 999;
+}
+#notification .ui-icon {
+	float: left;
+	margin-right: .5em;
 }
 
 #logo a {
@@ -263,6 +280,10 @@ textarea {
 }
 .ui-icon-time {
 	background: url(/img/clock.gif) no-repeat center center;
+}
+
+#list-completed {
+	margin-bottom: 0;
 }
 
 .ui-button {

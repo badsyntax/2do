@@ -8,12 +8,18 @@
 	<script type="text/javascript" src="/js/jquery.js"></script>
 </head>
 <body>
+	<div id="notification" class="ui-helper-hidden helper-clearfix">
+		<span class="ui-icon ui-icon-alert"></span>
+		<span class="message"></span>
+	</div>
+
 	<header>
 		<?php echo View::factory('page/nav') ?>
 		<div id="logo">
 			<a href="/">2do</a>
 		</div>
 	</header>
+
 	<div class="wrapper">
 		<div id="content">	
 			<?php echo $content ?>

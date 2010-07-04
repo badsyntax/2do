@@ -1,6 +1,11 @@
 
 (function( $, window, document, undefined ){
 
+	$.fn.exists = function( func ){
+
+		return ( this.length && func && func.apply( this ) ) ? this : ( !func ? this.length : this );
+	};
+
 	$.ajaxSetup({
 		dataType: 'json',
 		error: function( xhr, textStatus ) {
@@ -297,6 +302,8 @@
 				item.fadeOut('fast', function(){
 
 					$( this ).remove();
+
+					$.notification('alert', 'Todo successfully deleted.');
 				});
 			});
 		},
@@ -408,6 +415,24 @@
 		}
 
 	});
+
+	$.notification = function(type, message) {
+
+		$('#notification')
+			.find( 'ui-icon' )
+				.addClass('ui-icon ui-icon-' + type)
+				.end()
+			.find('.message')
+				.text( message )
+				.end()
+			.exists(function(){
+
+				$( this ).css({ marginLeft: -( $( this ).width() / 2 ) + 'px' });
+			})
+			.slideDown()
+			.delay(2000)
+			.slideUp();
+	};
 
 	function cookie(opt){
 
