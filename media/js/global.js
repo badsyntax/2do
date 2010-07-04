@@ -196,7 +196,7 @@
 							display: 'block'
 						});
 					
-					self.elements.completedList.find( 'ul' ).append( item );
+					self.elements.completedList.find( 'ul' ).prepend( item );
 
 					item.show();
 							
@@ -218,12 +218,16 @@
 
 				} else {
 
-					self.elements.completedList.find( 'ul' ).append( item );
+					self.elements.completedList.find( 'ul' ).prepend( item );
 
 					show();
 				}
 
 				checkbox.blur();
+				
+				self._saveSequences( self.elements.completedList.find('ul').sortable() );
+
+				self.elements.completedList.find('ul').sortable('destroy');
 			});
 
 			$.post( self.options.baseurl + '/complete', { id: id } );
@@ -248,6 +252,8 @@
 
 					self.elements.completedList.slideUp('slow').fadeOut();
 				}
+			
+				self._saveSequences( $( '.task-list.task:first' ) );
 			});
 
 			$.post( self.options.baseurl + '/incomplete', { id: id } );
