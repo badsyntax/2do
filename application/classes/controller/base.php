@@ -48,17 +48,17 @@ class Controller_Base extends Controller_Template {
 		if ($this->auto_render) {
 
 			$styles = array(
-				'css/smoothness/jquery-ui.css' => 'screen, projection',
-				'css/screen.css' => 'screen, projection'
+				'media/css/smoothness/jquery-ui.css',
+				'media/css/screen.css'
 			);
   
 			$scripts = array(
-				'js/jquery-ui.js',
-				'js/global.js',
+				'media/js/jquery-ui.js',
+				'media/js/global.js',
 			);
-		
-			$this->template->styles = $styles;
-			$this->template->scripts = $scripts;
+
+			$this->template->styles = Media::instance()->styles($styles);
+			$this->template->scripts = Media::instance()->scripts($scripts);
 		}
 
 		parent::after();

@@ -1,0 +1,3 @@
+[submodule "modules/media"]
+	path = modules/media
+	url = git@github.com:badsyntax/kohana-media.git

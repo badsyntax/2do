@@ -3,7 +3,7 @@
 <head>
 	<title><?php echo $title ?></title>
 	<meta charset="utf-8" />
-	<?php foreach ($styles as $file => $type) echo HTML::style($file, array('media' => $type)), "\n\t" ?>
+	<?php echo HTML::style($styles), "\n" ?>
 <!--[if IE]><?php echo HTML::script('/js/html5.js')?><![endif]-->
 	<script type="text/javascript" src="/js/jquery.js"></script>
 </head>
@@ -32,6 +32,6 @@
 		</footer>
 	<?php }?>
 	
-	<?php foreach ($scripts as $file) echo HTML::script($file), "\n" ?>
+	<?php echo HTML::script($scripts), "\n" ?>
 </body>
 </html>

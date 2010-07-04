@@ -1,3 +1,8 @@
+/*!
+ * global.js
+ *
+ *@Auth Richard Willis
+ */
 
 (function( $, window, document, undefined ){
 
