@@ -1,6 +1,7 @@
 <nav class="helper-clearfix">
 	
 	<?php if (Auth::instance()->logged_in()) {?>
+		<a href="<?php echo URL::site('projects') ?>">Projects</a>
 		
 		<a href="<?php echo URL::site('reports') ?>">Reports</a>
 

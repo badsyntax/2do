@@ -26,6 +26,12 @@ setlocale(LC_ALL, 'en_US.utf-8');
  */
 spl_autoload_register(array('Kohana', 'auto_load'));
 
+
+/**
+* Set the production status by the domain.
+*/
+Kohana::$environment = ($_SERVER['SERVER_ADDR'] !== '192.168.1.71') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
+
 /**
  * Enable the Kohana auto-loader for unserialization.
  *

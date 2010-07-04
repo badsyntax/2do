@@ -4,6 +4,7 @@
  *@Auth Richard Willis
  */
 
+
 (function( $, window, document, undefined ){
 
 	$.fn.exists = function( func ){
@@ -15,7 +16,7 @@
 		dataType: 'json',
 		error: function( xhr, textStatus ) {
 
-				alert('Something went wrong! Please try again.');
+				$.notification('alert', 'Something went wrong! Please try again.');
 			}
 	});
 
@@ -53,6 +54,8 @@
 					} catch(error) { }
 				}
 			};
+			
+			this.elements.taskTime.appendTo( 'body' );
 
 			$(':checkbox:not(.system)').checkbox( this.checkboxConfig );
 
@@ -88,6 +91,22 @@
 					});
 				}
 			}); //.disableSelection();
+
+			this.events = {
+
+				mouseenter: function( event ) {
+
+					$( this )
+						.prepend( self.elements.timeIcon.show() )
+						.prepend( self.elements.removeIcon.show() );
+				},
+				mouseleave: function( event ) {
+
+					self.elements.removeIcon.hide();
+
+					self.elements.timeIcon.hide();
+				}
+			};
 			
 			$( '.task-list' )
 			.delegate( '.task-remove', 'click', function( event ){
@@ -111,18 +130,8 @@
 					
 				self._contentClickHandler( event, this );		
 			})
-			.delegate( 'li:not(.task-new)', 'mouseenter', function(){
-
-				$( this )
-					.prepend( self.elements.timeIcon.show() )
-					.prepend( self.elements.removeIcon.show() );
-			})
-			.delegate( 'li', 'mouseleave', function(){
-
-				self.elements.removeIcon.hide();
-
-				self.elements.timeIcon.hide();
-			});
+			.delegate( 'li:not(.task-new)', 'mouseenter', this.events.mouseenter )
+			.delegate( 'li', 'mouseleave', this.events.mouseleave );
 
 			$('.list-toggle').click(function(){
 
@@ -319,42 +328,86 @@
 
 			var self = this, offset = $( event.target ).offset();
 
+			$('.task-list')
+			.undelegate( 'li:not(.task-new)', 'mouseenter', this.events.mouseenter )
+			.undelegate( 'li', 'mouseleave', this.events.mouseleave )
+			.find( '.task-content' )
+				.trigger('blur.edit');
+
 			this.elements.taskTime
 			.css({
 				left: offset.left - this.elements.taskTime.innerWidth() - 10,
 				top: offset.top - ( this.elements.taskTime.height() / 2 )
 			})
+			.find( '.ui-icon' )
+				.unbind( 'mousedown.time' )
+				.bind( 'mousedown.time', function(event){
+
+					var icon = this;
+
+					setTimeout(function(){
+
+						$( icon )
+							.siblings('input')
+								.focus()
+								.end()
+							.siblings('#task-time-help')
+								.toggle('fast');
+					}, 1);
+				})
+				.end()
 			.find( 'input' )
 				.focus()
+				.focus(function(){
+					
+					$( this ).data('focus', true);
+				})
 				.unbind( 'blur.time' )
 				.bind( 'blur.time', function( event ){
 
 					var input = this;
 					
-					self.elements.taskTime.css({ left: -9999 });
+					$( this ).data('focus', false);
+					
+					setTimeout(function(){
 
-					if ( !input.value ) return;
+						if ( $( input ).data('focus') ) return;
 
-					$.post( self.options.baseurl + '/savetime', { 
-						time: $.trim( input.value ),
-						id: item[0].id.replace(/task-/, '') 
-					}, function( response ){
+						$( input ).siblings( '#task-time-help' ).hide();
+					
+						self.elements.taskTime.css({ left: -9999 });
 
-						if ( response.outcome == 'success' ) {
+						$('.task-list')
+						.delegate( 'li:not(.task-new)', 'mouseenter', self.events.mouseenter )
+						.delegate( 'li', 'mouseleave', self.events.mouseleave )
+						.find('li').each(function(){
 
-							animate && item.effect( 'highlight', {}, 800 );
-						} else {
+							self.events.mouseleave.apply( this.parentNode, [ { target: this } ]);
+						});
 
-							alert( response.message );
-						}
+						if ( !input.value ) return;
+
+						$.post( self.options.baseurl + '/savetime', { 
+							time: $.trim( input.value ),
+							id: item[0].id.replace(/task-/, '') 
+						}, function( response ){
+
+							if ( response.outcome == 'success' ) {
+
+								animate && item.effect( 'highlight', {}, 800 );
+							} else {
+	
+								alert( response.message );
+							}
+						});
+
+						input.value = '';
 					});
-
-					input.value = '';
 				})
 				.bind('keydown.time', function(event){
 
 					// return key
-					( event.keyCode == 13 ) && $( this ).trigger( 'blur' );
+					( event.keyCode == $.ui.keyCode.ENTER ) && $( this ).trigger( 'blur' );
 				});
 		},
 
@@ -368,6 +421,8 @@
 				list = content.parents('ul:first');
 
 			if ( content.attr('contentEditable') == 'true' ) return;
+
+			this.elements.taskTime.find('input').trigger('blur.time');
 
 			$( '.task-content' ).not( content )
 				.trigger( 'blur.edit' );
@@ -407,7 +462,7 @@
 			.bind('keydown.edit', function(event){
 
 				// return key
-				( event.keyCode == 13 ) && $( this ).trigger( 'blur' );
+				( event.keyCode == $.ui.keyCode.ENTER ) && $( this ).trigger( 'blur' );
 			});
 		},
 

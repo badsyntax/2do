@@ -6,8 +6,7 @@
 	<input type="text" name="task-time" id="task-time" />
 
 	<div id="task-time-help">
-		<h4>Time info:</h4>
-		<p>You can enter the time in many different formats. Here are some examples:</p>
+		<h4>Examples:</h4>
 		<ul>
 			<li>3.5 hrs</li>
 			<li>34 min</li>

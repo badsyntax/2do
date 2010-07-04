@@ -3,7 +3,7 @@
 <head>
 	<title><?php echo $title ?></title>
 	<meta charset="utf-8" />
-	<?php echo HTML::style($styles), "\n" ?>
+	<?php echo $styles, "\n" ?>
 <!--[if IE]><?php echo HTML::script('/js/html5.js')?><![endif]-->
 	<script type="text/javascript" src="/js/jquery.js"></script>
 </head>
@@ -32,6 +32,6 @@
 		</footer>
 	<?php }?>
 	
-	<?php echo HTML::script($scripts), "\n" ?>
+	<?php echo $scripts, "\n" ?>
 </body>
 </html>

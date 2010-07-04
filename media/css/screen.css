@@ -2,6 +2,7 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pr
 article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary { 
 	display: block;
 }
+
 body {
 	background: url(/img/bg.gif);
 	margin: 3.2em 0 3em;
@@ -340,7 +341,7 @@ textarea {
 	display: none;
 }
 #task-time-help h4 {
-	margin-bottom: 4px;
+	margin-bottom: 10px;
 	font-weight: normal;
 }
 #task-time-help ul {
