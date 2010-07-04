@@ -97,31 +97,31 @@ Route::set('auth', 'auth/confirm/<openid>', array('openid' => '.*'))
 
 Route::set('sign-in', 'sign-in')
 	->defaults(array(
-		'controller' => 'account',
+		'controller' => 'auth',
 		'action' => 'sign_in'
 	));
 
 Route::set('sign-up', 'sign-up')
 	->defaults(array(
-		'controller' => 'account',
+		'controller' => 'auth',
 		'action' => 'sign_up'
 	));
 
 Route::set('sign-out', 'sign-out')
 	->defaults(array(
-		'controller' => 'account',
+		'controller' => 'auth',
 		'action' => 'sign_out'
 	));
 
 Route::set('profile', 'profile')
 	->defaults(array(
-		'controller' => 'account',
+		'controller' => 'auth',
 		'action' => 'profile'
 	));
 
 Route::set('noaccess', '403')
 	->defaults(array(
-		'controller' => 'account',
+		'controller' => 'auth',
 		'action' => '403'
 	));
 

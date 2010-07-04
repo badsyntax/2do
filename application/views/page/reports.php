@@ -1,5 +1,3 @@
-<div id="content">
-
 <h3>Reports</h3>
 
 <br />

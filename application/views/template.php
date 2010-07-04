@@ -15,8 +15,9 @@
 		</div>
 	</header>
 	<div class="wrapper">
-		
-		<?php echo $content ?>
+		<div id="content">	
+			<?php echo $content ?>
+		</div>
 	</div>
 
 	<?php if (Request::instance()->uri() == 'home/index' and !Auth::instance()->logged_in()){?>

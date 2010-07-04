@@ -1,19 +1,20 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
 /**
  * @name OpenID auth controller 
  * @author Richard Willis
- * @depends kohana3, auth module
- * @description This is an example Kohana controller using php-openid to authenticate an OpenID
- * service, largely based on the php-openid consumer examples here:
+ * @depends kohana3, kohana 3 auth module, php-openid
+ * 
+ * Parts of this controller are based on the php-openid consumer examples here:
  * http://github.com/openid/php-openid/tree/master/examples/consumer/
  *
  */
 
 class Controller_Auth extends Controller_Base {
-	
+
 	private $store_path = '/tmp/_php_consumer_test';
 
+	public $auth_required = FALSE;
+	
 	public function before(){
 
 		parent::before();
@@ -30,12 +31,114 @@ class Controller_Auth extends Controller_Base {
 			throw new Exception("Could not create the FileStore directory '{$store_path}'. Please check the effective permissions.");
 		}
 	}
-
+	
 	public function action_index(){
 
 		Request::instance()->redirect('/');
 	}
+ 
+	public function action_sign_in(){
 
+		if(Auth::instance()->logged_in()){
+
+			Request::instance()->redirect('profile');		
+		}
+
+		$this->template->title = '2do : sign in';
+		$content = $this->template->content = View::factory('auth/signin');
+
+		if ($_POST) {
+
+			$_POST['remember'] = TRUE;
+
+			$status = ORM::factory('user')->login($_POST);
+ 
+			if ($status) {
+
+				Request::instance()->redirect('/');
+			} else {
+
+				$content->errors = $_POST->errors('signin');
+			}
+		}
+	}
+	
+	public function action_profile(){
+
+		if(!Auth::instance()->logged_in()){
+
+			Request::instance()->redirect('sign-in');
+		}
+		
+		$profile = View::factory('auth/profile');
+		$profile->user = $this->user;
+
+		$this->template->title = '2do : profile';
+		$content = $this->template->content = $profile;
+
+		if ($_POST) {
+
+			$user = ORM::factory('user', (int) $_POST['user_id']);
+
+			$post = $user->validate_update($_POST);
+
+			if ($post->check()) {
+
+				$user->values($post);
+				$user->username = $user->email;
+
+				$user->save();
+
+			} else {
+
+				$content->errors = $post->errors('register');
+			}
+		}
+	}
+ 
+	public function action_sign_up(){
+
+		if(Auth::instance()->logged_in()){
+
+			Request::instance()->redirect('profile');		
+		}
+
+		$this->template->title = '2do : sign up'; 
+
+		$content = $this->template->content = View::factory('auth/signup');		
+ 
+		if ($_POST) {
+
+			$user = ORM::factory('user');	
+ 
+			$post = $user->validate_create($_POST);			
+ 
+			if ($post->check()) {
+
+				$user->values($post);
+ 
+				$user->save();
+ 
+				$user->add('roles', new Model_Role(array('name' =>'login')));
+ 
+				Auth::instance()->login($post['username'], $post['password']);
+ 
+				Request::instance()->redirect('profile');
+			}
+			else {
+
+				$content->errors = $post->errors('register');
+			}			
+		}		
+	}
+
+	public function action_sign_out(){
+
+		Auth::instance()->logout();
+
+		Request::instance()->redirect('/');		
+	}
+	
 	public function action_finish(){
 		
 		$openid = @$_GET['openid_identity'];
@@ -78,7 +181,7 @@ class Controller_Auth extends Controller_Base {
 	public function action_confirm(){
 
 		if (!$_POST) {
-			$template_auth = new View('openid/auth_confirm');
+			$template_auth = new View('auth/auth_confirm');
 			$template_auth->openid = @$_GET['openid'];
 			$this->template->content = $template_auth;
 		} 
@@ -116,7 +219,7 @@ class Controller_Auth extends Controller_Base {
 
 	public function action_try(){
 
-		$template_auth = new View('openid/auth_login');
+		$template_auth = new View('auth/auth_login');
 
 		$openid = @$_GET['openid_identity'];
 		
