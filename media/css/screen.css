@@ -330,6 +330,26 @@ textarea {
 	margin: 0;
 }
 
+#openid-login {
+	margin-top: 2em;
+}
+#openid-login .ui-button {
+	-moz-box-shadow: 0 0 0 #000;
+	-moz-border-radius: 0 4px 4px 0;
+}
+#openid-login .ui-button-text {
+	padding: 4px 1em 3px 1em;
+}
+#openid-login input {
+	-moz-border-radius: 4px 0 0 4px;
+	-webkit-border-radius: 4px 0 0 4px;
+	border-radius: 4px 0 0 4px;
+	margin: 0;
+	float: left;
+	background: url(/img/icon_openid.gif) no-repeat left center;
+	padding-left: 18px;
+}
+
 /* layout helpers 
 ---------------------*/
 

@@ -22,7 +22,9 @@
 	<?php foreach($lists as $list){?>
 
 		<section id="<?php echo strtolower($list['list']->name) ?>" class="list">
-			<h3 class="list-toggle"><?php echo $list['list']->name ?></h3>
+			<h3>
+				<span class="list-toggle"><?php echo $list['list']->name ?></span>
+			</h3>
 
 			<ul id="list-<?php echo $list['list']->id ?>" class="task-list task sortable">
 				<li class="task-new">
@@ -38,7 +40,7 @@
 						<div class="task-content">
 							<?php echo $task->content ?>
 						</div>
-						</li>
+					</li>
 				<?php }?>
 			</ul>
 		</section>
@@ -51,7 +53,7 @@
 	<section id="list-completed" class="list helper-hidden">
 	<?php }?>
 
-	<h3 class="list-toggle">Completed</h3>
+	<h3><span class="list-toggle">Completed</span></h3>
 
 	<ul class="task-list completed">
 		<?php foreach($complete as $task){?>

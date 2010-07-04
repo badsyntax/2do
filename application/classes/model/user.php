@@ -1,12 +1,12 @@
 <?php
 class Model_User extends Model_Auth_User {
  
-	public function validate_create(& $array) {
+	public function validate_create(& $array, $validate_email=TRUE) {
 
 		$array = Validate::factory($array)
 				->rules('password', $this->_rules['password'])
 				->rules('username', $this->_rules['username'])
-				->rules('email', $this->_rules['email'])
+				->rules('email', $validate_email ? $this->_rules['email'] : array())
 				->rules('password_confirm', $this->_rules['password_confirm'])
 				->filter('username', 'trim')
 				->filter('email', 'trim')

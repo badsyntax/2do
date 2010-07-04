@@ -49,7 +49,7 @@
 			this.elements.sortableLists
 			.sortable({
 				containment: $('#content'),
-				items: 'li:not(.active)',
+				items: 'li:not(.active):not(.task-new)',
 				connectWith: '.task-list.sortable',
 				distance: 5,
 				opacity: .6,
@@ -116,7 +116,7 @@
 
 			$('.list-toggle').click(function(){
 
-				$( this ).siblings( 'ul' )
+				$( this ).parent().siblings( 'ul' )
 				.animate({
 					height: ['toggle', 'swing']
 				}, 400, 'linear');

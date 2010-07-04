@@ -1,5 +1,15 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
+/**
+ * @name OpenID auth controller 
+ * @author Richard Willis
+ * @depends kohana3, auth module
+ * @description This is an example Kohana controller using php-openid to authenticate an OpenID
+ * service, largely based on the php-openid consumer examples here:
+ * http://github.com/openid/php-openid/tree/master/examples/consumer/
+ *
+ */
+
 class Controller_Auth extends Controller_Base {
 	
 	private $store_path = '/tmp/_php_consumer_test';
@@ -8,10 +18,12 @@ class Controller_Auth extends Controller_Base {
 
 		parent::before();
 
-		require Kohana::find_file('vendor', 'Auth/OpenID/Consumer');
-		require Kohana::find_file('vendor', 'Auth/OpenID/FileStore');
-		require Kohana::find_file('vendor', 'Auth/OpenID/SReg');
-		require Kohana::find_file('vendor', 'Auth/OpenID/PAPE');
+		set_include_path('application/vendor');
+
+		require_once Kohana::find_file('vendor', 'Auth/OpenID/Consumer');
+		require_once Kohana::find_file('vendor', 'Auth/OpenID/FileStore');
+		require_once Kohana::find_file('vendor', 'Auth/OpenID/SReg');
+		require_once Kohana::find_file('vendor', 'Auth/OpenID/PAPE');
 
 		if (!file_exists($this->store_path) && !@mkdir($this->store_path)) {
 
@@ -74,14 +86,29 @@ class Controller_Auth extends Controller_Base {
 
 			$openid = @$_POST['openid'];
 
+			$data = array(
+				'username' => $openid,
+				'email' => $openid,
+				'password' => $openid,
+				'password_confirm' => $openid,
+				'remember' => TRUE
+			);
 			$user = ORM::factory('user');
-			$user->username = $openid;
-			$user->email = $openid;
-			$user->password = $openid;
-			$user->save();
-			$user->add('roles', new Model_Role(array('name' =>'login')));
 
-			Auth::instance()->force_login($user);
+			$post = $user->validate_create($data, false);
+
+			if ($post->check()) {
+
+				$user->values($post);
+
+				$user->save();
+
+				$user->add('roles', new Model_Role(array('name' =>'login')));
+
+				Auth::instance()->force_login($user);
+			} else {
+				die(print_r($post->errors('register')));
+			}
 
 			Request::instance()->redirect('/');
 		}
@@ -157,7 +184,6 @@ class Controller_Auth extends Controller_Base {
 			// Display an error if the form markup couldn't be generated;
 			// otherwise, render the HTML.
 			if (Auth_OpenID::isFailure($form_html)) {
-
 
 				throw new Exception('Could not redirect to server: ' . $form_html->message);
 			}
