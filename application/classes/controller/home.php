@@ -8,7 +8,8 @@ class Controller_Home extends Controller_Base {
 
 		if (Auth::instance()->logged_in()) {
 
-			$this->template = Request::factory('list')->execute()->response;
+			$this->template = Request::factory('lists')->execute()->response;
+
 		} else {
 
 			$this->template->content = View::factory('page/home_signin');

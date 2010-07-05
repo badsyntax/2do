@@ -7,10 +7,17 @@
 				<span class="ui-icon ui-icon-triangle-1-s helper-right"></span>
 				Projects
 			</a>
+
 			<ul class="ui-helper-hidden-accessible">
-				<li><a href="#">Project 1</a></li>
-				<li><a href="#">Project 2</a></li>
-				<li><a href="#">New project</a></li>
+				<?php if (isset($projects)){
+					foreach($projects as $project){?>
+						<li><a href="#"><?php echo $project->name ?></a></li>
+					<?php }
+				} ?>
+				<li id="projects-new">
+					<a href="#">New project</a>
+					<input type="text" name="project-name" />
+				</li>
 			</ul>
 		</li>
 		<li>
@@ -20,9 +27,6 @@
 			<a href="<?php echo URL::site('sign-out') ?>">Sign out</a>
 		</li>
 	<?php } else {?>
-		<li>
-			<a href="<?php echo URL::site('help') ?>">help</a>
-		</li>
 		<li>
 			<a href="<?php echo URL::site('info') ?>">info</a>
 		</li>

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
-class Controller_List extends Controller_Base {
+class Controller_Lists extends Controller_Base {
 
 	public $auth_required = array('login');
 
@@ -32,6 +32,8 @@ class Controller_List extends Controller_Base {
 		$lists_template->lists = $lists;
 		$lists_template->hidden_lists = explode(',', @$_COOKIE['hiddenlists']);
 		$lists_template->complete = ORM::factory('task')->get_completed($this->user->id, $date);
+		
+		$this->template->set_global('projects', ORM::factory('project')->where('user_id', '=', $this->user->id)->find_all());
 
 		$this->template->content = $lists_template;
 	}

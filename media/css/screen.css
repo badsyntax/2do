@@ -5,7 +5,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 
 body {
 	background: url(/img/bg.gif);
-	margin: 3.2em 0 2.4em;
+	margin: 3.2em 0 3em;
 	font: normal 84%/1.1 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	color: #444;
 }
@@ -302,7 +302,7 @@ textarea {
 }
 
 .task-list .task-content {
-	margin-top: 1px;
+	margin-top: 2px;
 	margin-left: 24px;
 	padding: .1em 0 .3em 0;
 	cursor: pointer;
@@ -400,6 +400,7 @@ textarea {
 	width: 120px;
 	background: #efefef;
 	position: absolute;
+	top: 0;
 	z-index: 999;
 	padding: 6px;
 	-moz-box-shadow: 2px 2px 4px #888;
@@ -429,7 +430,7 @@ textarea {
 }
 
 #openid-login {
-	margin-top: 1em;
+	margin-top: 2em;
 }
 #openid-login .ui-button {
 	-moz-box-shadow: 0 0 0 #000;
@@ -449,11 +450,22 @@ textarea {
 	-webkit-border-radius: 4px 0 0 4px;
 	-o-border-radius: 4px 0 0 4px;
 	border-radius: 4px 0 0 4px;
-	margin: 0;
-	display:inline-block;
+	margin: -4px -4px 0 10px;
+	display: inline-block;
 	background: url(/img/icon_openid.gif) no-repeat left center;
 	padding-left: 18px;
+	width: 22em;
 }
+#openid-login p {
+	margin-bottom: .6em;
+}
+
+#projects-new input {
+	display: none;
+	width: 140px;
+	margin: 0 15px 10px 15px;
+}
+
 
 /* layout helpers 
 ---------------------*/

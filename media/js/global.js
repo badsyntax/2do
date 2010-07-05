@@ -162,6 +162,36 @@
 					height: ['toggle', 'swing']
 				}, 200, 'linear');
 			});
+
+			$('#projects-new a').click(function(){
+
+				$(this).siblings('input')
+					.show()
+					.focus()
+					.blur(function(){
+
+						$(this).hide();
+
+						if ( $.trim( this.value ) ) {
+
+							var param = {
+
+								name: this.value
+							};
+
+							$.post( self.options.baseurl + 'project/save', param, function(){
+
+								$.notification('alert', 'New project successfully saved!');
+							});
+						}
+					})
+					.keydown(function(event){
+
+						( event.keyCode == $.ui.keyCode.ENTER ) && $( this ).trigger( 'blur' );
+					});
+
+				return false;
+			});
 		},
 
 		_saveSequences : function( list, callback ){
@@ -172,7 +202,7 @@
 					listid: list[0].id.replace(/list-/, '')
 				}) ].join( '&' );
 
-			$.post( this.options.baseurl + '/reorder', param , callback );
+			$.post( this.options.baseurl + 'task/reorder', param , callback );
 		},
 
 		_taskComplete : function( id, item, checkbox ){
@@ -232,7 +262,7 @@
 				self.elements.completedList.find('ul').sortable('destroy');
 			});
 
-			$.post( self.options.baseurl + '/complete', { id: id } );
+			$.post( self.options.baseurl + 'task/complete', { id: id } );
 		},
 
 		_taskIncomplete : function( id, listitem, checkbox ){
@@ -260,7 +290,7 @@
 				$('html:not(:animated)').animate({ scrollTop: 0 }, 1000, 'swing');
 			});
 
-			$.post( self.options.baseurl + '/incomplete', { id: id } );
+			$.post( self.options.baseurl + 'task/incomplete', { id: id } );
 		},
 
 		_taskSave : function( text, item, listId ){
@@ -282,7 +312,7 @@
 					
 			newitem.effect( 'highlight', {}, 800 );
 
-			$.post(this.options.baseurl + '/save', { 
+			$.post(this.options.baseurl + 'task/save', { 
 				task: text, 
 				list: listId 
 			}, function( response ){
@@ -307,7 +337,7 @@
 					
 			animate && item.effect( 'highlight', {}, 800 );
 
-			$.post(this.options.baseurl + '/save', { 
+			$.post(this.options.baseurl + 'task/save', { 
 				task: text, 
 				list: listId, 
 				id: item[0].id.replace(/task-/, '') 
@@ -324,7 +354,7 @@
 
 			var id = item.attr('id').replace(/task-/, '');
 
-			$.post( this.options.baseurl + '/remove', { id: id }, function( data ){
+			$.post( this.options.baseurl + 'task/remove', { id: id }, function( data ){
 
 				item.fadeOut('fast', function(){
 
@@ -404,7 +434,7 @@
 
 						if ( !input.value ) return;
 
-						$.post( self.options.baseurl + '/savetime', { 
+						$.post( self.options.baseurl + 'task/savetime', { 
 							time: $.trim( input.value ),
 							id: item[0].id.replace(/task-/, '') 
 						}, function( response ){
@@ -568,19 +598,11 @@
 	$.cookie = new cookie();
 
 	$('#lists').listeditor({
-		baseurl: '/task'
+		baseurl: '/'
 	});
 
 	$('button').button();
 
-	$('#projects-menu').appendTo( 'body' );
-
-	$('#projects-link').bind('mouseenter', function(){
-		$('#projects-menu').css({ 
-			left: $(this).offset().left - 7,
-			top: $(this).offset().top + $(this).height() + 1
-		});
-	});
 
 })( jQuery, window, window.document );
 
