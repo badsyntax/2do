@@ -5,7 +5,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 
 body {
 	background: url(/img/bg.gif);
-	margin: 3.2em 0 3em;
+	margin: 3.2em 0 2.4em;
 	font: normal 84%/1.1 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	color: #444;
 }
@@ -142,6 +142,9 @@ footer a, footer a:visited {
 	text-decoration: none;
 }
 footer a:hover {
+	-moz-text-shadow: 1px 1px 2px #000;
+	-webkit-text-shadow: 1px 1px 2px #000;
+	-o-text-shadow: 1px 1px 2px #000;
 	text-shadow: 1px 1px 2px #000;
 	color: #fff;
 }
@@ -152,21 +155,72 @@ nav {
 	padding: 0;
 	float: right;
 }
-nav a {
+nav ul, nav li { 
+	margin: 0;
+	padding: 0;
+}
+nav li {
+	list-style: none;
+	position: relative;
 	float: left;
+	overflow: visible;
+	padding: 0 0 10px;
+}
+nav a {
+	display: block;
 	font-family: 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	padding: 0 .6em;
 	text-decoration: none;
 	text-align: center;
 	outline: none;
-	color: #ccc;
+	color: #888 !important;
+	background: transparent !important;
+	border: 0 !important;
 }
 nav a.selected {
 	text-decoration: underline;
 }
 nav a:hover {
+	-moz-text-shadow: 1px 1px 2px #000;
+	-webkit-text-shadow: 1px 1px 2px #000;
+	-o-text-shadow: 1px 1px 2px #000;
 	text-shadow: 1px 1px 2px #000;
+	color: #fff !important;
+}
+nav a .ui-icon {
+	width: 12px;
+}
+nav li ul {
+	width: auto;
+	position: absolute;
 	color: #fff;
+	background: #000 url(/img/bg.gif);
+	top: 1.5em;
+	z-index: 999;
+	border: 1px solid #000;
+	-moz-border-radius: 0 0 8px 8px;
+	left: 0;
+        -moz-box-shadow: 2px 2px 0 #dadada;
+}
+nav li ul li {
+	float: none;
+	white-space: nowrap;
+	padding: 0;
+}
+nav li ul li a {
+	color: #fff;
+	font-weight: normal;
+	padding: 8px 15px;
+	text-align: left;
+	display: block;
+	text-decoration: none;
+}
+
+nav > ul > li:hover ul {
+	left: 0;
+}
+nav > ul > li:hover > a {
+	color: #fff !important;
 }
 
 fieldset {
@@ -180,10 +234,12 @@ input[type=text], input[type=password] {
 	width: 18em;
 	-moz-box-shadow: inset 2px 2px 1px #ddd;
 	-webkit-box-shadow: inset 2px 2px 1px #ddd;
+	-o-box-shadow: inset 2px 2px 1px #ddd;
 	-ox-shadow: inset 2px 2px 1px #ddd;
 	border: 1px solid #aaa;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
+	-o-border-radius: 4px;
 	border-radius: 4px;
 	padding: .5em .8em .4em .8em;
 }
@@ -223,6 +279,9 @@ textarea {
 	margin-bottom: 4px;
 	cursor: pointer;
 }
+.task-list li:hover {
+	/* -moz-box-shadow: 0 0 1px #000; */
+}
 .task-list .task-hover .ui-icon {
 	position: absolute;
 	left: auto;
@@ -257,7 +316,15 @@ textarea {
 .task-list .task-content .ui-icon {
 }
 .task-list li.active {
-	border-color: #aaa;
+	border-color: #bbb;
+        -moz-box-shadow: inset 2px 2px 1px #eaeaea;
+        -webkit-box-shadow: inset 2px 2px 1px #eaeaea;
+        -o-box-shadow: inset 2px 2px 1px #eaeaea;
+        -ox-shadow: inset 2px 2px 1px #eaeaea;
+        box-shadow: inset 2px 2px 1px #eaeaea;
+}
+.task-list li.active .task-time, .task-list li.active .task-remove {
+	display: none !important;
 }
 .task-list.sortable .ui-state-highlight {
 	background: #ffffdd;
@@ -282,6 +349,10 @@ textarea {
 .ui-icon-time {
 	background: url(/img/clock.gif) no-repeat center center;
 }
+.ui-state-selected {
+	background: #E6E6E6 url(/css/smoothness/images/ui-bg_glass_75_e6e6e6_1x400.png) repeat-x 50% 50%;
+	border-color: #ccc !important;
+}
 
 #list-completed {
 	margin-bottom: 0;
@@ -290,11 +361,13 @@ textarea {
 .ui-button {
 	-moz-box-shadow: 2px 2px 4px #CCCCCC;
 	-webkit-box-shadow: 2px 2px 4px #CCCCCC;
+	-o-box-shadow: 2px 2px 4px #CCCCCC;
 	box-shadow: 2px 2px 4px #CCCCCC;
 }
 .ui-button.ui-state-active {
 	-moz-box-shadow: 1px 1px 1px #ddd;
 	-webkit-box-shadow: 1px 1px 1px #ddd;
+	-o-box-shadow: 1px 1px 1px #ddd;
 	box-shadow: 1px 1px 1px #ddd;
 }
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
@@ -318,6 +391,7 @@ textarea {
 	border: 1px solid #bbb;
 	-moz-box-shadow: inset 2px 2px 1px #ddd;
 	-webkit-box-shadow: inset 2px 2px 1px #ddd;
+	-o-box-shadow: inset 2px 2px 1px #ddd;
 	-ox-shadow: inset 2px 2px 1px #ddd;
 	margin-bottom: 1em;
 }
@@ -330,6 +404,8 @@ textarea {
 	padding: 6px;
 	-moz-box-shadow: 2px 2px 4px #888;
 	-webkit-box-shadow: 2px 2px 1px #888;
+	-o-box-shadow: 2px 2px 1px #888;
+	box-shadow: 2px 2px 1px #888;
 }
 #task-time-container .ui-icon-help {
 	cursor: pointer;
@@ -353,11 +429,17 @@ textarea {
 }
 
 #openid-login {
-	margin-top: 2em;
+	margin-top: 1em;
 }
 #openid-login .ui-button {
 	-moz-box-shadow: 0 0 0 #000;
+	-webkit-box-shadow: 0 0 0 #000;
+	-o-box-shadow: 0 0 0 #000;
+	box-shadow: 0 0 0 #000;
 	-moz-border-radius: 0 4px 4px 0;
+	-webkit-border-radius: 0 4px 4px 0;
+	-o-border-radius: 0 4px 4px 0;
+	border-radius: 0 4px 4px 0;
 }
 #openid-login .ui-button-text {
 	padding: 4px 1em 3px 1em;
@@ -365,9 +447,10 @@ textarea {
 #openid-login input {
 	-moz-border-radius: 4px 0 0 4px;
 	-webkit-border-radius: 4px 0 0 4px;
+	-o-border-radius: 4px 0 0 4px;
 	border-radius: 4px 0 0 4px;
 	margin: 0;
-	float: left;
+	display:inline-block;
 	background: url(/img/icon_openid.gif) no-repeat left center;
 	padding-left: 18px;
 }
@@ -403,9 +486,10 @@ textarea {
 }
 
 
+
 /* Checkbox
 ----------------------------------*/
-.ui-checkbox { position: relative; float: left; font-size: 64%; margin-top: .5em; width: 17px; height: 18px;}
+.ui-checkbox { position: relative; float: left; font-size: 64%; margin-top: .5em; width: 17px; height: 18px; margin-bottom: .5em}
 .ui-checkbox .ui-checkbox-inputwrapper { width: 0; height: 0; overflow: hidden; }
 .ui-checkbox label { display: block; position: relative; padding-right: 1em; line-height: 1; text-indent: -9999px; height: 18px; width:16px; margin: 0; cursor: pointer; z-index: 1; }
 .ui-checkbox .ui-checkbox-box { position: absolute; top: 0; left: 0; width: 15px; height: 16px; }

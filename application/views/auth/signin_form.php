@@ -12,13 +12,13 @@
 			</ul>
 		<?php }?>
 
-		<p>
+		<div>
 			<label for="email">Email</label>
 			<?php echo form::input('username', @$_POST['username'], array('id'=>'email')) ?>
 
 			<label for="password">Password</label>
 			<?php echo form::password('password', '', array('id' => 'password')) ?>
-		</p>
+		</div>
 
 		<button type="submit">Sign in</button>
 	</fieldset>

@@ -184,6 +184,7 @@
 				function show(){
 
 					item.fadeIn( 'fast', function(){
+
 						item.effect( 'highlight', {}, 800 );
 					});
 				}
@@ -223,6 +224,7 @@
 					show();
 				}
 
+
 				checkbox.blur();
 				
 				self._saveSequences( self.elements.completedList.find('ul').sortable() );
@@ -254,6 +256,8 @@
 				}
 			
 				self._saveSequences( $( '.task-list.task:first' ) );
+                                
+				$('html:not(:animated)').animate({ scrollTop: 0 }, 1000, 'swing');
 			});
 
 			$.post( self.options.baseurl + '/incomplete', { id: id } );
@@ -265,50 +269,53 @@
 
 			if ( !text ) return;
 
+			var 
+			list = item.parents('ul:first'),
+			newitem = 
+				$( '<li></li>' )
+				.html( '<label><input type="checkbox" /></label><div class="task-content">' + text + '</div>' )
+				.find(':checkbox').checkbox( self.checkboxConfig )
+				.end();
+				
+			item.after( newitem )
+				.find( '.task-content' ).html( 'New todo' );
+					
+			newitem.effect( 'highlight', {}, 800 );
+
 			$.post(this.options.baseurl + '/save', { 
 				task: text, 
 				list: listId 
 			}, function( response ){
 
 				if ( response.outcome == 'success' ) {
-
-					var 
-					list = item.parents('ul:first'),
-					newitem = 
-						$( '<li></li>' )
-						.html( '<label><input type="checkbox" /></label><div class="task-content">' + text + '</div>' )
-						.attr('id', 'task-' + response.id)
-						.find(':checkbox').checkbox( self.checkboxConfig )
-						.end();
+				
+					newitem.attr('id', 'task-' + response.id)
 						
-					item.after( newitem )
-						.find( '.task-content' ).html( 'New todo' );
-						
-					newitem.effect( 'highlight', {}, 800, function(){
-	
-						self._saveSequences( list );
-					});
+					self._saveSequences( list );
 				} else {
+
+					newitem.remove();
 			
-					alert( response.message );
+					$.notification('alert', response.message );
 				}
 			});
 		},
 
 		_taskUpdate: function( text, item, listId, animate ){
-			
+
+			animate = animate === undefined ? true : animate;
+					
+			animate && item.effect( 'highlight', {}, 800 );
+
 			$.post(this.options.baseurl + '/save', { 
 				task: text, 
 				list: listId, 
 				id: item[0].id.replace(/task-/, '') 
 			}, function( response ){
 
-				if ( response.outcome == 'success' ) {
+				if ( response.outcome != 'success' ) {
 
-					animate && item.effect( 'highlight', {}, 800 );
-				} else {
-
-					alert( response.message );
+					$.notification('alert', response.message );
 				}
 			});
 		},
@@ -332,13 +339,15 @@
 
 			animate = animate === undefined ? true : animate;
 
-			var self = this, offset = $( event.target ).offset();
+			var self = this, offset = $( event.target ).offset(), icon = event.target;
 
 			$('.task-list')
 			.undelegate( 'li:not(.task-new)', 'mouseenter', this.events.mouseenter )
 			.undelegate( 'li', 'mouseleave', this.events.mouseleave )
 			.find( '.task-content' )
 				.trigger('blur.edit');
+
+			$( icon ).parents( 'li' ).addClass( 'ui-state-selected' );
 
 			this.elements.taskTime
 			.css({
@@ -380,6 +389,8 @@
 						if ( $( input ).data('focus') ) return;
 
 						$( input ).siblings( '#task-time-help' ).hide();
+			
+						$( icon ).parents( 'li' ).removeClass( 'ui-state-selected' );
 					
 						self.elements.taskTime.css({ left: -9999 });
 
@@ -482,7 +493,9 @@
 
 	});
 
-	$.notification = function(type, message) {
+	$.notification = function(type, message, delay) {
+
+		delay = delay || 2000;
 
 		$('#notification')
 			.find( 'ui-icon' )
@@ -495,8 +508,9 @@
 
 				$( this ).css({ marginLeft: -( $( this ).width() / 2 ) + 'px' });
 			})
+			.stop()
 			.slideDown()
-			.delay(2000)
+			.delay( delay )
 			.slideUp();
 	};
 
@@ -558,6 +572,15 @@
 	});
 
 	$('button').button();
+
+	$('#projects-menu').appendTo( 'body' );
+
+	$('#projects-link').bind('mouseenter', function(){
+		$('#projects-menu').css({ 
+			left: $(this).offset().left - 7,
+			top: $(this).offset().top + $(this).height() + 1
+		});
+	});
 
 })( jQuery, window, window.document );
 

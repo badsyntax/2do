@@ -4,6 +4,8 @@ class Controller_Home extends Controller_Base {
 
 	public function action_index(){
 
+		$this->template->title = '2do : organize your life';
+
 		if (Auth::instance()->logged_in()) {
 
 			$this->template = Request::factory('list')->execute()->response;
