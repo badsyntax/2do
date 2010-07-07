@@ -34,22 +34,35 @@ class Controller_Task extends Controller_BaseAjax {
 
 		$this->request->response = json_encode(
 		array(
-			'outcome' => 'success',
+			'status' => 'success',
 			'message' => 'Successfully saved!',
 			'id' => $task->id
 		));
 	}
 
-	public function action_savetime(){
+	public function action_time(){
 
-		$task = ORM::factory('task', (int) $_POST['id']);
-		$task->time = $_POST['time'];
-		$task->save();
+		$response = array();
 
-		$this->request->response = json_encode(
-		array(
-			'outcome' => 'success'
-		));
+		$task = ORM::factory('task');
+
+		if ($task->values($_POST)->check()) {
+
+			$response['status'] = 'success';
+
+			$task->save();
+
+		} else {
+
+			$response['status'] = 'error';
+
+			$response = array_merge(
+				array('errors' => $task->validate()->errors('tasktime')),
+				$response
+			);
+		}
+
+		$this->request->response = json_encode($response);
 	}
 
 	public function action_remove(){
@@ -60,7 +73,7 @@ class Controller_Task extends Controller_BaseAjax {
 
 		$this->request->response = json_encode(
 		array(
-			'outcome' => 'success',
+			'status' => 'success',
 			'message' => 'Successfully removed!'
 		));
 	}
@@ -71,7 +84,7 @@ class Controller_Task extends Controller_BaseAjax {
 		
 		$this->request->response = json_encode(
 		array(
-			'outcome' => 'success'
+			'status' => 'success'
 		));
 	}
 
@@ -81,7 +94,7 @@ class Controller_Task extends Controller_BaseAjax {
 
 		$this->request->response = json_encode(
 		array(
-			'outcome' => 'success',
+			'status' => 'success',
 			'sequence' => $task->sequence
 		));
 	}
@@ -97,7 +110,7 @@ class Controller_Task extends Controller_BaseAjax {
 
 		$this->request->response = json_encode(
 		array(
-			'outcome' => 'success'
+			'status' => 'success'
 		));
 	}
 

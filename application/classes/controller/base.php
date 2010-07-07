@@ -48,7 +48,7 @@ class Controller_Base extends Controller_Template {
 		if ($this->auto_render) {
 
 			$styles = array(
-				'media/css/smoothness/jquery-ui.css',
+				//'media/css/smoothness/jquery-ui.css',
 				'media/css/screen.css'
 			);
   

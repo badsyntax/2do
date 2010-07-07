@@ -29,6 +29,11 @@ h3 {
 	border-bottom: 1px solid #ddd;
 	font-weight: bold;
 }
+h4 {
+	font-size: 112%;
+	font-weight: normal;
+	margin-bottom: 1.4em;
+}
 h2, h3, button {
 	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 }
@@ -346,9 +351,6 @@ textarea {
 .task-time {
 	right: 16px;
 }
-.ui-icon-time {
-	background: url(/img/clock.gif) no-repeat center center;
-}
 .ui-state-selected {
 	background: #E6E6E6 url(/css/smoothness/images/ui-bg_glass_75_e6e6e6_1x400.png) repeat-x 50% 50%;
 	border-color: #ccc !important;
@@ -359,10 +361,10 @@ textarea {
 }
 
 .ui-button {
-	-moz-box-shadow: 2px 2px 4px #CCCCCC;
-	-webkit-box-shadow: 2px 2px 4px #CCCCCC;
-	-o-box-shadow: 2px 2px 4px #CCCCCC;
-	box-shadow: 2px 2px 4px #CCCCCC;
+	-moz-box-shadow: 2px 2px 4px #AAA;
+	-webkit-box-shadow: 2px 2px 4px #AAA;
+	-o-box-shadow: 2px 2px 4px #AAA;
+	box-shadow: 2px 2px 4px #AAA;
 }
 .ui-button.ui-state-active {
 	-moz-box-shadow: 1px 1px 1px #ddd;
@@ -397,6 +399,7 @@ textarea {
 }
 
 #task-time-container {
+	color: #444;
 	width: 120px;
 	background: #efefef;
 	position: absolute;
@@ -441,6 +444,7 @@ textarea {
 	-webkit-border-radius: 0 4px 4px 0;
 	-o-border-radius: 0 4px 4px 0;
 	border-radius: 0 4px 4px 0;
+	border-width: 1px 1px 1px 0
 }
 #openid-login .ui-button-text {
 	padding: 4px 1em 3px 1em;

@@ -34,7 +34,7 @@
 				removeIcon: $( '<span></span>' )
 					.addClass( 'ui-icon ui-icon-closethick task-remove' ),
 				timeIcon: $( '<span></span>' )
-					.addClass( 'ui-icon ui-icon-time task-time' ),
+					.addClass( 'ui-icon ui-icon-clock task-time' ),
 				taskTime: $( '#task-time-container' )
 			};
 
@@ -317,7 +317,7 @@
 				list: listId 
 			}, function( response ){
 
-				if ( response.outcome == 'success' ) {
+				if ( response.status == 'success' ) {
 				
 					newitem.attr('id', 'task-' + response.id)
 						
@@ -343,7 +343,7 @@
 				id: item[0].id.replace(/task-/, '') 
 			}, function( response ){
 
-				if ( response.outcome != 'success' ) {
+				if ( response.status != 'success' ) {
 
 					$.notification('alert', response.message );
 				}
@@ -354,15 +354,17 @@
 
 			var id = item.attr('id').replace(/task-/, '');
 
-			$.post( this.options.baseurl + 'task/remove', { id: id }, function( data ){
+			confirm('Are you sure you want to remove this todo?') && 
 
-				item.fadeOut('fast', function(){
+				$.post( this.options.baseurl + 'task/remove', { id: id }, function( data ){
 
-					$( this ).remove();
+					item.fadeOut('fast', function(){
 
-					$.notification('alert', 'Todo successfully deleted.');
+						$( this ).remove();
+	
+						$.notification('alert', 'Todo successfully deleted.');
+					});
 				});
-			});
 		},
 
 		_taskTime : function( event, item, animate ){
@@ -375,7 +377,7 @@
 			.undelegate( 'li:not(.task-new)', 'mouseenter', this.events.mouseenter )
 			.undelegate( 'li', 'mouseleave', this.events.mouseleave )
 			.find( '.task-content' )
-				.trigger('blur.edit');
+				.trigger( 'blur.edit' );
 
 			$( icon ).parents( 'li' ).addClass( 'ui-state-selected' );
 
@@ -434,17 +436,17 @@
 
 						if ( !input.value ) return;
 
-						$.post( self.options.baseurl + 'task/savetime', { 
+						$.post( self.options.baseurl + 'task/time', { 
 							time: $.trim( input.value ),
 							id: item[0].id.replace(/task-/, '') 
 						}, function( response ){
 
-							if ( response.outcome == 'success' ) {
+							if ( response.status == 'success' ) {
 
 								animate && item.effect( 'highlight', {}, 800 );
 							} else {
-	
-								alert( response.message );
+
+								alert( 'errors' );
 							}
 						});
 

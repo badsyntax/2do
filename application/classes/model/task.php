@@ -3,6 +3,30 @@ class Model_Task extends ORM {
 
 	protected $_belongs_to = array('list' => array());
 
+	protected $_rules = array(
+		'time' => array(
+			'not_empty'  => NULL,
+			'min_length' => array(4),
+			'max_length' => array(32)
+		)
+	);
+
+	protected $_ignored_columns = array('id');
+
+	protected $_callbacks = array(
+		'time' => array('validate_time_format')
+	);
+
+	public function validate_time_format(Validate $array, $field) {
+
+		// eg: 34 hrs
+		if (!preg_match("/^[0-9]{1,3}\s?[a-z]{1,6}$/", $array[$field])) {
+
+			$array->error($field, 'invalid', array($array[$field]));
+		}
+	}
+
+
 	public function shift_sequences($offset=0){
 
 		foreach($this->order_by('sequence', 'ASC')->find_all() as $i => $todo){
@@ -49,11 +73,6 @@ class Model_Task extends ORM {
 	private function __check_date($date=''){
 
 		return preg_match('/^[0-9]{2,2}\/[0-9]{2,2}\/[0-9]{4,4}$/', $date);
-	}
-
-	public function save(){
-
-		return parent::save();
 	}
 
 	public function delete($id = NULL){

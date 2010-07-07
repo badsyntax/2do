@@ -2,7 +2,7 @@
 
 	<ul>	
 	<?php if (Auth::instance()->logged_in()) {?>
-		<li>
+		<li class="ui-helper-hidden">
 			<a id="projects-link" href="<?php echo URL::site('projects') ?>" class="ui-state-default">
 				<span class="ui-icon ui-icon-triangle-1-s helper-right"></span>
 				Projects

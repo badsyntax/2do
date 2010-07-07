@@ -3,9 +3,9 @@
 <br />
 
 <div style="text-align:center">
-<p>
-	Choose the service you'd like to sign in with
-</p>
+<h4>
+	Choose the service you'd like to sign in with.
+</h4>
 
 <form method="get" action="<?php echo URL::site('auth/try') ?>">
 		<div class="helper-cleafix">

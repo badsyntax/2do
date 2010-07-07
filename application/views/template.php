@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-	<title><?php echo $title ?></title>
 	<meta charset="utf-8" />
-	<?php echo $styles, "\n" ?>
-<!--[if IE]><?php echo HTML::script('/js/html5.js')?><![endif]-->
+	<title><?php echo htmlspecialchars($title) ?></title>
+	<?php echo implode("\n", array_map('HTML::style', $styles)), "\n"?>
+	<!--[if IE]>
+		<?php echo HTML::script('js/html5.js'), "\n"?>
+	<![endif]-->
+	<?php echo HTML::style('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/black-tie/jquery-ui.css'), "\n"?>
 	<script type="text/javascript" src="/js/jquery.js"></script>
 </head>
 <body>
@@ -32,6 +35,6 @@
 		</footer>
 	<?php }?>
 	
-	<?php echo $scripts, "\n" ?>
+	<?php echo implode("\n", array_map('HTML::script', $scripts)) ?>
 </body>
 </html>
