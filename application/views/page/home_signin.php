@@ -1,7 +1,5 @@
 <h3>Sign in</h3>
 
-<br />
-
 <div style="text-align:center">
 <h4>
 	Choose the service you'd like to sign in with.

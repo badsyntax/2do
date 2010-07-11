@@ -97,6 +97,12 @@ Route::set('list', 'list/<date>', array('date' => '.*'))
 		'action' => 'index',
 	));
 
+Route::set('time', 'reports/time/<time>', array('time' => '.*'))
+	->defaults(array(
+		'controller' => 'reports',
+		'action' => 'time',
+	));
+
 Route::set('auth', 'auth/confirm/<openid>', array('openid' => '.*'))
 	->defaults(array(
 		'controller' => 'auth',

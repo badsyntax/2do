@@ -20,7 +20,7 @@ class Model_Task extends ORM {
 	public function validate_time_format(Validate $array, $field) {
 
 		// eg: 34 hrs
-		if (!preg_match("/^[0-9]{1,3}\s?[a-z]{1,6}$/", $array[$field])) {
+		if (!preg_match("/([0-9]{1,3}\s?[a-z]{1,6})/", $array[$field])) {
 
 			$array->error($field, 'invalid', array($array[$field]));
 		}
@@ -61,18 +61,50 @@ class Model_Task extends ORM {
 		}
 
 		return $this
-		->where('deleted', '=', FALSE)
-		->where('user_id', '=', (int) $user_id)
-		->where('complete', '=', TRUE)
-		->order_by('sequence', 'ASC')
-		->find_all();
-
-		return $this;
+			->where('deleted', '=', FALSE)
+			->where('user_id', '=', (int) $user_id)
+			->where('complete', '=', TRUE)
+			->order_by('sequence', 'ASC')
+			->find_all();
 	}
 
 	private function __check_date($date=''){
 
 		return preg_match('/^[0-9]{2,2}\/[0-9]{2,2}\/[0-9]{4,4}$/', $date);
+	}
+
+	public function save(){
+
+		if (preg_match_all("/([0-9]{1,3}\s?[a-z]{1,6})/", $this->time, $matches)){
+
+			$tot_time = 0;
+
+			foreach($matches[0] as $match) {
+
+				preg_match("/([0-9]+)\s?([a-z]+)/", $match, $val);
+
+				$time = $val[1];
+				$type = $val[2][0];
+
+				switch($type) {
+					case 'm':
+						$time *= 60;
+						break;
+					case 'h':
+						$time *= 3600;
+						break;
+					case 'd':
+						$time *= 86400;
+						break;
+				}
+
+				$tot_time += $time;
+			}
+
+			$this->time = $tot_time;
+		}
+
+		return parent::save();
 	}
 
 	public function delete($id = NULL){

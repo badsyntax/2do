@@ -1,6 +1,5 @@
 <h3>Profile</h3>
 
-<br />
 <form method="post" action="<?php echo Url::site('profile') ?>">
 	<fieldset>
 

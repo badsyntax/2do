@@ -1,3 +1,6 @@
 [submodule "modules/media"]
 	path = modules/media
 	url = git@github.com:badsyntax/kohana-media.git
+[submodule "modules/media-upstream"]
+	path = modules/media-upstream
+	url = http://github.com/azampagl/kohana-media.git

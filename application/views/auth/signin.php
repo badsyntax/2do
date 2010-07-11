@@ -1,3 +1,12 @@
+<h3>Sign up</h3>
+
+<p>
+	If you don't have an account with one of the listed OpenID services then you may <a href="<?php echo URL::site('sign-up')?>">sign up</a> for a site account. 
+	If you already have a site account, then sign in below!
+</p>
+
+<br />
+
 <h3>Sign in</h3>
 
 <form method="post" action="<?php echo Url::site('sign-in') ?>">
@@ -25,6 +34,7 @@
 		<button type="submit">Sign in</button>
 	</fieldset>
 </form>
+
 
 <script type="text/javascript">
 

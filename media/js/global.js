@@ -379,7 +379,7 @@
 			.find( '.task-content' )
 				.trigger( 'blur.edit' );
 
-			$( icon ).parents( 'li' ).addClass( 'ui-state-selected' );
+			$( icon ).closest( 'li' ).addClass( 'ui-state-selected' );
 
 			this.elements.taskTime
 			.css({
@@ -395,11 +395,11 @@
 					setTimeout(function(){
 
 						$( icon )
-							.siblings('input')
+							.siblings( 'input' )
 								.focus()
 								.end()
-							.siblings('#task-time-help')
-								.toggle('fast');
+							.siblings( '#task-time-help' )
+								.toggle( 'fast' );
 					}, 1);
 				})
 				.end()
@@ -414,49 +414,65 @@
 
 					var input = this;
 					
-					$( this ).data('focus', false);
+					$( this ).data( 'focus', false );
 					
 					setTimeout(function(){
 
 						if ( $( input ).data('focus') ) return;
 
-						$( input ).siblings( '#task-time-help' ).hide();
+						function hideBox(){
+
+							$( input ).siblings( '#task-time-help' ).hide();
 			
-						$( icon ).parents( 'li' ).removeClass( 'ui-state-selected' );
+							$( icon ).parents( 'li' ).removeClass( 'ui-state-selected' );
 					
-						self.elements.taskTime.css({ left: -9999 });
+							self.elements.taskTime.css({ left: -9999 });
 
-						$('.task-list')
-						.delegate( 'li:not(.task-new)', 'mouseenter', self.events.mouseenter )
-						.delegate( 'li', 'mouseleave', self.events.mouseleave )
-						.find('li').each(function(){
+							$( '.task-list' )
+							.delegate( 'li:not(.task-new)', 'mouseenter', self.events.mouseenter )
+							.delegate( 'li', 'mouseleave', self.events.mouseleave )
+							.find( 'li' ).each(function(){
 
-							self.events.mouseleave.apply( this.parentNode, [ { target: this } ]);
-						});
+								self.events.mouseleave.apply( this.parentNode, [ { target: this } ]);
+							});
+		
+							input.value = '';
+						}
 
-						if ( !input.value ) return;
+						if ( !input.value || !$( input ).data( 'save' ) ) {
+
+							hideBox();
+
+							return;
+						}
 
 						$.post( self.options.baseurl + 'task/time', { 
 							time: $.trim( input.value ),
 							id: item[0].id.replace(/task-/, '') 
-						}, function( response ){
+						}, function(response){
 
 							if ( response.status == 'success' ) {
 
+								hideBox();
+
 								animate && item.effect( 'highlight', {}, 800 );
+
 							} else {
 
-								alert( 'errors' );
+								$.notification('alert', 'Invalid time format!');
+
+								$( input ).focus();
 							}
 						});
-
-						input.value = '';
 					});
 				})
 				.bind('keydown.time', function(event){
 
-					// return key
-					( event.keyCode == $.ui.keyCode.ENTER ) && $( this ).trigger( 'blur' );
+					if ( event.keyCode == $.ui.keyCode.ENTER ) {
+					
+						$( this ).data( 'save', true ).trigger( 'blur' );
+					}
+
 				});
 		},
 

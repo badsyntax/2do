@@ -41,6 +41,8 @@ class Controller_Base extends Controller_Template {
 			$this->template->styles = array();
 			$this->template->scripts = array();
 		}
+
+		$request = Request::instance();
 	}
 	
 	public function after() {
