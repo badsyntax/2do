@@ -317,7 +317,7 @@ textarea {
 	position: relative;
 }
 .task-list .task-editing {
-	cursor: auto;
+	cursor: text;
 }
 .task-list .task-content .ui-icon {
 }

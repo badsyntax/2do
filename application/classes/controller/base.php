@@ -47,23 +47,22 @@ class Controller_Base extends Controller_Template {
 	
 	public function after() {
 	
-		if ($this->auto_render) {
-
-			$styles = array(
-				//'media/css/smoothness/jquery-ui.css',
-				'media/css/screen.css'
-			);
+		$styles = array(
+			//'media/css/smoothness/jquery-ui.css',
+			'media/css/screen.css'
+		);
   
-			$scripts = array(
-				'media/js/jquery-ui.js',
-				'media/js/global.js',
-			);
+		$scripts = array(
+			'media/js/jquery-ui.js',
+			'media/js/global.js',
+		);
 
-			$this->template->styles = Media::instance()->styles($styles);
-			$this->template->scripts = Media::instance()->scripts($scripts);
-		}
+		$this->template->styles = Media::instance()->styles($styles);
+		$this->template->scripts = Media::instance()->scripts($scripts);
 
-		parent::after();
+                $this->request->response = $this->template;
+
+		return parent::after();
 	}
 
 	public function action_403(){

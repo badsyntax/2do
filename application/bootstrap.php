@@ -30,8 +30,8 @@ spl_autoload_register(array('Kohana', 'auto_load'));
 /**
 * Set the production status by the domain.
 */
-//Kohana::$environment = Kohana::PRODUCTION;
-Kohana::$environment = ($_SERVER['SERVER_ADDR'] !== '192.168.1.71') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
+Kohana::$environment = Kohana::PRODUCTION;
+//Kohana::$environment = ($_SERVER['SERVER_ADDR'] !== '192.168.1.71') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
 
 /**
  * Enable the Kohana auto-loader for unserialization.
@@ -48,13 +48,13 @@ ini_set('unserialize_callback_func', 'spl_autoload_call');
  *
  * The following options are available:
  *
- * - string   base_url    path, and optionally domain, of your application   NULL
- * - string   index_file  name of your index file, usually "index.php"       index.php
- * - string   charset     internal character set used for input and output   utf-8
- * - string   cache_dir   set the internal cache directory                   APPPATH/cache
- * - boolean  errors      enable or disable error handling                   TRUE
- * - boolean  profile     enable or disable internal profiling               TRUE
- * - boolean  caching     enable or disable internal caching                 FALSE
+ * - string   base_url	  path, and optionally domain, of your application   NULL
+ * - string   index_file  name of your index file, usually "index.php"	     index.php
+ * - string   charset	  internal character set used for input and output   utf-8
+ * - string   cache_dir   set the internal cache directory		     APPPATH/cache
+ * - boolean  errors	  enable or disable error handling		     TRUE
+ * - boolean  profile	  enable or disable internal profiling		     TRUE
+ * - boolean  caching	  enable or disable internal caching		     FALSE
  */
 Kohana::init(array(
 	'base_url'   => '/',
@@ -80,10 +80,10 @@ Kohana::modules(array(
 	 'codebench'  => MODPATH.'codebench',  // Benchmarking tool
 	 'database'   => MODPATH.'database',   // Database access
 	 'image'      => MODPATH.'image',      // Image manipulation
-	 'orm'        => MODPATH.'orm',        // Object Relationship Mapping
+	 'orm'	      => MODPATH.'orm',        // Object Relationship Mapping
 	 'pagination' => MODPATH.'pagination', // Paging of results
-	 'media' 	=> MODPATH.'media', // Paging of results
-	// 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
+	 'media'	=> MODPATH.'media', // Paging of results
+	// 'userguide'	=> MODPATH.'userguide',  // User guide and API documentation
 	));
 
 /**
@@ -149,7 +149,71 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
  * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
  * If no source is specified, the URI will be automatically detected.
  */
-echo Request::instance()
-	->execute()
-	->send_headers()
-	->response;
+
+$request = Request::instance($_SERVER['PATH_INFO']);
+
+try {
+	 // Attempt to execute the response
+	 $request->execute();
+
+}
+catch (ReflectionException $e) {
+
+	Kohana::$log->add(Kohana::ERROR, Kohana::exception_text($e));
+
+	if ( Kohana::$environment === Kohana::DEVELOPMENT ) {
+
+		throw $e;
+	}
+
+	$request->response = Request::factory('404')->execute();
+}
+catch (Exception404 $e) {
+
+	Kohana::$log->add(Kohana::ERROR, Kohana::exception_text($e));
+
+	if ( Kohana::$environment === Kohana::DEVELOPMENT ) {
+		throw $e;
+	}
+
+	$request->response = Request::factory('404')->execute();
+}
+catch (Kohana_Request_Exception $e) {
+
+	Kohana::$log->add(Kohana::ERROR, Kohana::exception_text($e));
+
+	if ( Kohana::$environment === Kohana::DEVELOPMENT ) {
+		throw $e;
+	}
+
+	$request->response = Request::factory('404')->execute();
+}
+catch (Exception $e) {
+
+	Kohana::$log->add(Kohana::ERROR, Kohana::exception_text($e));
+
+	if ( Kohana::$environment === Kohana::DEVELOPMENT ) {
+
+		throw $e;
+	}
+	 
+	$request->response = Request::factory('500')->execute();
+}
+
+
+if ($request->response) {
+
+	 // Get the total memory and execution time
+	 $total = array(
+		 '{memory_usage}' => number_format((memory_get_peak_usage() - KOHANA_START_MEMORY) / 1024, 2).'KB',
+		 '{execution_time}' => number_format(microtime(TRUE) - KOHANA_START_TIME, 5).' seconds'
+	);
+
+	// Insert the totals into the response
+	$request->response = strtr((string) $request->response, $total);
+}
+
+/**
+* Display the request response.
+*/
+echo $request->send_headers()->response;
