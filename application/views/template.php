@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<title><?php echo htmlspecialchars($title) ?></title>
-	<?php echo implode("\n", array_map('HTML::style', $styles)), "\n"?>
+	<?php echo implode("\n", array_map('HTML::style', $styles)), "\n";?>
 	<!--[if IE]>
 		<?php echo HTML::script('js/html5.js'), "\n"?>
 	<![endif]-->
@@ -29,12 +29,17 @@
 		</div>
 	</div>
 
-	<?php if (Request::instance()->uri() == 'home/index' and !Auth::instance()->logged_in()){?>
+	<footer>
 
-		<footer>
-		</footer>
-	<?php }?>
+		<a href="#application-profiler">profiler</a> |
+		<a href="<?php echo URL::site('contact')?>">contact</a>
+
+		<div id="application-profiler">
+			<?php echo View::factory('profiler/stats') ?>
+		</div>
+	</footer>
 	
 	<?php echo implode("\n", array_map('HTML::script', $scripts)) ?>
+
 </body>
 </html>

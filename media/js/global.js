@@ -9,15 +9,19 @@
 
 	$.fn.exists = function( func ){
 
-		return ( this.length && func && func.apply( this ) ) ? this : ( !func ? this.length : this );
+		return 	this.length && func && func.apply( this ) ?
+			this : 
+				!func ? 
+				this.length : 
+				this; 
 	};
 
 	$.ajaxSetup({
 		dataType: 'json',
 		error: function( xhr, textStatus ) {
 
-				$.notification('alert', 'Something went wrong! Please try again.');
-			}
+			$.notification('alert', 'Something went wrong! Please try again.');
+		}
 	});
 
 	$.widget('ui.listeditor', {
@@ -90,7 +94,7 @@
 						}
 					});
 				}
-			}); //.disableSelection();
+			});
 
 			this.events = {
 
@@ -602,7 +606,6 @@
 
 			start = start + name.length + 1;
 
-
 			var end = document.cookie.indexOf( ';', start );
 
 			if (end === -1) { 
@@ -621,6 +624,16 @@
 
 	$('button').button();
 
+	$('a[href="#application-profiler"]').click(function(event){
+
+		var profiler = $( this.href.replace(/^[^#]*/, '') ).toggle(), offset = profiler.offset();
+
+		console.debug(offset);
+
+		$( document ).scrollTop( offset.top );
+
+		return false;
+	});
 
 })( jQuery, window, window.document );
 

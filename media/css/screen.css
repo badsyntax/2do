@@ -2,7 +2,6 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pr
 article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary { 
 	display: block;
 }
-
 body {
 	background: url(/img/bg.gif);
 	margin: 3.2em 0 3em;
@@ -122,9 +121,6 @@ header {
 	-webkit-border-radius: 12px;
 	border-radius: 12px;
 }
-.footer {
-	margin-top: 0;
-}
 
 #content {
 	padding: 20px;
@@ -140,7 +136,7 @@ section.list.last {
 footer {
 	width: 720px;
 	margin: .3em auto;
-	text-align: right;
+	text-align: center;
 	padding-right: 20px;
 }
 footer a, footer a:visited {
@@ -172,8 +168,7 @@ nav li {
 	overflow: visible;
 	padding: 0 0 10px;
 }
-nav a {
-	display: block;
+nav a, footer a {
 	font-family: 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	padding: 0 .6em;
 	text-decoration: none;
@@ -186,7 +181,7 @@ nav a {
 nav a.selected {
 	text-decoration: underline;
 }
-nav a:hover {
+nav a:hover, footer a:hover {
 	-moz-text-shadow: 1px 1px 2px #000;
 	-webkit-text-shadow: 1px 1px 2px #000;
 	-o-text-shadow: 1px 1px 2px #000;
@@ -470,6 +465,11 @@ textarea {
 	margin: 0 15px 10px 15px;
 }
 
+#application-profiler {
+	display: none;
+	margin-top: 1em;
+}
+
 
 /* layout helpers 
 ---------------------*/
@@ -500,7 +500,6 @@ textarea {
 .helper-clearfix { 
 	display: block; 
 }
-
 
 
 /* Checkbox

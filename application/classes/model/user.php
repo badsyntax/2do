@@ -35,12 +35,4 @@ class Model_User extends Model_Auth_User {
 		
 		return $array;
 	}
-
-	public function get_by_openid($identity=''){
-
-		return $this
-			->or_where('openid', '=', $identity)
-			->or_where('username', '=', $identity)
-			->find();
-	}
 }
