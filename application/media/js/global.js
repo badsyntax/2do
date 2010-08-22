@@ -628,8 +628,6 @@
 
 		var profiler = $( this.href.replace(/^[^#]*/, '') ).toggle(), offset = profiler.offset();
 
-		console.debug(offset);
-
 		$( document ).scrollTop( offset.top );
 
 		return false;

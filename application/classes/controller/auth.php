@@ -19,8 +19,6 @@ class Controller_Auth extends Controller_Base {
 
 		parent::before();
 
-		//set_include_path('application/vendor');
-
 		if (!file_exists($this->store_path) && !@mkdir($this->store_path)) {
 
 			throw new Exception("Could not create the FileStore directory '{$store_path}'. Please check the effective permissions.");
@@ -80,7 +78,6 @@ class Controller_Auth extends Controller_Base {
 
 				$user->values($post);
 				$user->username = $user->email;
-
 				$user->save();
 
 			} else {
@@ -175,8 +172,11 @@ class Controller_Auth extends Controller_Base {
 	public function action_confirm(){
 
 		if (!$_POST) {
+
 			$template_auth = new View('auth/auth_confirm');
+
 			$template_auth->openid = @$_GET['openid'];
+
 			$this->template->content = $template_auth;
 		} 
 		else if (isset($_POST['agree'])) {
@@ -190,11 +190,10 @@ class Controller_Auth extends Controller_Base {
 				'password_confirm' => $openid,
 				'remember' => TRUE
 			);
+
 			$user = ORM::factory('user');
 
-			$post = $user->validate_create($data, false);
-
-			if ($post->check()) {
+			if ($post = $user->validate_create($data, false)->check()) {
 
 				$user->values($post);
 
@@ -203,6 +202,8 @@ class Controller_Auth extends Controller_Base {
 				$user->add('roles', new Model_Role(array('name' =>'login')));
 
 				Auth::instance()->force_login($user);
+			} else {
+
 			}
 
 			Request::instance()->redirect('/');
@@ -229,7 +230,7 @@ class Controller_Auth extends Controller_Base {
 
 		if (!$auth_request) {
 
-			throw new Exception('Authentication error; not a valid OpenID.');
+			throw new Exception('Authentication error: not a valid OpenID.');
 		}
 
 		$sreg_request = Auth_OpenID_SRegRequest::build( array('nickname'), array('fullname', 'email') );
