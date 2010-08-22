@@ -496,51 +496,51 @@
 			$( '.task-content' ).not( content )
 				.trigger( 'blur.edit' );
 
-			this.elements.sortableLists
-                        .sortable('refresh');
+			this.elements.sortableLists.sortable('refresh');
 			
 			$.data( content[0], 'value', $.trim( content.text() ) );
 
 			content
-			.addClass( 'task-editing' )
-			.attr('contentEditable', true)
-			.html( text == 'New todo' ? '&nbsp;' : text )
-			.focus()
-			.bind('blur.edit', function(){
-
-				item.removeClass('active');
+				.addClass( 'task-editing' )
+				.attr('contentEditable', true)
+				.attr('spellcheck', false)
+				.html( text == 'New todo' ? '&nbsp;' : text )
+				.focus()
+				.bind('blur.edit', function(){
+	
+					item.removeClass( 'active' );
 				
-				content
-				.attr( 'contentEditable', false )
-				.unbind( 'blur.edit keydown.edit' )
-				.removeClass( 'task-editing task-hover' );
+					content
+						.attr( 'contentEditable', false )
+						.unbind( 'blur.edit keydown.edit' ) .removeClass( 'task-editing task-hover' );
 
-				(function( self ){
+					(function( self ){
 
-					var text = $.trim( content.text() ), listId = list[0].id.replace(/list-/, '');
+						var text = $.trim( content.text() ), listId = list[0].id.replace(/list-/, '');
+	
+						( text != content.data( 'value' ) ) && 
+							self[ item.hasClass('task-new') ? '_taskSave' : '_taskUpdate' ]( text, item, listId ); 
+	
+					})( self );
 
-					( text != content.data( 'value' ) ) && 
-						self[ item.hasClass('task-new') ? '_taskSave' : '_taskUpdate' ]( text, item, listId ); 
+					if ( !$.trim( $(this).text() ) ) {
+						$( this ).html( $(this).data('value') );
+					}
+				})
+				.bind('keydown.edit', function(event){
+			
+					if ( event.keyCode == $.ui.keyCode.ENTER ) {
 
-				})( self );
-
-				if ( !$.trim( $(this).text() ) ) {
-					$( this ).html( $(this).data('value') );
-				}
-			})
-			.bind('keydown.edit', function(event){
-
-				// return key
-				( event.keyCode == $.ui.keyCode.ENTER ) && $( this ).trigger( 'blur' );
-			});
+						$( this ).trigger( 'blur' );
+					}
+				});
 		},
 
 		destroy : function(){
 				
 			$.Widget.prototype.destroy.apply(this, arguments);
 
-			this.element.find( 'checkbox' )
-				.checkbox( 'destroy' );
+			this.element.find( 'checkbox' ).checkbox( 'destroy' );
 		}
 
 	});

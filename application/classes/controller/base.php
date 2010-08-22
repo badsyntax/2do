@@ -48,24 +48,25 @@ class Controller_Base extends Controller_Template {
 	public function after() {
 	
 		$styles = array(
-			'application/media/css/screen.css'
+			'application/media/css/main.css'
 		);
   
 		$scripts = array(
 			'application/media/js/jquery-ui.js',
+			'application/media/js/modernizr-1.5.min.js',
 			'application/media/js/global.js',
 		);
 
 		$this->template->styles = array();
 		foreach(Media::instance()->styles($styles) as $style){
 
-			$this->template->styles[] = preg_replace('/application\//', '', $style);
+			$this->template->styles[] = preg_replace('/application\/media\//', '', $style);
 		}
 		
 		$this->template->scripts = array();
 		foreach(Media::instance()->scripts($scripts) as $script){
 
-			$this->template->scripts[] = preg_replace('/application\//', '', $script);
+			$this->template->scripts[] = preg_replace('/application\/media\//', '', $script);
 		}
 		
                 $this->request->response = $this->template;

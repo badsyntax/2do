@@ -7,7 +7,7 @@ class Controller_Lists extends Controller_Base {
 	function action_index(){
 
 		$date = $this->request->param('date');
-		
+
 		if (!$date) {
 
 			$date = date('d/m/Y');
@@ -28,7 +28,7 @@ class Controller_Lists extends Controller_Base {
 
 			array_push($lists, $data);
 		}
-		
+
 		$lists_template->lists = $lists;
 		$lists_template->hidden_lists = explode(',', @$_COOKIE['hiddenlists']);
 		$lists_template->complete = ORM::factory('task')->get_completed($this->user->id, $date);

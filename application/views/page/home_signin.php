@@ -1,26 +1,29 @@
 <h3>Sign in</h3>
 
 <div style="text-align:center">
-<h4>
-	Choose the service you'd like to sign in with.
-</h4>
 
-<form method="get" action="<?php echo URL::site('auth/try') ?>">
+	<h4>
+		Choose the service you'd like to sign in with.
+	</h4>
+
+	<form method="get" action="<?php echo URL::site('auth/try') ?>">
 		<div class="helper-cleafix">
 
 			<button type="submit" name="openid_identity" value="https://www.google.com/accounts/o8/id">Google</button>
 
 			<button type="submit" name="openid_identity" value="https://me.yahoo.com">Yahoo</button>
 			
+			<button type="button" id="button-twitter" value="oath-twitter">Twitter</button>
+			
 			<button type="button" id="button-openid" value="openid">OpenID</button>
 			
-			<button type="button" id="button-sitelogin" value="openid">Site login</button>
+			<button type="button" id="button-sitelogin" value="site-login">Site login</button>
 		</div>
-</form>
+	</form>
 
-<form method="get" id="openid-url-form" action="<?php echo URL::site('auth/try') ?>" class="ui-helper-hidden">
+	<form method="get" id="openid-url-form" action="<?php echo URL::site('auth/try') ?>" class="ui-helper-hidden">
 		<div id="openid-login" class="helper-clearfix">
-	
+
 			<p>
 				<label for="openid-url">
 					Enter your OpenID URL
@@ -31,7 +34,7 @@
 
 			<button type="submit" style="font-size:90%">Go</button>
 		</div>
-</form>
+	</form>
 
 </div>
 
@@ -60,4 +63,3 @@
 		window.location = '<?php echo URL::site('sign-in') ?>';
 	});
 </script>
-</div>

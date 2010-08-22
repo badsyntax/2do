@@ -13,12 +13,12 @@ class Model_Auth_User extends ORM {
 		'username' => array(
 			'not_empty'  => NULL,
 			'min_length' => array(4),
-			'max_length' => array(32)
+			'max_length' => array(255)
 		),
 		'password' => array(
 			'not_empty'  => NULL,
 			'min_length' => array(5),
-			'max_length' => array(42),
+			'max_length' => array(255),
 		),
 		'password_confirm' => array(
 			'matches'    => array('password'),

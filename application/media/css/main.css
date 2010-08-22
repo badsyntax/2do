@@ -170,7 +170,7 @@ nav li {
 }
 nav a, footer a {
 	font-family: 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
-	padding: 0 .6em;
+	padding: 0 .4em;
 	text-decoration: none;
 	text-align: center;
 	outline: none;
@@ -245,7 +245,8 @@ textarea {
 	border: 1px solid #aaa;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
-	border-radius: 4px;*/
+	border-radius: 4px;
+	*/
 	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	padding: 0;
 	margin: 0;
@@ -262,7 +263,7 @@ textarea {
 	margin: 0;
 }
 .task-list li {
-	border: 1px solid #eee;
+	border: 1px solid #f4f4f4;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	border-radius: 6px;

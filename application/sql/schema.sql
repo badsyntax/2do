@@ -131,3 +131,14 @@ ALTER TABLE `roles_users`
 ALTER TABLE `user_tokens`
   ADD CONSTRAINT `user_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
+
+
+INSERT INTO `roles` (`id`, `name`, `description`) VALUES
+(1, 'login', 'Login privileges, granted after account confirmation'),
+(2, 'admin', 'Administrative user, has access to everything.');
+
+
+INSERT INTO `lists` (`id`, `name`, `date`) VALUES
+(1, 'Today', '2010-06-20 16:13:46'),
+(2, 'Someday', '2010-06-20 16:13:46');
+

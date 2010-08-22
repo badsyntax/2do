@@ -171,29 +171,33 @@ class Controller_Auth extends Controller_Base {
 
 	public function action_confirm(){
 
+		if (!isset($_REQUEST['openid'])) Request::instance()->redirect('/');
+			
+		$openid = $_REQUEST['openid'];
+
 		if (!$_POST) {
 
 			$template_auth = new View('auth/auth_confirm');
 
-			$template_auth->openid = @$_GET['openid'];
+			$template_auth->openid = $openid;
 
 			$this->template->content = $template_auth;
 		} 
 		else if (isset($_POST['agree'])) {
 
-			$openid = @$_POST['openid'];
-
 			$data = array(
 				'username' => $openid,
 				'email' => $openid,
-				'password' => $openid,
-				'password_confirm' => $openid,
+				'password' => sha1($openid),
+				'password_confirm' => sha1($openid),
 				'remember' => TRUE
 			);
 
 			$user = ORM::factory('user');
 
-			if ($post = $user->validate_create($data, false)->check()) {
+			$post = $user->validate_create($data, false);
+
+			if ($post->check()){
 
 				$user->values($post);
 
@@ -202,8 +206,12 @@ class Controller_Auth extends Controller_Base {
 				$user->add('roles', new Model_Role(array('name' =>'login')));
 
 				Auth::instance()->force_login($user);
+
 			} else {
 
+				//die(var_dump($post->errors('register')));
+
+				throw new Exception('Failed to add new user');
 			}
 
 			Request::instance()->redirect('/');
