@@ -19,12 +19,7 @@ class Controller_Auth extends Controller_Base {
 
 		parent::before();
 
-		set_include_path('application/vendor');
-
-		require_once Kohana::find_file('vendor', 'Auth/OpenID/Consumer');
-		require_once Kohana::find_file('vendor', 'Auth/OpenID/FileStore');
-		require_once Kohana::find_file('vendor', 'Auth/OpenID/SReg');
-		require_once Kohana::find_file('vendor', 'Auth/OpenID/PAPE');
+		//set_include_path('application/vendor');
 
 		if (!file_exists($this->store_path) && !@mkdir($this->store_path)) {
 

@@ -29,16 +29,8 @@
 		</div>
 	</div>
 
-	<footer>
+	<?php echo View::factory('page/footer') ?>
 
-		<a href="#application-profiler">profiler</a> |
-		<a href="<?php echo URL::site('contact')?>">contact</a>
-
-		<div id="application-profiler">
-			<?php echo View::factory('profiler/stats') ?>
-		</div>
-	</footer>
-	
 	<?php echo implode("\n", array_map('HTML::script', $scripts)) ?>
 
 </body>
