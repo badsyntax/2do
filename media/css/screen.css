@@ -217,13 +217,6 @@ nav li ul li a {
 	text-decoration: none;
 }
 
-nav > ul > li:hover ul {
-	left: 0;
-}
-nav > ul > li:hover > a {
-	color: #fff !important;
-}
-
 fieldset {
 	margin-left: 2em;
 }
