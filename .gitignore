@@ -1,0 +1,4 @@
+application/media/cache*
+application/cache*
+application/logs*
+*swp
