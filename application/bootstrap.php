@@ -30,8 +30,7 @@ spl_autoload_register(array('Kohana', 'auto_load'));
 /**
 * Set the production status by the domain.
 */
-Kohana::$environment = Kohana::PRODUCTION;
-//Kohana::$environment = ($_SERVER['SERVER_ADDR'] !== '192.168.1.71') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
+Kohana::$environment = ($_SERVER['HTTP_HOST'] !== 'dev.2do.me.uk') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
 
 /**
  * Enable the Kohana auto-loader for unserialization.
