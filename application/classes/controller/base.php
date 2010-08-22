@@ -48,18 +48,26 @@ class Controller_Base extends Controller_Template {
 	public function after() {
 	
 		$styles = array(
-			//'media/css/smoothness/jquery-ui.css',
-			'media/css/screen.css'
+			'application/media/css/screen.css'
 		);
   
 		$scripts = array(
-			'media/js/jquery-ui.js',
-			'media/js/global.js',
+			'application/media/js/jquery-ui.js',
+			'application/media/js/global.js',
 		);
 
-		$this->template->styles = Media::instance()->styles($styles);
-		$this->template->scripts = Media::instance()->scripts($scripts);
+		$this->template->styles = array();
+		foreach(Media::instance()->styles($styles) as $style){
 
+			$this->template->styles[] = preg_replace('/application\//', '', $style);
+		}
+		
+		$this->template->scripts = array();
+		foreach(Media::instance()->scripts($scripts) as $script){
+
+			$this->template->scripts[] = preg_replace('/application\//', '', $script);
+		}
+		
                 $this->request->response = $this->template;
 
 		return parent::after();
