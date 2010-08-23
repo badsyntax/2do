@@ -99,7 +99,7 @@ h4 {
 	margin-bottom: 1.4em;
 }
 h2, h3, button {
-	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
+	font-family: 'Droid Sans', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 }
 em {
 	font-style: italic;
@@ -129,18 +129,6 @@ a:hover {
 }
 small {
 	font-size: small;
-}
-@font-face {
-	font-family: 'Lobster';
-	font-style: normal;
-	font-weight: normal;
-	src: local('Lobster'), url('http://themes.googleusercontent.com/font?kit=X-CahsKZZcJfSyZ_tX4ptg') format('truetype');
-}
-@font-face {
-	font-family: 'Droid Sans Mono';
-	font-style: normal;
-	font-weight: normal;
-	src: local('Droid Sans Mono'), url('http://themes.googleusercontent.com/font?kit=ns-m2xQYezAtqh7ai59hJViAdY2Sz5g753dOuB6TK0I') format('truetype');
 }
 
 header {
@@ -312,7 +300,7 @@ textarea {
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
-	font-family: 'Droid Sans Mono', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
+	font-family: 'Droid Sans', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	padding: 0;
 	margin: 0 0 1em 0;
 	width: 95%;

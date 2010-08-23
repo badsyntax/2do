@@ -5,8 +5,10 @@
       	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title><?php echo htmlspecialchars($title) ?></title>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster">
 	<?php echo implode("\n", array_map('HTML::style', $styles)), "\n";?>
-	<link rel="stylesheet" media="handheld" href="css/handheld.css">
+	<link rel="stylesheet" media="handheld" href="<?php echo URL::site('css/handheld.css')?>">
 	<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 	<link rel="shortcut icon" href="/img/favicon.ico">
 	<!--[if IE]>
@@ -15,11 +17,11 @@
 	<?php echo HTML::style('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/black-tie/jquery-ui.css'), "\n"?>
 	<script type="text/javascript" src="/js/jquery.js"></script>
 </head>
-<!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
-<!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
-<!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
-<!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
+	<!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
+	<!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
+	<!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
+	<!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
+	<!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
 
 	<div id="notification" class="ui-helper-hidden helper-clearfix">
 		<span class="ui-icon ui-icon-alert"></span>
@@ -43,5 +45,6 @@
 
 	<?php echo implode("\n", array_map('HTML::script', $scripts)) ?>
 
+	<!-- {execution_time} -->
 </body>
 </html>

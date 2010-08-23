@@ -85,7 +85,7 @@ Kohana::modules(array(
 	 'openid'	=> MODPATH.'openid', // Paging of results
 	 'swiftmailer'	=> MODPATH.'swiftmailer', // Paging of results
 	 //'userguide'	=> MODPATH.'userguide',  // User guide and API documentation
-	));
+));
 
 /**
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
@@ -150,8 +150,27 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
  * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
  * If no source is specified, the URI will be automatically detected.
  */
+$cache_key = sha1( @$_COOKIE['session'] . Request::instance()->uri );
 
-$request = Request::instance($_SERVER['PATH_INFO']);
+$cache_lifetime = PHP_INT_MAX;
+
+
+
+$cache_lifetime = PHP_INT_MAX;
+
+$cache = Kohana::cache($cache_key);
+
+if ( !$cache ) {
+
+        $request = Request::instance($_SERVER['PATH_INFO']);
+
+        Kohana::cache($cache_key, $request, $cache_lifetime);
+
+} else {
+
+
+        $request = $cache;
+}
 
 try {
 	 // Attempt to execute the response
@@ -203,6 +222,7 @@ catch (Exception $e) {
 
 
 if ($request->response) {
+
 
 	 // Get the total memory and execution time
 	 $total = array(
