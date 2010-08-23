@@ -11,8 +11,6 @@ class Controller_Base extends Controller_Template {
 	public function before() {
 
 		parent::before();
-		
-		set_include_path('application/vendor/');
 
 		$this->session = Session::instance();
 
@@ -20,9 +18,11 @@ class Controller_Base extends Controller_Template {
 
 		$action_name = Request::instance()->action;
 
-		if (($this->auth_required !== FALSE && Auth::instance()->logged_in($this->auth_required) === FALSE)
-		|| (is_array($this->secure_actions) && array_key_exists($action_name, $this->secure_actions) && 
-		Auth::instance()->logged_in($this->secure_actions[$action_name]) === FALSE)) {
+		if (
+			($this->auth_required !== FALSE && Auth::instance()->logged_in($this->auth_required) === FALSE) || 
+			(is_array($this->secure_actions) && array_key_exists($action_name, $this->secure_actions) && 
+			Auth::instance()->logged_in($this->secure_actions[$action_name]) === FALSE)
+		) {
 
 			if (Auth::instance()->logged_in()){
 
@@ -42,7 +42,9 @@ class Controller_Base extends Controller_Template {
 			$this->template->scripts = array();
 		}
 
-		$request = Request::instance();
+		$this->cache_key = $this->request->uri;
+
+		$this->check_cache();
 	}
 	
 	public function after() {
@@ -68,15 +70,40 @@ class Controller_Base extends Controller_Template {
 
 			$this->template->scripts[] = preg_replace('/application\//', '', $script);
 		}
-		
                 $this->request->response = $this->template;
+
+		Event::run('routing.after');
 
 		return parent::after();
 	}
 
 	public function action_403(){
+
 	      $this->template->title = '403';
 	      $this->template->content = 'You do not have permission to view this page';
 	}
 
+	private function check_cache(){
+		
+		$cache = Kohana::cache($this->cache_key);
+
+		if ( !$cache ) {
+
+			 Event::add('routing.after', array($this, 'save_cache'));
+
+		} else {
+
+			echo $cache.View::factory('profiler/stats');
+
+			exit;
+		}
+		
+	}
+
+	public function save_cache(){
+			
+		$cache_lifetime = PHP_INT_MAX;
+
+		Kohana::cache($this->cache_key, (string) $this->request->response, $cache_lifetime);
+	}
 }

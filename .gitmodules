@@ -4,3 +4,6 @@
 [submodule "modules/media-upstream"]
 	path = modules/media-upstream
 	url = http://github.com/azampagl/kohana-media.git
+[submodule "modules/event"]
+	path = modules/event
+	url = http://github.com/samsoir/kohana-event.git

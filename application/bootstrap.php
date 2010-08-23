@@ -26,7 +26,6 @@ setlocale(LC_ALL, 'en_US.utf-8');
  */
 spl_autoload_register(array('Kohana', 'auto_load'));
 
-
 /**
 * Set the production status by the domain.
 */
@@ -83,6 +82,7 @@ Kohana::modules(array(
 	 //'pagination' => MODPATH.'pagination', // Paging of results
 	 'media'	=> MODPATH.'media', // Paging of results
 	 'openid'	=> MODPATH.'openid', // Paging of results
+	 'event'	=> MODPATH.'event', // Paging of results
 	 'swiftmailer'	=> MODPATH.'swiftmailer', // Paging of results
 	 //'userguide'	=> MODPATH.'userguide',  // User guide and API documentation
 ));
@@ -150,27 +150,8 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
  * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
  * If no source is specified, the URI will be automatically detected.
  */
-$cache_key = sha1( @$_COOKIE['session'] . Request::instance()->uri );
-
-$cache_lifetime = PHP_INT_MAX;
-
-
-
-$cache_lifetime = PHP_INT_MAX;
-
-$cache = Kohana::cache($cache_key);
-
-if ( !$cache ) {
-
-        $request = Request::instance($_SERVER['PATH_INFO']);
-
-        Kohana::cache($cache_key, $request, $cache_lifetime);
-
-} else {
-
-
-        $request = $cache;
-}
+        
+$request = Request::instance($_SERVER['PATH_INFO']);
 
 try {
 	 // Attempt to execute the response
