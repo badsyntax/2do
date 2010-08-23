@@ -1,4 +1,4 @@
-<h3>Reports</h3>
+<h2>Reports</h2>
 
 <p>
 	<strong>Total tasks:</strong> <?php echo $total_tasks ?>
@@ -12,7 +12,7 @@
 
 <br />
 
-<h3>Time logs</h3>
+<h2>Time logs</h2>
 
 <p>Get a break-down of complete task times per day. Start by selecting the day:</p>
 <div id="datepicker" style="font-size:80%"></div>
@@ -35,7 +35,7 @@
 
 <br /><br />
 
-<h3>Download</h3>
+<h2>Download</h2>
 
 <br />
 

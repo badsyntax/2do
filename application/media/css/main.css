@@ -26,10 +26,24 @@ table {
 	border-collapse: collapse; 
 	border-spacing: 0; 
 }
-hr { display:block; height:1px; border:0; border-top:1px solid #ccc; margin:1em 0; padding:0; }
-input, select { vertical-align:middle; }
+hr { 
+	display: block; 
+	height: 1px; 
+	border: 0; 
+	border-top: 1px solid #ccc; 
+	margin: 1em 0; 
+	padding: 0; 
+}
+input, select { 
+	vertical-align: middle;
+}
 
-body { font:13px sans-serif; *font-size:small; *font:x-small; line-height:1.22; }
+body { 
+	font: 13px sans-serif;
+	*font-size: small; 
+	*font: x-small; 
+	line-height: 1.22; 
+}
 table { font-size:inherit; font:100%; }
 select, input, textarea { font:99% sans-serif; }
 pre, code, kbd, samp { font-family: monospace, sans-serif; }
@@ -65,7 +79,6 @@ button {  width: auto; overflow: visible; }
 .ie7 img { -ms-interpolation-mode: bicubic; }
 
 
-
 body {
 	background: url(/img/bg.gif);
 	margin: 3.2em 0 3em;
@@ -81,14 +94,11 @@ h1, h2, h3, h4 {
 }
 h1 {
 	font-size: 190%;
-	font-family: 'Lobster', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
+	font-family: 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 	border-bottom: 1px solid #ddd;
 }
 h2 {
 	font-size: 140%;
-}
-h3 {
-	font-size: 120%;
 	border-bottom: 1px solid #ddd;
 	font-weight: bold;
 	margin-bottom: 1.2em;
@@ -99,7 +109,7 @@ h4 {
 	margin-bottom: 1.4em;
 }
 h2, h3, button {
-	font-family: 'Droid Sans', 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
+	font-family: 'Lucinda Grande', 'Trebuchet MS', 'Arial', 'Helvetica', 'sans-serif';
 }
 em {
 	font-style: italic;
@@ -184,7 +194,7 @@ section.list {
 section.list.last {
 	margin-bottom: 0;
 }
-section.list h3 {
+section.list h2 {
 	margin-bottom: .4em;
 }
 
@@ -522,6 +532,11 @@ textarea {
 .form-error {
 	padding-left: .5em;
 	color: red;
+}
+
+#home-signin {
+	text-align: center;
+	margin-bottom: 1.2em;
 }
 
 

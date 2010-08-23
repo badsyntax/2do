@@ -1,4 +1,4 @@
-<h3>Profile</h3>
+<h2>Profile</h2>
 
 <form method="post" action="<?php echo Url::site('profile') ?>">
 	<fieldset>

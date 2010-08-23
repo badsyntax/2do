@@ -1,4 +1,4 @@
-<h3>Sign up</h3>
+<h2>Sign up</h2>
 
 <form method="post" action="<?php echo Url::site('sign-up') ?>">
 	<fieldset>

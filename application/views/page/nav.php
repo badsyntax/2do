@@ -3,10 +3,12 @@
 	<ul>	
 		<?php if (Auth::instance()->logged_in()) {?>
 			<li>
+				<!--
 				<a id="projects-link" href="<?php echo URL::site('projects') ?>" class="ui-state-default">
 					projects
 				</a>
 				|
+				-->
 				<a href="<?php echo URL::site('reports') ?>">reports</a>
 				|
 				<a href="<?php echo URL::site('feedback') ?>">feedback</a>

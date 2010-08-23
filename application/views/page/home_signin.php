@@ -1,6 +1,6 @@
-<h3>Sign in</h3>
+<h2>Sign in</h2>
 
-<div style="text-align:center">
+<div id="home-signin">
 
 	<h4>
 		Choose the service you'd like to sign in with.

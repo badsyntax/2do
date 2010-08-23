@@ -2,7 +2,8 @@
 
 	<?php if (Kohana::$environment === Kohana::DEVELOPMENT){?>
 		<div id="application-profiler">
-			<?/*<?php echo View::factory('profiler/stats') ?> */?>
+			{profiler}
+			{execution_time}
 		</div>
 	<?php }?>
 

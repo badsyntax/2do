@@ -1,4 +1,4 @@
-<h3>Redirecting..</h3>
+<h2>Redirecting..</h2>
 
 <?php echo $form;?>
 

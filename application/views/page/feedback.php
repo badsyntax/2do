@@ -1,4 +1,4 @@
-<h3>Feedback</h3>
+<h2>Feedback</h2>
 
 <form method="post" action="<?php echo URL::site( Request::instance()->uri )?>">
 

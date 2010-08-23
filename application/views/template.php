@@ -5,8 +5,6 @@
       	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title><?php echo htmlspecialchars($title) ?></title>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans">
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lobster">
 	<?php echo implode("\n", array_map('HTML::style', $styles)), "\n";?>
 	<link rel="stylesheet" media="handheld" href="<?php echo URL::site('css/handheld.css')?>">
 	<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
@@ -15,7 +13,6 @@
 		<?php echo HTML::script('js/html5.js'), "\n"?>
 	<![endif]-->
 	<?php echo HTML::style('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/black-tie/jquery-ui.css'), "\n"?>
-	<script type="text/javascript" src="/js/jquery.js"></script>
 </head>
 	<!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
 	<!--[if IE 7 ]>    <body class="ie7"> <![endif]-->

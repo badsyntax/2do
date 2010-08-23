@@ -19,9 +19,9 @@
 <?php foreach($lists as $list){?>
 
 	<section id="<?php echo strtolower($list['list']->name) ?>" class="list">
-		<h3>
+		<h2>
 			<span class="list-toggle"><?php echo $list['list']->name ?></span>
-		</h3>
+		</h2>
 
 		<ul id="list-<?php echo $list['list']->id ?>" class="task-list task sortable<?php echo in_array($list['list']->id, $hidden_lists) ? ' ui-helper-hidden' : '';?>">
 			<li class="task-new">
@@ -50,7 +50,7 @@
 <section id="list-completed" class="list helper-hidden">
 <?php }?>
 
-<h3><span class="list-toggle">Completed</span></h3>
+<h2><span class="list-toggle">Completed</span></h2>
 
 <ul class="task-list completed">
 	<?php foreach($complete as $task){?>

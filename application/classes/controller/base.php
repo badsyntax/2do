@@ -54,6 +54,7 @@ class Controller_Base extends Controller_Template {
 		);
   
 		$scripts = array(
+			'application/media/js/jquery.js',
 			'application/media/js/jquery-ui.js',
 			'application/media/js/modernizr-1.5.min.js',
 			'application/media/js/global.js',
@@ -84,6 +85,8 @@ class Controller_Base extends Controller_Template {
 	}
 
 	private function check_cache(){
+
+		if ( Kohana::$environment !== Kohana::PRODUCTION ) return;
 		
 		$cache = Kohana::cache($this->cache_key);
 
@@ -93,7 +96,12 @@ class Controller_Base extends Controller_Template {
 
 		} else {
 
-			echo $cache.View::factory('profiler/stats');
+			$this->request->send_headers();
+
+			echo strtr($cache, array(
+				'{profiler}' => (string) View::factory('profiler/stats'),
+				'{execution_time}' => number_format(microtime(TRUE) - KOHANA_START_TIME, 5).' seconds'
+			));
 
 			exit;
 		}

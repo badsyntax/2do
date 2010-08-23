@@ -1,4 +1,4 @@
-<h3>Sign up</h3>
+<h2>Sign up</h2>
 
 <p>
 	As this is your first login with this account, you will need
