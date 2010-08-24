@@ -42,7 +42,7 @@ class Controller_Base extends Controller_Template {
 			$this->template->scripts = array();
 		}
 
-		$this->cache_key = $this->request->uri;
+		$this->cache_key = ( $this->user ? $this->user->id : 0 ).$this->request->uri;
 
 		$this->check_cache();
 	}
