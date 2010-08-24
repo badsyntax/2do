@@ -191,7 +191,10 @@
 					})
 					.keydown(function(event){
 
-						( event.keyCode == $.ui.keyCode.ENTER ) && $( this ).trigger( 'blur' );
+						if ( event.keyCode == $.ui.keyCode.ENTER ) {
+							
+							$( this ).trigger( 'blur' );
+						}
 					});
 
 				return false;
@@ -304,15 +307,20 @@
 			if ( !text ) return;
 
 			var 
-			list = item.parents('ul:first'),
-			newitem = 
-				$( '<li></li>' )
-				.html( '<label><input type="checkbox" /></label><div class="task-content">' + text + '</div>' )
-				.find(':checkbox').checkbox( self.checkboxConfig )
-				.end();
+				list = item.parents('ul:first'),
+				newitem = 
+					$( '<li></li>' )
+					.html( '<label><input type="checkbox" /></label><div class="task-content">' + text + '</div>' )
+					.find(':checkbox').checkbox( self.checkboxConfig )
+					.end();
 				
 			item.after( newitem )
-				.find( '.task-content' ).html( 'New todo' );
+				.find( '.task-content' ).html( '' );
+			
+			setTimeout(function(){
+
+				item.trigger('click');
+			});
 					
 			newitem.effect( 'highlight', {}, 800 );
 
@@ -512,7 +520,8 @@
 				
 					content
 						.attr( 'contentEditable', false )
-						.unbind( 'blur.edit keydown.edit' ) .removeClass( 'task-editing task-hover' );
+						.unbind( 'blur.edit keydown.edit' )
+						.removeClass( 'task-editing task-hover' );
 
 					(function( self ){
 
@@ -520,10 +529,11 @@
 	
 						( text != content.data( 'value' ) ) && 
 							self[ item.hasClass('task-new') ? '_taskSave' : '_taskUpdate' ]( text, item, listId ); 
-	
+
 					})( self );
 
 					if ( !$.trim( $(this).text() ) ) {
+
 						$( this ).html( $(this).data('value') );
 					}
 				})
