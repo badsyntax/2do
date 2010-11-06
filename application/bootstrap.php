@@ -29,7 +29,7 @@ spl_autoload_register(array('Kohana', 'auto_load'));
 /**
 * Set the production status by the domain.
 */
-Kohana::$environment = ($_SERVER['HTTP_HOST'] !== 'dev.2do.me.uk') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
+Kohana::$environment = ($_SERVER['HTTP_HOST'] !== 'dev.2do.me.uk' and $_SERVER['HTTP_HOST'] !== 'm.dev.2do.me.uk') ? Kohana::PRODUCTION : Kohana::DEVELOPMENT;
 //Kohana::$environment = Kohana::PRODUCTION;
 
 /**
@@ -105,7 +105,7 @@ Route::set('time', 'reports/time/<time>', array('time' => '.*'))
 		'action' => 'time',
 	));
 
-Route::set('auth', 'auth/confirm/<openid>', array('openid' => '.*'))
+Route::set('auth', 'auth/openid_confirm/<openid>', array('openid' => '.*'))
 	->defaults(array(
 		'controller' => 'auth',
 		'action' => 'confirm',

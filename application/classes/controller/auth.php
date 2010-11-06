@@ -158,7 +158,7 @@ class Controller_Auth extends Controller_Base {
 
 			if (!$user->id) {
 
-				Request::instance()->redirect('/auth/confirm?openid='.urlencode($openid));
+				Request::instance()->redirect('/auth/openid_confirm?openid='.urlencode($openid));
 			}
 
 			Auth::instance()->force_login($user);

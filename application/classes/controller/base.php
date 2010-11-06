@@ -3,17 +3,25 @@
 class Controller_Base extends Controller_Template {
   
 	public $template = 'master_page';
+	
+	public $template_mobile = 'master_page_mobile';
 
 	public $auth_required = FALSE;
 
 	public $secure_actions = FALSE;
 
 	public $cache_page = TRUE;
+
+	public $mobile = FALSE;
   
 	public function before() {
 
-		parent::before();
+		$this->mobile = strstr($_SERVER['HTTP_HOST'], 'm.');
 
+		$this->template = $this->mobile ? $this->template_mobile : $this->template;
+
+		parent::before();
+		
 		$this->session = Session::instance();
 
 		$this->user = Auth::instance()->get_user();
@@ -21,9 +29,9 @@ class Controller_Base extends Controller_Template {
 		$action_name = Request::instance()->action;
 
 		if (
-			($this->auth_required !== FALSE && Auth::instance()->logged_in($this->auth_required) === FALSE) || 
-			(is_array($this->secure_actions) && array_key_exists($action_name, $this->secure_actions) && 
-			Auth::instance()->logged_in($this->secure_actions[$action_name]) === FALSE)
+			($this->auth_required !== FALSE && Auth::instance()->logged_in($this->auth_required) === FALSE) 
+			|| (is_array($this->secure_actions) && array_key_exists($action_name, $this->secure_actions) 
+			&& Auth::instance()->logged_in($this->secure_actions[$action_name]) === FALSE)
 		) {
 
 			if (Auth::instance()->logged_in()){
@@ -36,10 +44,8 @@ class Controller_Base extends Controller_Template {
 		}
 
 		if ($this->auto_render) {
-
 			$this->template->title	 = '';
 			$this->template->content = '';
-			
 			$this->template->styles = array();
 			$this->template->scripts = array();
 		}
@@ -49,15 +55,26 @@ class Controller_Base extends Controller_Template {
 	
 	public function after() {
 	
-		$styles = array(
-			'application/media/css/main.css'
-		);
+		$styles = $this->mobile
+			? array(
+				'http://code.jquery.com/mobile/1.0a1/jquery.mobile-1.0a1.min.css',
+				'application/media/css/main_mobile.css'
+			) 
+			: array(
+				'application/media/css/main.css'
+			);
   
-		$scripts = array(
-			'application/media/js/jquery.js',
-			'application/media/js/jquery-ui.js',
-			'application/media/js/global.js',
-		);
+		$scripts = $this->mobile 
+			? array(
+				'http://code.jquery.com/jquery-1.4.3.min.js',
+				'application/media/js/jquery.mobile.js',
+				//'application/media/js/global.js'
+			)
+			: array(
+				'application/media/js/jquery.js',
+				'application/media/js/jquery-ui.js',
+				'application/media/js/global.js'
+			);
 
 		$this->template->styles = array();
 		foreach(Media::instance()->styles($styles) as $style){
@@ -107,8 +124,6 @@ class Controller_Base extends Controller_Template {
 			Event::add('routing.after', array($this, 'save_cache'), FALSE, array($cache_key, $cache_lifetime));
 
 		} else {
-
-			echo 'from cache';
 
 			$this->request->send_headers();
 
