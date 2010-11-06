@@ -32,6 +32,33 @@
 
 			$( 'body' ).attr( 'role', 'application' );
 
+			$.extend(this.options, {
+				checkboxConfig: {
+					select: function(widget, event){
+
+						try {
+
+							var checkbox = $( this ), 
+								listitem = checkbox.parents('li:first'), 
+								id = listitem.attr('id').replace(/task-/, ''),
+								action = checkbox.is(':checked') ? '_taskComplete' : '_taskIncomplete';
+
+							self[ action ]( id, listitem, checkbox );
+
+						} catch(error) { }
+					}
+				}
+			});
+
+			this._createElements();
+
+			this._bind();
+		},
+
+		_createElements: function(){
+
+			var self = this;
+			
 			this.elements = {
 				completedList: $('#list-completed'),
 				sortableLists: $('.task-list.sortable'),
@@ -42,26 +69,9 @@
 				taskTime: $( '#task-time-container' )
 			};
 
-			this.checkboxConfig = {
-
-				select: function(widget, event){
-
-					try {
-
-						var checkbox = $( this ), 
-							listitem = checkbox.parents('li:first'), 
-							id = listitem.attr('id').replace(/task-/, ''),
-							action = checkbox.is(':checked') ? '_taskComplete' : '_taskIncomplete';
-
-						self[ action ]( id, listitem, checkbox );
-
-					} catch(error) { }
-				}
-			};
-			
 			this.elements.taskTime.appendTo( 'body' );
 
-			$(':checkbox:not(.system)').checkbox( this.checkboxConfig );
+			$(':checkbox:not(.system)').checkbox( this.options.checkboxConfig );
 
 			this.elements.sortableLists
 			.sortable({
@@ -96,13 +106,19 @@
 				}
 			});
 
+		},
+
+		_bind : function(){
+
+			var self = this;
+
 			this.events = {
 
 				mouseenter: function( event ) {
 
-					$( this )
-						.prepend( self.elements.timeIcon.show() )
-						.prepend( self.elements.removeIcon.show() );
+					( self.options.time ) && $( this ).prepend( self.elements.timeIcon.show() );
+
+					$( this ).prepend( self.elements.removeIcon.show() );
 				},
 				mouseleave: function( event ) {
 
@@ -137,9 +153,14 @@
 			.delegate( 'li:not(.task-new)', 'mouseenter', this.events.mouseenter )
 			.delegate( 'li', 'mouseleave', this.events.mouseleave );
 
-			$('.list-toggle').click(function(){
+			$('.list h2')
+			.bind('mouseenter mouseleave', function(){
 
-				var list = $( this ).parent().siblings( 'ul' ), 
+				$(this).toggleClass('hover');
+			})
+			.click(function(){
+
+				var list = $( this ).siblings( 'ul' ), 
 					listid = list[0].id.replace(/list-/, ''), 
 					hiddenlists = $.cookie.get('hiddenlists').split( ',' );
 
@@ -311,7 +332,7 @@
 				newitem = 
 					$( '<li></li>' )
 					.html( '<label><input type="checkbox" /></label><div class="task-content">' + text + '</div>' )
-					.find(':checkbox').checkbox( self.checkboxConfig )
+					.find(':checkbox').checkbox( self.options.checkboxConfig )
 					.end();
 				
 			item.after( newitem )
@@ -531,10 +552,7 @@
 
 					})( self );
 
-					if ( !$.trim( $(this).text() ) ) {
-
-						$( this ).html( $(this).data('value') );
-					}
+					( !$.trim( $(this).text()) ) && $( this ).html( $(this).data('value') );
 				})
 				.bind('keydown.edit', function(event){
 			
