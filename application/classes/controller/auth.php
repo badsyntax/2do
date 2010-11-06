@@ -38,7 +38,7 @@ class Controller_Auth extends Controller_Base {
 		}
 
 		$this->template->title = '2do : sign in';
-		$content = $this->template->content = View::factory('auth/signin');
+		$content = $this->template->content = View::factory('page/auth/signin');
 
 		if ($_POST) {
 
@@ -62,7 +62,7 @@ class Controller_Auth extends Controller_Base {
 			Request::instance()->redirect('sign-in');
 		}
 		
-		$profile = View::factory('auth/profile');
+		$profile = View::factory('page/auth/profile');
 		$profile->user = $this->user;
 
 		$this->template->title = '2do : profile';
@@ -96,7 +96,7 @@ class Controller_Auth extends Controller_Base {
 
 		$this->template->title = '2do : sign up'; 
 
-		$content = $this->template->content = View::factory('auth/signup');		
+		$content = $this->template->content = View::factory('page/auth/signup');		
  
 		if ($_POST) {
 
@@ -130,17 +130,15 @@ class Controller_Auth extends Controller_Base {
 		Request::instance()->redirect('/');		
 	}
 	
-	public function action_finish(){
+	public function action_openid_finish(){
 		
-		$openid = @$_GET['openid_identity'];
-
-		if (!$openid) Request::instance()->redirect('/');
+		$openid = @$_GET['openid_identity'] or Request::instance()->redirect('/');
 
 		$store = new Auth_OpenID_FileStore($this->store_path);
 
 		$consumer = new Auth_OpenID_Consumer($store);
 
-		$response = $consumer->complete(URL::site('auth/finish', TRUE));
+		$response = $consumer->complete(URL::site('auth/openid_finish', TRUE));
 
 		if ($response->status == Auth_OpenID_CANCEL) {
 
@@ -164,12 +162,14 @@ class Controller_Auth extends Controller_Base {
 			}
 
 			Auth::instance()->force_login($user);
+			
+			Session::instance()->set('notification', 'Succesfully logged in.');
 
 			Request::instance()->redirect('/');
 		}
 	}
 
-	public function action_confirm(){
+	public function action_openid_confirm(){
 
 		if (!isset($_REQUEST['openid'])) Request::instance()->redirect('/');
 			
@@ -177,7 +177,7 @@ class Controller_Auth extends Controller_Base {
 
 		if (!$_POST) {
 
-			$template_auth = new View('auth/auth_confirm');
+			$template_auth = new View('page/auth/auth_confirm');
 
 			$template_auth->openid = $openid;
 
@@ -218,9 +218,9 @@ class Controller_Auth extends Controller_Base {
 		}
 	}
 
-	public function action_try(){
+	public function action_openid_try(){
 
-		$template_auth = new View('auth/auth_login');
+		$template_auth = new View('page/auth/auth_login');
 
 		$openid = @$_GET['openid_identity'];
 		
@@ -265,7 +265,7 @@ class Controller_Auth extends Controller_Base {
 		// form to send a POST request to the server.
 		if ($auth_request->shouldSendRedirect()) {
 
-			$redirect_url = $auth_request->redirectURL(URL::site(NULL, TRUE), URL::site('auth/finish', TRUE));
+			$redirect_url = $auth_request->redirectURL(URL::site(NULL, TRUE), URL::site('auth/openid_finish', TRUE));
 
 			// If the redirect URL can't be built, display an error
 			// message.
@@ -280,7 +280,7 @@ class Controller_Auth extends Controller_Base {
 
 			$form_html = $auth_request->htmlMarkup(
 				URL::site(NULL, TRUE), 
-				URL::site('auth/finish', TRUE), 
+				URL::site('auth/openid_finish', TRUE), 
 				false, 
 				array('id' => 'openid_message')
 			);

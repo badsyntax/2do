@@ -32,6 +32,9 @@ class Controller_Task extends Controller_BaseAjax {
 		$task->list_id = (int) $_POST['list'];
 		$task->save();
 
+		$cache_key = ( $this->user ? $this->user->id : 0 );
+		Cache::instance()->delete($cache_key);
+
 		$this->request->response = json_encode(
 		array(
 			'status' => 'success',
@@ -103,7 +106,7 @@ class Controller_Task extends Controller_BaseAjax {
 
 		foreach($_POST['task'] as $i => $id){
 
-			$task = ORM::factory('task')->where('id', '=', $id)->find();
+			$task = ORM::factory('task', (int) $id)->find();
 			$task->sequence = $i;
 			$task->save();
 		}

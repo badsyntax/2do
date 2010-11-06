@@ -9,8 +9,6 @@ class Controller_Feedback extends Controller_Base {
 		$this->template->title = '2do : feedback';
 
 		$data = Validate::factory($_POST)
-			->filter('subject', 'trim')
-			->rule('subject', 'not_empty')
 			->filter('message', 'trim')
 			->filter('message', 'Security::xss_clean')
 			->filter('message', 'strip_tags')
@@ -21,6 +19,11 @@ class Controller_Feedback extends Controller_Base {
 			$transport = Swift_MailTransport::newInstance();
 
 			$mailer = Swift_Mailer::newInstance($transport);
+
+			if ( !Validate::email($this->user->email)){
+				$this->user->email = 'unset@2do.me.uk';
+			}
+
 
 			$message = Swift_Message::newInstance("2do.me.uk feedback")
 				->setFrom(array(

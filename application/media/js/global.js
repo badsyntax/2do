@@ -511,7 +511,6 @@
 			content
 				.addClass( 'task-editing' )
 				.attr('contentEditable', true)
-				.attr('spellcheck', false)
 				.html( text == 'New todo' ? '&nbsp;' : text )
 				.focus()
 				.bind('blur.edit', function(){
@@ -544,6 +543,9 @@
 						$( this ).trigger( 'blur' );
 					}
 				});
+
+			content
+				.attr('spellcheck', false);
 		},
 
 		destroy : function(){
@@ -643,5 +645,18 @@
 		return false;
 	});
 
-})( jQuery, window, window.document );
+	var notification = $.trim( $('#notification .message').text() );
+
+	(notification) && $.notification('alert', notification);
+
+	$('#logo a').hover(
+	function(){
+ 		
+		$(this).stop().animate({ color: "#EEEEEE" }, 500);
+	}, function(){
+
+		$(this).stop().animate({ color: "#FFFFFF" }, 500);
+	});
+
+})( this.jQuery, this, document );
 

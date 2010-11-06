@@ -165,10 +165,13 @@ header {
 	margin-right: .5em;
 }
 
+#logo {
+	padding-bottom: 0px;
+}
 #logo a {
 	color: #fff;
-	color: #fff;
 	font-size: 240%;
+	text-decoration: none;
 }
 #logo a:hover {
 	color: #fff;
@@ -318,7 +321,7 @@ textarea {
 }
 textarea:focus, input:focus {
 	outline: none;
-	border-color: #999;
+	border-color: #555;
 }
 textarea {
 	padding: .6em;
@@ -348,9 +351,6 @@ textarea {
 	right: 0;
 	top: 0;
 }
-.task-list .task-new {
-	cursor: pointer;
-}
 .task-list .task-new .task-add {
 	margin: .3em 2px 0 0;
 }
@@ -362,11 +362,10 @@ textarea {
 }
 
 .task-list .task-content {
-	margin-top: 2px;
 	margin-left: 24px;
-	padding: .1em 0 .3em 0;
+	padding: .3em 0;
 	cursor: pointer;
-	line-height: 1.4em;
+	line-height: 1.3em;
 	background: transparent;
 	position: relative;
 }
@@ -412,7 +411,10 @@ textarea {
 
 
 #list-completed {
-	margin-bottom: 0;
+	margin: 20px 0 0 0;
+}
+#someday {
+	margin: 0;
 }
 
 .ui-button {
@@ -530,7 +532,6 @@ textarea {
 }
 
 .form-error {
-	padding-left: .5em;
 	color: red;
 }
 

@@ -14,19 +14,25 @@
 	<![endif]-->
 	<?php echo HTML::style('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/black-tie/jquery-ui.css'), "\n"?>
 </head>
-	<!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
-	<!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
-	<!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
-	<!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
-	<!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
+<!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
+<!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
+<!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
+<!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
 
 	<div id="notification" class="ui-helper-hidden helper-clearfix">
 		<span class="ui-icon ui-icon-alert"></span>
-		<span class="message"></span>
+		<span class="message">
+		<?php
+			$notification = Session::instance()->get('notification', NULL);
+			Session::instance()->delete('notification');
+			echo $notification;
+		?>
+		</span>
 	</div>
 
 	<header>
-		<?php echo View::factory('page/nav') ?>
+		<?php echo View::factory('page/units/nav') ?>
 		<div id="logo">
 			<a href="/">2do</a>
 		</div>
@@ -38,7 +44,7 @@
 		</div>
 	</div>
 
-	<?php echo View::factory('page/footer') ?>
+	<?php echo View::factory('page/units/footer') ?>
 
 	<?php echo implode("\n", array_map('HTML::script', $scripts)) ?>
 

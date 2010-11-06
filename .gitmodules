@@ -6,4 +6,4 @@
 	url = http://github.com/azampagl/kohana-media.git
 [submodule "modules/event"]
 	path = modules/event
-	url = http://github.com/samsoir/kohana-event.git
+	url = git@github.com:badsyntax/kohana-event.git

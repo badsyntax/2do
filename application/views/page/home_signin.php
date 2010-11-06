@@ -6,7 +6,7 @@
 		Choose the service you'd like to sign in with.
 	</h4>
 
-	<form method="get" action="<?php echo URL::site('auth/try') ?>">
+	<form method="get" action="<?php echo URL::site('auth/openid_try') ?>">
 		<div class="helper-cleafix">
 
 			<button type="submit" name="openid_identity" value="https://www.google.com/accounts/o8/id">Google</button>
@@ -21,7 +21,7 @@
 		</div>
 	</form>
 
-	<form method="get" id="openid-url-form" action="<?php echo URL::site('auth/try') ?>" class="ui-helper-hidden">
+	<form method="get" id="openid-url-form" action="<?php echo URL::site('auth/openid_try') ?>" class="ui-helper-hidden">
 		<div id="openid-login" class="helper-clearfix">
 
 			<p>

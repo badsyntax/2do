@@ -2,11 +2,13 @@
   
 class Controller_Base extends Controller_Template {
   
-	public $template = 'template';
+	public $template = 'master_page';
 
 	public $auth_required = FALSE;
 
 	public $secure_actions = FALSE;
+
+	public $cache_page = TRUE;
   
 	public function before() {
 
@@ -42,8 +44,6 @@ class Controller_Base extends Controller_Template {
 			$this->template->scripts = array();
 		}
 
-		$this->cache_key = ( $this->user ? $this->user->id : 0 ).$this->request->uri;
-
 		$this->check_cache();
 	}
 	
@@ -56,7 +56,6 @@ class Controller_Base extends Controller_Template {
 		$scripts = array(
 			'application/media/js/jquery.js',
 			'application/media/js/jquery-ui.js',
-			'application/media/js/modernizr-1.5.min.js',
 			'application/media/js/global.js',
 		);
 
@@ -88,13 +87,28 @@ class Controller_Base extends Controller_Template {
 
 		if ( Kohana::$environment !== Kohana::PRODUCTION ) return;
 		
-		$cache = Kohana::cache($this->cache_key);
+		$cache_key = sha1( 
+			( $this->user ? $this->user->id : 0 ) .
+			$this->request->uri . 
+			get_class($this) .
+			implode('.', $_REQUEST)
+		);
 
-		if ( !$cache ) {
+		$cache = Cache::instance()->get($cache_key);
 
-			 Event::add('routing.after', array($this, 'save_cache'));
+		if ( !$this->cache_page ) {
+
+			return;
+
+		} else if ( !$cache ) {
+
+			$cache_lifetime = 10;
+			
+			Event::add('routing.after', array($this, 'save_cache'), FALSE, array($cache_key, $cache_lifetime));
 
 		} else {
+
+			echo 'from cache';
 
 			$this->request->send_headers();
 
@@ -108,10 +122,23 @@ class Controller_Base extends Controller_Template {
 		
 	}
 
-	public function save_cache(){
-			
-		$cache_lifetime = PHP_INT_MAX;
+	public function purge_cache($cache_key){
 
-		Kohana::cache($this->cache_key, (string) $this->request->response, $cache_lifetime);
+		Cache::instance()->delete($cache_key);
+	}
+
+	public function save_cache($cache_key, $cache_lifetime=FALSE){
+
+		if ( !$this->cache_page ) {
+		
+			return;
+		}
+
+		if ($cache_lifetime === FALSE) {
+
+			$cache_lifetime = PHP_INT_MAX;
+		}
+
+		Cache::instance()->set($cache_key, (string) $this->request->response, $cache_lifetime);
 	}
 }
