@@ -41,6 +41,7 @@ class Controller_Auth extends Controller_Base {
 		$content = $this->template->content = View::factory('page/auth/signin');
 
 		if ($_POST) {
+		
 
 			$status = ORM::factory('user')->login($_POST);
 
@@ -99,6 +100,8 @@ class Controller_Auth extends Controller_Base {
 		$content = $this->template->content = View::factory('page/auth/signup');		
  
 		if ($_POST) {
+		
+			$_POST['username'] = $_POST['email'];
 
 			$user = ORM::factory('user');	
  

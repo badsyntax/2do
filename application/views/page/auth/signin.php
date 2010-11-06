@@ -1,11 +1,8 @@
 <h2>Sign up</h2>
 
 <p>
-	If you don't have an account with one of the listed OpenID services then you may <a href="<?php echo URL::site('sign-up')?>">sign up</a> for a site account. 
-	If you already have a site account, then sign in below!
+	&raquo; <a href="<?php echo URL::site('sign-up')?>">Sign up</a> for a new site account. 
 </p>
-
-<br />
 
 <h2>Sign in</h2>
 

@@ -10,5 +10,4 @@ return array (
 		'username_available'	=> 'The username already exists',
 		'default'  => 'Invalid Input.',
 	),
- 
 );

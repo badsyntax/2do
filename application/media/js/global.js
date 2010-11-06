@@ -648,32 +648,35 @@
 
 	$.cookie = new cookie();
 
-	$('#lists').listeditor({
-		baseurl: '/'
-	});
+	$(function(){
 
-	$('button').button();
+		$('#lists').listeditor({
+			baseurl: '/'
+		});
 
-	$('a[href="#application-profiler"]').click(function(event){
+		$('button').button();
 
-		var profiler = $( this.href.replace(/^[^#]*/, '') ).toggle(), offset = profiler.offset();
+		$('a[href="#application-profiler"]').click(function(event){
 
-		$( document ).scrollTop( offset.top );
+			var profiler = $( this.href.replace(/^[^#]*/, '') ).toggle(), offset = profiler.offset();
+	
+			$( document ).scrollTop( offset.top );
 
-		return false;
-	});
+			return false;
+		});
 
-	var notification = $.trim( $('#notification .message').text() );
+		var notification = $.trim( $('#notification .message').text() );
 
-	(notification) && $.notification('alert', notification);
+		(notification) && $.notification('alert', notification);
 
-	$('#logo a').hover(
-	function(){
+		$('#logo a').hover(
+		function(){
  		
-		$(this).stop().animate({ color: "#EEEEEE" }, 500);
-	}, function(){
-
-		$(this).stop().animate({ color: "#FFFFFF" }, 500);
+			$(this).stop().animate({ color: "#EEEEEE" }, 500);
+		}, function(){
+	
+			$(this).stop().animate({ color: "#FFFFFF" }, 500);
+		});
 	});
 
 })( this.jQuery, this, document );

@@ -16,7 +16,7 @@
 				</span>
 			<?php }?>
 		</label>
-		<?php echo Form::textarea('message', $_POST['message'], array('id' => 'field-message'))?>
+		<?php echo Form::textarea('message', $_POST['message'], array('id' => 'field-message', 'style' => 'height:80px'))?>
 		<script>
 			document.getElementById('field-message').focus();
 		</script>

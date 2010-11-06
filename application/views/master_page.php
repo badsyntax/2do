@@ -13,6 +13,7 @@
 		<?php echo HTML::script('js/html5.js'), "\n"?>
 	<![endif]-->
 	<?php echo HTML::style('http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/black-tie/jquery-ui.css'), "\n"?>
+	<?php echo implode("\n", array_map('HTML::script', $scripts)) ?>
 </head>
 <!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
 <!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
@@ -45,8 +46,6 @@
 	</div>
 
 	<?php echo View::factory('page/units/footer') ?>
-
-	<?php echo implode("\n", array_map('HTML::script', $scripts)) ?>
 
 	<!-- {execution_time} -->
 </body>

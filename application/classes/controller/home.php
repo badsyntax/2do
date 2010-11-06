@@ -12,8 +12,7 @@ class Controller_Home extends Controller_Base {
 
 		} else {
 
-			$this->template->content = View::factory('page/home_signin');
+			$this->template->content = View::factory( $this->mobile ? 'page/home_signin_mobile' : 'page/home_signin' );
 		}
 	}
-
 }

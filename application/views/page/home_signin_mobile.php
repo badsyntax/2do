@@ -9,15 +9,15 @@
 	<form method="get" action="<?php echo URL::site('auth/openid_try') ?>">
 		<div class="helper-cleafix">
 
-			<button type="submit" name="openid_identity" value="https://www.google.com/accounts/o8/id">Google</button>
+			<a rel="external" href="<?php echo URL::site('auth/openid_try') ?>?openid_identity=https://www.google.com/accounts/o8/id" data-role="button">Google</a>
 
-			<button type="submit" name="openid_identity" value="https://me.yahoo.com">Yahoo</button>
+			<a rel="external" href="<?php echo URL::site('auth/openid_try') ?>?openid_identity=https://me.yahoo.com" data-role="button">Yahoo</a>
 			
 			<button type="button" id="button-twitter" value="oath-twitter">Twitter</button>
 			
 			<button type="button" id="button-openid" value="openid">OpenID</button>
 			
-			<button type="button" id="button-sitelogin" value="site-login">Site login</button>
+			<a rel="external" href="<?php echo URL::site('sign-in') ?>" data-role="button">Site login</a>
 		</div>
 	</form>
 
@@ -56,10 +56,13 @@
 
 		$( '#openid-url-form' ).toggle();
 		$( '#openid-url' ).focus();
+
+		if ( !$( '#openid-url-form' ).is(':hidden')){
+
+			setTimeout(function(){
+				$(window).scrollTop(1000);
+			});
+		}
 	});
 
-	$( '#button-sitelogin' ).click(function(){
-
-		window.location = '<?php echo URL::site('sign-in') ?>';
-	});
 </script>

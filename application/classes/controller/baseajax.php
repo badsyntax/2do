@@ -8,8 +8,10 @@ class Controller_BaseAjax extends Controller {
   
 	public function before() {
 
+		$this->mobile = strstr($_SERVER['HTTP_HOST'], 'm.');
+
 		parent::before();
-                
+		
 		$this->request->headers['Content-type'] = 'application/x-javascript';
 
 		$this->session = Session::instance();

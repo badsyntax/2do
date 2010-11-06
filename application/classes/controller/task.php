@@ -35,12 +35,18 @@ class Controller_Task extends Controller_BaseAjax {
 		$cache_key = ( $this->user ? $this->user->id : 0 );
 		Cache::instance()->delete($cache_key);
 
-		$this->request->response = json_encode(
-		array(
-			'status' => 'success',
-			'message' => 'Successfully saved!',
-			'id' => $task->id
-		));
+		if ($this->mobile){
+
+			echo 'test';
+		} else {
+
+			$this->request->response = json_encode(
+			array(
+				'status' => 'success',
+				'message' => 'Successfully saved!',
+				'id' => $task->id
+			));
+		}
 	}
 
 	public function action_time(){

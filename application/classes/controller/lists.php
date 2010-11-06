@@ -15,7 +15,7 @@ class Controller_Lists extends Controller_Base {
 
 		$this->template->title ='2do';
 
-		$lists_template = View::factory('page/lists');
+		$lists_template = View::factory( $this->mobile ? 'page/lists_mobile' : 'page/lists' );
 
 		$lists = array();
 		
@@ -36,6 +36,12 @@ class Controller_Lists extends Controller_Base {
 		$this->template->set_global('projects', ORM::factory('project')->where('user_id', '=', $this->user->id)->find_all());
 
 		$this->template->content = $lists_template;
+	}
+
+	function action_newtodo(){
+
+		echo new View( $this->mobile ? 'page/units/newtodo_mobile' : 'page/units/newtodo' );
+		exit;
 	}
 
 }

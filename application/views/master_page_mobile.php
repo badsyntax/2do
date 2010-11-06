@@ -10,11 +10,8 @@
 
 <div data-role="page">
 
-        <div data-role="header">
-                <h1>2DO</h1>
-		<!--
+        <div data-role="header" data-position="inline" data-nobackbtn="true">
 		<?php echo View::factory('page/units/nav_mobile') ?>
-		-->
         </div><!-- /header -->
 
         <div data-role="content">
@@ -32,7 +29,9 @@
         </div><!-- /content -->
 
         <div data-role="footer">
-		<?php echo View::factory('page/units/footer') ?>
+		<div data-role="controlgroup" data-type="horizontal">
+			<?php echo View::factory('page/units/footer_mobile') ?>
+		</div>
         </div><!-- /footer -->
 
 </div>
