@@ -7,6 +7,3 @@
 [submodule "modules/event"]
 	path = modules/event
 	url = git@github.com:badsyntax/kohana-event.git
-[submodule "modules/oauth"]
-	path = modules/oauth
-	url = https://github.com/Yahasana/OAuth-2.0.git
