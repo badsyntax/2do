@@ -1,5 +1,3 @@
-<h2>Sign up</h2>
-
 <form method="post" action="<?php echo Url::site('sign-up') ?>" rel="external">
 	<fieldset>
 

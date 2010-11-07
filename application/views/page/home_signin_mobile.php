@@ -1,4 +1,21 @@
-<h2>Sign in</h2>
+ <div data-role="header" data-position="inline" data-nobackbtn="true">
+                <h1>2do - sign in</h1>
+                <?php if (Auth::instance()->logged_in()){?>
+                <?php }?>
+        </div><!-- /header -->
+
+        <div data-role="content"  data-theme="c">
+                <div id="notification" class="ui-helper-hidden helper-clearfix">
+                        <span class="ui-icon ui-icon-alert"></span>
+                        <span class="message">
+                        <?php
+                                $notification = Session::instance()->get('notification', NULL);
+                                Session::instance()->delete('notification');
+                                echo $notification;
+                        ?>
+                        </span>
+                </div>
+
 
 <div id="home-signin">
 
@@ -17,7 +34,7 @@
 			
 			<button type="button" id="button-openid" value="openid">OpenID</button>
 			
-			<a rel="external" href="<?php echo URL::site('sign-in') ?>" data-role="button">Site login</a>
+			<a href="<?php echo URL::site('sign-in') ?>" data-role="button">Site login</a>
 		</div>
 	</form>
 
@@ -37,7 +54,7 @@
 	</form>
 
 </div>
-
+</div>
 <script type="text/javascript">
 
 	$('#openid-url-form').submit(function(){
@@ -66,3 +83,4 @@
 	});
 
 </script>
+

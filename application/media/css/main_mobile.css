@@ -27,3 +27,12 @@ h4 {
 .ui-footer .ui-controlgroup-horizontal {
 	margin: .4em 0;
 }
+.task-view .ui-btn-inner  {
+	white-space: normal;
+}
+.task-view .ui-btn-icon-left .ui-icon {
+	top: 1.1em;
+}
+.ui-content {
+
+}

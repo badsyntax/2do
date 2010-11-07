@@ -80,6 +80,7 @@ Kohana::modules(array(
 	 'database'   => MODPATH.'database',   // Database access
 	 //'image'      => MODPATH.'image',      // Image manipulation
 	 'orm'	      => MODPATH.'orm',        // Object Relationship Mapping
+	 'oauth'	=> MODPATH.'oauth',
 	 //'pagination' => MODPATH.'pagination', // Paging of results
 	 'media'	=> MODPATH.'media', // Paging of results
 	 'openid'	=> MODPATH.'openid', // Paging of results

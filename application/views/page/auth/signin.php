@@ -1,10 +1,6 @@
-<h2>Sign up</h2>
-
 <p>
-	&raquo; <a href="<?php echo URL::site('sign-up')?>">Sign up</a> for a new site account. 
+<a href="<?php echo URL::site('sign-up')?>">Sign up</a> for a new site account. 
 </p>
-
-<h2>Sign in</h2>
 
 <form method="post" action="<?php echo Url::site('sign-in') ?>">
 	<fieldset>

@@ -1,3 +1,31 @@
+        <div data-role="header" data-position="inline" data-nobackbtn="false">
+                <h1>Lists</h1>
+                <?php if (Auth::instance()->logged_in()){?>
+                <?php }?>
+        </div><!-- /header -->
+
+        <div data-role="content">
+                <div id="notification" class="ui-helper-hidden helper-clearfix">
+                        <span class="ui-icon ui-icon-alert"></span>
+                        <span class="message">
+                        <?php
+                                $notification = Session::instance()->get('notification', NULL);
+                                Session::instance()->delete('notification');
+                                echo $notification;
+                        ?>
+                        </span>
+                </div>
+
+
+<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="a">
+<?php foreach($lists as $l => $list){?>
+<li><a href="<?php echo URL::site('lists/view/' . $list['list']->id);?>"><?php echo $list['list']->name ?></a></li>
+<?php }?>
+</ul>
+</div>
+
+<?/*
+
 <div id="lists">
 <?php foreach($lists as $l => $list){?>
 
@@ -65,3 +93,4 @@
 </section>
 
 </div>
+*/?>

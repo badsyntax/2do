@@ -1,12 +1,20 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
-class Controller_Task extends Controller_BaseAjax {
+class Controller_Task extends Controller_Base {
 
 	public $auth_required = array('login');
  
 	public function action_index(){
 
 		$this->request->response = '';
+	}
+
+	public function action_view($id=0){
+
+		$task_template = View::factory( $this->mobile ? 'page/task_view_mobile' : 'page/task_view' );
+		$task_template->task = ORM::factory('task', (int) $id);
+
+		$this->template->content = $task_template;
 	}
 
 	public function action_save(){

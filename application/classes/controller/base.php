@@ -57,7 +57,7 @@ class Controller_Base extends Controller_Template {
 	
 		$styles = $this->mobile
 			? array(
-				'http://code.jquery.com/mobile/1.0a1/jquery.mobile-1.0a1.min.css',
+				'http://jquery-mobile-localdomain/themes/default/',
 				'application/media/css/main_mobile.css'
 			) 
 			: array(
@@ -66,7 +66,7 @@ class Controller_Base extends Controller_Template {
   
 		$scripts = $this->mobile 
 			? array(
-				'http://code.jquery.com/jquery-1.4.3.min.js',
+				'application/media/js/jquery-1.4.3.min.js',
 				'application/media/js/jquery.mobile.js',
 				//'application/media/js/global.js'
 			)

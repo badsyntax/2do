@@ -44,4 +44,22 @@ class Controller_Lists extends Controller_Base {
 		exit;
 	}
 
+	function action_view($id=0){
+
+		$this->template->title ='2do';
+
+		$lists_template = View::factory( $this->mobile ? 'page/lists_view_mobile' : 'page/lists_view' );
+		
+		$date = date('d/m/Y');
+
+		$lists_template->list = ORM::factory('list')->find($id);
+		$lists_template->tasks = $lists_template->list->get_tasks($this->user->id, $date);
+		$lists_template->hidden_lists = explode(',', @$_COOKIE['hiddenlists']);
+		$lists_template->complete = ORM::factory('task')->get_completed($this->user->id, $date);
+		
+		$this->template->set_global('projects', ORM::factory('project')->where('user_id', '=', $this->user->id)->find_all());
+		
+		$this->template->content = $lists_template;
+	}
+
 }

@@ -10,23 +10,7 @@
 
 <div data-role="page">
 
-        <div data-role="header" data-position="inline" data-nobackbtn="true">
-		<?php echo View::factory('page/units/nav_mobile') ?>
-        </div><!-- /header -->
-
-        <div data-role="content">
-		<div id="notification" class="ui-helper-hidden helper-clearfix">
-			<span class="ui-icon ui-icon-alert"></span>
-			<span class="message">
-			<?php
-				$notification = Session::instance()->get('notification', NULL);
-				Session::instance()->delete('notification');
-				echo $notification;
-			?>
-			</span>
-		</div>
 		<?php echo $content ?>
-        </div><!-- /content -->
 
         <div data-role="footer">
 		<div data-role="controlgroup" data-type="horizontal">
