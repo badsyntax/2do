@@ -1,30 +1,36 @@
-<form method="post" action="<?php echo Url::site('sign-up') ?>" rel="external">
-	<fieldset>
+<div data-role="header" data-position="inline" data-nobackbtn="false">
+	<h2>Sign up</h2>
+</div><!-- /header -->
 
-		<?php if (isset($errors)) {?>
-			<ul class="errors">
-			<?php foreach($errors as $field => $error){?>
-				<li><?php echo $error ?></li>
+<div data-role="content"  data-theme="c">
+	<form method="post" action="<?php echo Url::site('sign-up') ?>" rel="external">
+		<fieldset>
+
+			<?php if (isset($errors)) {?>
+				<ul class="errors">
+				<?php foreach($errors as $field => $error){?>
+					<li><?php echo $error ?></li>
+				<?php }?>
+				</ul>
 			<?php }?>
-			</ul>
-		<?php }?>
 
-		<p>
-			<label for="email">Email</label>
-			<input type="text" name="email" />
-		
-			<!--
-			<label for="username">Username</label>
-			<input type="text" name="username" />
-			-->
+			<p>
+				<label for="email">Email</label>
+				<input type="text" name="email" />
+			
+				<!--
+				<label for="username">Username</label>
+				<input type="text" name="username" />
+				-->
 
-			<label for="password">Password</label>
-			<input type="password" name="password" />
+				<label for="password">Password</label>
+				<input type="password" name="password" />
 
-			<label for="password_confirm">Confirm password</label>
-			<input type="password" name="password_confirm" />
-		</p>
+				<label for="password_confirm">Confirm password</label>
+				<input type="password" name="password_confirm" />
+			</p>
 
-		<button type="submit">Signup</button>
-	</fieldset>
-</form>
+			<button type="submit">Signup</button>
+		</fieldset>
+	</form>
+</div>

@@ -172,27 +172,27 @@ class Controller_Auth extends Controller_Base {
 		}
 	}
 
-	public function action_openid_confirm(){
+	public function action_confirm(){
 
-		if (!isset($_REQUEST['openid'])) Request::instance()->redirect('/');
+		if (!isset($_REQUEST['id'])) Request::instance()->redirect('/');
 			
-		$openid = $_REQUEST['openid'];
+		$auth_id = $_REQUEST['id'];
 
 		if (!$_POST) {
 
 			$template_auth = new View('page/auth/auth_confirm');
 
-			$template_auth->openid = $openid;
+			$template_auth->id = $auth_id;
 
 			$this->template->content = $template_auth;
 		} 
 		else if (isset($_POST['agree'])) {
 
 			$data = array(
-				'username' => $openid,
-				'email' => $openid,
-				'password' => sha1($openid),
-				'password_confirm' => sha1($openid),
+				'username' => $auth_id,
+				'email' => $auth_id,
+				'password' => sha1($auth_id),
+				'password_confirm' => sha1($auth_id),
 				'remember' => TRUE
 			);
 
@@ -297,7 +297,39 @@ class Controller_Auth extends Controller_Base {
 				
 			$template_auth->form = $form_html;
 		}
+
+		$this->template->show_footer = FALSE;
 				
 		$this->template->content = $template_auth;
+	}
+
+	public function action_oauth_try($provider='twitter'){
+
+		$consumer = OAuth_Consumer::factory(Kohana::config('oauth.twitter'));
+
+		$provider = OAuth_Provider::factory('twitter');
+
+		$access_token = $provider->request_token($consumer);
+
+		$url = $provider->url_authorize().'?oauth_token='.$access_token;
+
+		Request::instance()->redirect($url);
+	}
+
+	public function action_oauth_authorize(){
+
+		$oauth_token = $_REQUEST['oauth_token'];
+		$oauth_verifier = $_REQUEST['oauth_verifier'];
+		
+		$consumer = OAuth_Consumer::factory(Kohana::config('oauth.twitter'));
+
+		$provider = OAuth_Provider::factory('twitter');
+		
+		$access_token = $provider->request_token($consumer);
+
+		$token = $provider->access_token($consumer, $access_token, array('oauth_verifier' => $oauth_verifier));
+		
+		die($token);
+
 	}
 }

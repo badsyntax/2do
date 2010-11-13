@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
-
+/**
+ * Default auth user
+ *
+ * @package    Kohana/Auth
+ * @author     Kohana Team
+ * @copyright  (c) 2007-2009 Kohana Team
+ * @license    http://kohanaphp.com/license.html
+ */
 class Model_Auth_User extends ORM {
 
 	// Relationships
@@ -13,12 +20,13 @@ class Model_Auth_User extends ORM {
 		'username' => array(
 			'not_empty'  => NULL,
 			'min_length' => array(4),
-			'max_length' => array(255)
+			'max_length' => array(32),
+			'regex'      => array('/^[-\pL\pN_.]++$/uD'),
 		),
 		'password' => array(
 			'not_empty'  => NULL,
 			'min_length' => array(5),
-			'max_length' => array(255),
+			'max_length' => array(42),
 		),
 		'password_confirm' => array(
 			'matches'    => array('password'),
@@ -37,6 +45,14 @@ class Model_Auth_User extends ORM {
 		'email' => array('email_available'),
 	);
 
+	// Field labels
+	protected $_labels = array(
+		'username'         => 'username',
+		'email'            => 'email address',
+		'password'         => 'password',
+		'password_confirm' => 'password confirmation',
+	);
+
 	// Columns to ignore
 	protected $_ignored_columns = array('password_confirm');
 
@@ -50,10 +66,12 @@ class Model_Auth_User extends ORM {
 	 */
 	public function login(array & $array, $redirect = FALSE)
 	{
-
+		$fieldname = $this->unique_key($array['username']);
 		$array = Validate::factory($array)
+			->label('username', $this->_labels[$fieldname])
+			->label('password', $this->_labels['password'])
 			->filter(TRUE, 'trim')
-			->rules('username', $this->_rules['username'])
+			->rules('username', $this->_rules[$fieldname])
 			->rules('password', $this->_rules['password']);
 
 		// Get the remember login option
@@ -62,10 +80,10 @@ class Model_Auth_User extends ORM {
 		// Login starts out invalid
 		$status = FALSE;
 
-		if ( $array->check())
+		if ($array->check())
 		{
 			// Attempt to load the user
-			$this->where('username', '=', $array['username'])->find();
+			$this->where($fieldname, '=', $array['username'])->find();
 
 			if ($this->loaded() AND Auth::instance()->login($this, $array['password'], $remember))
 			{
@@ -98,6 +116,8 @@ class Model_Auth_User extends ORM {
 	public function change_password(array & $array, $redirect = FALSE)
 	{
 		$array = Validate::factory($array)
+			->label('password', $this->_labels['password'])
+			->label('password_confirm', $this->_labels['password_confirm'])
 			->filter(TRUE, 'trim')
 			->rules('password', $this->_rules['password'])
 			->rules('password_confirm', $this->_rules['password_confirm']);
@@ -131,7 +151,7 @@ class Model_Auth_User extends ORM {
 		}
 
 		// Update the number of logins
-		$this->logins += 1;
+		$this->logins = new Database_Expression('logins + 1');
 
 		// Set the last login date
 		$this->last_login = time();
@@ -150,7 +170,7 @@ class Model_Auth_User extends ORM {
 	 */
 	public function username_available(Validate $array, $field)
 	{
-		if ($this->unique_key_exists($array[$field]))
+		if ($this->unique_key_exists($array[$field], 'username'))
 		{
 			$array->error($field, 'username_available', array($array[$field]));
 		}
@@ -166,7 +186,7 @@ class Model_Auth_User extends ORM {
 	 */
 	public function email_available(Validate $array, $field)
 	{
-		if ($this->unique_key_exists($array[$field]))
+		if ($this->unique_key_exists($array[$field], 'email'))
 		{
 			$array->error($field, 'email_available', array($array[$field]));
 		}
@@ -176,13 +196,20 @@ class Model_Auth_User extends ORM {
 	 * Tests if a unique key value exists in the database.
 	 *
 	 * @param   mixed    the value to test
+	 * @param   string   field name
 	 * @return  boolean
 	 */
-	public function unique_key_exists($value)
+	public function unique_key_exists($value, $field = NULL)
 	{
+		if ($field === NULL)
+		{
+			// Automatically determine field by looking at the value
+			$field = $this->unique_key($value);
+		}
+
 		return (bool) DB::select(array('COUNT("*")', 'total_count'))
 			->from($this->_table_name)
-			->where($this->unique_key($value), '=', $value)
+			->where($field, '=', $value)
 			->where($this->_primary_key, '!=', $this->pk())
 			->execute($this->_db)
 			->get('total_count');

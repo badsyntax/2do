@@ -7,9 +7,9 @@
 <div id="terms" class="ui-corner-all">
 	Terms go here.
 </div>
-<form method="post" id="auth-confirm-form" action="<?php echo URL::site('/auth/openid_confirm'); ?>" class="ui-helper-reset helper-clearfix">
-	<input type="hidden" name="openid" value="<?php echo $openid ?>" />
-	<button type="submit" name="agree" id="agree" value="https://www.google.com/accounts/o8/id">Sign up &raquo;</button>
+<form method="post" id="auth-confirm-form" action="<?php echo URL::site('/auth/confirm'); ?>" class="ui-helper-reset helper-clearfix">
+	<input type="hidden" name="id" value="<?php echo $id ?>" />
+	<button type="submit" name="agree" id="agree">Sign up &raquo;</button>
 </form>
 
 <script type="text/javascript">

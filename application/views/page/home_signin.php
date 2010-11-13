@@ -62,4 +62,9 @@
 
 		window.location = '<?php echo URL::site('sign-in') ?>';
 	});
+
+	$( '#button-twitter' ).click(function(){
+
+		window.location = '<?php echo URL::site('oauth') ?>';
+	});
 </script>

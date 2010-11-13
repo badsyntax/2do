@@ -38,12 +38,6 @@ class Controller_Lists extends Controller_Base {
 		$this->template->content = $lists_template;
 	}
 
-	function action_newtodo(){
-
-		echo new View( $this->mobile ? 'page/units/newtodo_mobile' : 'page/units/newtodo' );
-		exit;
-	}
-
 	function action_view($id=0){
 
 		$this->template->title ='2do';
