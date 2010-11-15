@@ -1,8 +1,8 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
- * @name OpenID auth controller 
+ * @name OpenID + OAuth controller 
  * @author Richard Willis
- * @depends kohana3, kohana 3 auth module, php-openid
+ * @depends kohana3, kohana 3 auth module, kohana 3 oauth modeul, php-openid module
  * 
  * Parts of this controller are based on the php-openid consumer examples here:
  * http://github.com/openid/php-openid/tree/master/examples/consumer/
@@ -11,9 +11,16 @@
 
 class Controller_Auth extends Controller_Base {
 
-	private $store_path = '/tmp/_php_consumer_test';
-
 	public $auth_required = FALSE;
+	
+	// OpenID
+	private $store_path = '/tmp/_php_consumer_test';
+	
+	// OAuth
+	protected $provider;
+	protected $consumer;
+	protected $token;
+	protected $cookie = 'oauth_token_twitter';
 	
 	public function before(){
 
@@ -161,7 +168,7 @@ class Controller_Auth extends Controller_Base {
 
 			if (!$user->id) {
 
-				Request::instance()->redirect('/auth/openid_confirm?openid='.urlencode($openid));
+				Request::instance()->redirect('/auth/confirm?id='.urlencode($openid));
 			}
 
 			Auth::instance()->force_login($user);
@@ -180,13 +187,13 @@ class Controller_Auth extends Controller_Base {
 
 		if (!$_POST) {
 
-			$template_auth = new View('page/auth/auth_confirm');
+			$template_auth = new View($this->mobile ? 'page/auth/confirm_mobile' : 'page/auth/confirm');
 
 			$template_auth->id = $auth_id;
 
 			$this->template->content = $template_auth;
 		} 
-		else if (isset($_POST['agree'])) {
+		else {
 
 			$data = array(
 				'username' => $auth_id,
@@ -212,7 +219,7 @@ class Controller_Auth extends Controller_Base {
 
 			} else {
 
-				//die(var_dump($post->errors('register')));
+				die(var_dump($post->errors('register')));
 
 				throw new Exception('Failed to add new user');
 			}
@@ -303,33 +310,93 @@ class Controller_Auth extends Controller_Base {
 		$this->template->content = $template_auth;
 	}
 
-	public function action_oauth_try($provider='twitter'){
+	public function oauth_init($provider='twitter')
+	{
+		$this->provider = $provider;
 
-		$consumer = OAuth_Consumer::factory(Kohana::config('oauth.twitter'));
+		// Load the configuration for this provider
+		$config = Kohana::config('oauth.'.$this->provider);
 
-		$provider = OAuth_Provider::factory('twitter');
+		// Create a consumer from the config
+		$this->consumer = OAuth_Consumer::factory($config);
 
-		$access_token = $provider->request_token($consumer);
+		// Load the provider
+		$this->provider = OAuth_Provider::factory($this->provider);
 
-		$url = $provider->url_authorize().'?oauth_token='.$access_token;
-
-		Request::instance()->redirect($url);
+		if ($token = Cookie::get($this->cookie))
+		{
+			// Get the token from storage
+			$this->token = unserialize($token);
+		}
 	}
 
-	public function action_oauth_authorize(){
+	public function action_oauth_twitter()
+	{
+		$this->oauth_init('twitter');
 
-		$oauth_token = $_REQUEST['oauth_token'];
-		$oauth_verifier = $_REQUEST['oauth_verifier'];
-		
-		$consumer = OAuth_Consumer::factory(Kohana::config('oauth.twitter'));
+		// We will need a callback URL for the user to return to
+		$callback = URL::site($this->request->uri(array('action' => 'oauth_authorize')), Request::$protocol);
 
-		$provider = OAuth_Provider::factory('twitter');
-		
-		$access_token = $provider->request_token($consumer);
+		// Add the callback URL to the consumer
+		$this->consumer->callback($callback);
 
-		$token = $provider->access_token($consumer, $access_token, array('oauth_verifier' => $oauth_verifier));
-		
-		die($token);
+		// Get a request token for the consumer
+		$token = $this->provider->request_token($this->consumer);
 
+		// Store the request token
+		Cookie::set($this->cookie, serialize($token));
+
+		// Redirect to the provider's login page
+		$this->request->redirect($this->provider->authorize_url($token));
+	}
+
+	public function action_oauth_authorize()
+	{
+		$this->oauth_init('twitter');
+
+		if ($this->token AND $this->token->token !== Arr::get($_GET, 'oauth_token'))
+		{
+			// Delete the token, it is not valid
+			Cookie::delete($this->cookie);
+
+			// Send the user back to the beginning
+			Request::instance()->redirect($this->request->uri(array('action' => 'index')));
+		}
+
+		// Get the verifier
+		$verifier = Arr::get($_GET, 'oauth_verifier');
+
+		// Store the verifier in the token
+		$this->token->verifier($verifier);
+
+		// Exchange the request token for an access token
+		$this->token = $this->provider->access_token($this->consumer, $this->token);
+
+		// Store the access token
+		Cookie::set($this->cookie, serialize($this->token));
+
+		// At this point, we need to retrieve a unique twitter id for the user.
+		$response = 
+			OAuth_Request::factory('resource', 'GET', 'http://api.twitter.com/1/account/verify_credentials.json')
+			->param('oauth_consumer_key', Kohana::config('oauth.twitter.key'))
+			->param('oauth_token', $this->token)
+			->sign(OAuth_Signature::factory('HMAC-SHA1'), $this->consumer, $this->token)
+			->execute();
+
+		$response = json_decode($response);
+
+		$twitter_id = $response->screen_name;
+
+		$user = ORM::factory('user')
+		       ->where('username', '=', $twitter_id)
+		       ->find();
+
+		!$user->id AND Request::instance()->redirect('/auth/confirm?id='.$twitter_id);
+
+		Auth::instance()->force_login($user);
+
+		Session::instance()->set('notification', 'Succesfully logged in.');
+
+		Request::instance()->redirect('/');
 	}
 }
