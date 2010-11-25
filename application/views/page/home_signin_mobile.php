@@ -1,20 +1,20 @@
  <div data-role="header" data-position="inline" data-nobackbtn="true">
-                <h1>2do - sign in</h1>
-                <?php if (Auth::instance()->logged_in()){?>
-                <?php }?>
-        </div><!-- /header -->
+		<h1>2do - sign in</h1>
+		<?php if (Auth::instance()->logged_in()){?>
+		<?php }?>
+	</div><!-- /header -->
 
-        <div data-role="content"  data-theme="c">
-                <div id="notification" class="ui-helper-hidden helper-clearfix">
-                        <span class="ui-icon ui-icon-alert"></span>
-                        <span class="message">
-                        <?php
-                                $notification = Session::instance()->get('notification', NULL);
-                                Session::instance()->delete('notification');
-                                echo $notification;
-                        ?>
-                        </span>
-                </div>
+	<div data-role="content"  data-theme="c">
+		<div id="notification" class="ui-helper-hidden helper-clearfix">
+			<span class="ui-icon ui-icon-alert"></span>
+			<span class="message">
+			<?php
+				$notification = Session::instance()->get('notification', NULL);
+				Session::instance()->delete('notification');
+				echo $notification;
+			?>
+			</span>
+		</div>
 
 
 <div id="home-signin">
@@ -30,7 +30,7 @@
 
 			<a rel="external" href="<?php echo URL::site('auth/openid_try') ?>?openid_identity=https://me.yahoo.com" data-role="button">Yahoo</a>
 			
-			<button type="button" id="button-twitter" value="oath-twitter">Twitter</button>
+			<a rel="external" href="<?php echo URL::site('auth/oauth_twitter') ?>" data-role="button">Twitter</a>
 			
 			<button type="button" id="button-openid" value="openid">OpenID</button>
 			
@@ -80,6 +80,10 @@
 				$(window).scrollTop(1000);
 			});
 		}
+	});
+
+	$( '#button-twitter' ).click(function(){
+
 	});
 
 </script>

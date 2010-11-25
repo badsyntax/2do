@@ -65,6 +65,6 @@
 
 	$( '#button-twitter' ).click(function(){
 
-		window.location = '<?php echo URL::site('oauth') ?>';
+		window.location = '<?php echo URL::site('auth/oauth_twitter') ?>';
 	});
 </script>

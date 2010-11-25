@@ -5,6 +5,8 @@
 	<title><?php echo htmlspecialchars($title) ?></title> 
 	<?php echo implode("\n", array_map('HTML::style', $styles)), "\n";?>
 	<?php echo implode("\n", array_map('HTML::script', $scripts)) ?>
+    </script>
+
 </head>
 <body>
 

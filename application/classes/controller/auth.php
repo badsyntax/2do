@@ -294,6 +294,8 @@ class Controller_Auth extends Controller_Base {
 				false, 
 				array('id' => 'openid_message')
 			);
+
+			die(var_dump(htmlspecialchars($form_html)));
 			
 			// Display an error if the form markup couldn't be generated;
 			// otherwise, render the HTML.

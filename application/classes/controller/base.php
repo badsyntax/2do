@@ -66,9 +66,9 @@ class Controller_Base extends Controller_Template {
   
 		$scripts = $this->mobile 
 			? array(
-				'application/media/js/jquery-1.4.3.min.js',
+				'application/media/js/jquery-1.4.4.min.js',
+				'application/media/js/global.mobile.js',
 				'application/media/js/jquery.mobile.js',
-				//'application/media/js/global.js'
 			)
 			: array(
 				'application/media/js/jquery.js',

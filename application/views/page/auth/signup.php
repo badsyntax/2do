@@ -1,8 +1,8 @@
-<div data-role="header" data-position="inline" data-nobackbtn="false">
+<div data-role="header" data-position="inline">
 	<h2>Sign up</h2>
 </div><!-- /header -->
 
-<div data-role="content"  data-theme="c">
+<div data-role="content" data-theme="c">
 	<form method="post" action="<?php echo Url::site('sign-up') ?>" rel="external">
 		<fieldset>
 
